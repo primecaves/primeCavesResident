@@ -33,7 +33,8 @@ export default {
     DRIBBBLE: '#EA4C89',
     TEXT_GREY: '#455A64',
     RED: '#F30808',
-    GREY: '#FAFAFA'
+    GREY: '#FAFAFA',
+    YELLOW:'#DEAB48'
   },
   PIE_COLOR: [
     '#A68510',

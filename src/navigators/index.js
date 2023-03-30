@@ -36,7 +36,6 @@ const RenderTabBarIcon = ({
 
 
 const HomeStack = (props) => {
-  console.log("Myprops", props)
   const { Navigator, Screen } = createNativeStackNavigator();
 
   const navProps = {
