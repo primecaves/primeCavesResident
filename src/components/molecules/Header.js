@@ -39,8 +39,8 @@ const SearchButton = ({ isWhite, style, navigation }) => (
   <TouchableOpacity style={[styles.button, style]} onPress={() => navigation.navigate('Search')}>
     <Icon
       size={16}
-      family="Galio"
-      name="search-zoom-in"
+      family="AntDesign"
+      name="search1"
       color={theme.COLORS[isWhite ? 'WHITE' : 'ICON']}
     />
   </TouchableOpacity>
@@ -50,16 +50,16 @@ class Header extends React.Component {
   handleLeftPress = () => {
     const { back, navigation, scene } = this.props;
     return (back ? navigation.dispatch(CommonActions.goBack()) : navigation.openDrawer());
-  }
+  };
   renderRight = () => {
     const { white, title, navigation } = this.props;
     // const { routeName } = navigation.state;
 
     if (title === 'Title') {
       return [
-        <BellButton key='chat-title' navigation={navigation} isWhite={white} />,
-        <BasketButton key='basket-title' navigation={navigation} isWhite={white} />
-      ]
+        <BellButton key="chat-title" navigation={navigation} isWhite={white} />,
+        <BasketButton key="basket-title" navigation={navigation} isWhite={white} />,
+      ];
     }
 
     switch (title) {
@@ -72,13 +72,13 @@ class Header extends React.Component {
       case 'Search':
       case 'Settings':
         return ([
-          <BellButton key='chat-categories' navigation={navigation} isWhite={white} />,
-          <BasketButton key='basket-categories' navigation={navigation} isWhite={white} />
+          <BellButton key="chat-categories" navigation={navigation} isWhite={white} />,
+          <BasketButton key="basket-categories" navigation={navigation} isWhite={white} />,
         ]);
       default:
         break;
     }
-  }
+  };
   renderSearch = () => {
     const { navigation } = this.props;
     return (
@@ -89,10 +89,11 @@ class Header extends React.Component {
         placeholder="What are you looking for?"
         placeholderTextColor={'#8898AA'}
         onFocus={() => { Keyboard.dismiss(); navigation.navigate('Search'); }}
-        iconContent={<Icon size={16} color={theme.COLORS.MUTED} name="search-zoom-in" family="ArgonExtra" />}
+        iconContent={<Icon size={16} color={theme.COLORS.MUTED} family="AntDesign"
+          name="search1" />}
       />
     );
-  }
+  };
   renderOptions = () => {
     const { navigation, optionLeft, optionRight } = this.props;
 
@@ -112,20 +113,20 @@ class Header extends React.Component {
         </Button>
       </Block>
     );
-  }
+  };
   renderTabs = () => {
     const { tabs, tabIndex, navigation } = this.props;
     const defaultTab = tabs && tabs[0] && tabs[0].id;
 
-    if (!tabs) return null;
+    if (!tabs) { return null; }
 
     return (
       <Tabs
         data={tabs || []}
         initialIndex={tabIndex || defaultTab}
         onChange={id => navigation.setParams({ tabId: id })} />
-    )
-  }
+    );
+  };
   renderHeader = () => {
     const { search, options, tabs } = this.props;
     if (search || tabs || options) {
@@ -137,7 +138,7 @@ class Header extends React.Component {
         </Block>
       );
     }
-  }
+  };
   render() {
     const { back, title, white, transparent, bgColor, iconColor, titleColor, navigation, ...props } = this.props;
     // const { routeName } = navigation.state;
@@ -149,7 +150,7 @@ class Header extends React.Component {
 
     const navbarStyles = [
       styles.navbar,
-      bgColor && { backgroundColor: bgColor }
+      bgColor && { backgroundColor: bgColor },
     ];
 
     return (
@@ -164,8 +165,8 @@ class Header extends React.Component {
           onLeftPress={this.handleLeftPress}
           left={
             <Icon
-              name={back ? 'chevron-left' : "menu"} family="entypo"
-              // name={back ? 'nav-left' : "menu-8"} family="ArgonExtra" 
+              name={back ? 'chevron-left' : 'menu'} family="entypo"
+              // name={back ? 'nav-left' : "menu-8"} family="ArgonExtra"
               size={back ? 20 : 20} onPress={this.handleLeftPress}
               color={iconColor || (white ? argonTheme.COLORS.WHITE : argonTheme.COLORS.ICON)}
               style={{ marginTop: 2 }}
@@ -175,7 +176,7 @@ class Header extends React.Component {
           titleStyle={[
             styles.title,
             { color: argonTheme.COLORS[white ? 'WHITE' : 'HEADER'] },
-            titleColor && { color: titleColor }
+            titleColor && { color: titleColor },
           ]}
           {...props}
         />
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderWidth: 1,
     borderRadius: 3,
-    borderColor: argonTheme.COLORS.BORDER
+    borderColor: argonTheme.COLORS.BORDER,
   },
   options: {
     marginBottom: 24,
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
   tabTitle: {
     lineHeight: 19,
     fontWeight: '400',
-    color: argonTheme.COLORS.HEADER
+    color: argonTheme.COLORS.HEADER,
   },
 });
 
