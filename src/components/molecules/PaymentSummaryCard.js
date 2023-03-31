@@ -1,9 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet,
-  Image,
-  TouchableWithoutFeedback,
-  View,
+  StyleSheet
 } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import Theme from '../../constants/Theme';
