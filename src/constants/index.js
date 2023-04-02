@@ -1,5 +1,5 @@
-import COLORS from './Theme';
-
+import argonTheme from './Theme';
+import Images from './Images';
 const EMPTY_ARRAY = Object.freeze([]);
 const EMPTY_SET = Object.freeze(new Set());
 const EMPTY_STRING = '';
@@ -36,5 +36,6 @@ export {
   ENTER_KEY_CODE,
   PIPE,
   EMPTY_ROW,
-  COLORS,
+  argonTheme,
+  Images,
 };
