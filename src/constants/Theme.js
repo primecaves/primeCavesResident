@@ -36,6 +36,7 @@ export default {
     GREY: '#FAFAFA',
     YELLOW: '#DEAB48',
     REMAINDER: '#ef4f4f',
+    PINK: '#FFC0CB',
   },
   PIE_COLOR: [
     '#A68510',
