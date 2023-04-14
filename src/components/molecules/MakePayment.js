@@ -5,21 +5,49 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Dimensions } from 'react-native';
 import { StyleSheet } from 'react-native';
 import Theme from '../../constants/Theme';
+import RazorpayCheckout from 'react-native-razorpay';
 
 class MakePayment extends React.Component {
   render() {
     return (
       <Block style={styles.container} middle>
-        <Button style={styles.button}>
-          <Text size={16} color={Theme.COLORS.WHITE} >
+        <Button
+          style={styles.button}
+          onPress={() => {
+            var options = {
+              description: 'Prime Caves',
+              image: 'https://i.imgur.com/3g7nmJC.jpg',
+              currency: 'INR',
+              key: '<YOUR_KEY_ID>',
+              amount: '5000',
+              name: 'Acme Corp',
+              order_id: 'order_DslnoIgkIDL8Zt', //Replace this with an order_id created using Orders API.
+              prefill: {
+                email: 'gaurav.kumar@example.com',
+                contact: '9191919191',
+                name: 'Gaurav Kumar',
+              },
+              theme: { color: '#53a20e' },
+            };
+            RazorpayCheckout.open(options)
+              .then(data => {
+                // handle success
+                alert(`Success: ${data.razorpay_payment_id}`);
+              })
+              .catch(error => {
+                // handle failure
+                alert(`Error: ${error.code} | ${error.description}`);
+              });
+          }}
+        >
+          <Text size={16} color={Theme.COLORS.WHITE}>
             <Icon
               name="wallet-outline"
               size={22}
               color={Theme.COLORS.WHITE}
-              
               style={styles.icon}
             />
-            {"    Make Payments"}
+            {'    Make Payments'}
           </Text>
         </Button>
       </Block>

@@ -16,7 +16,7 @@ class PaymentFilterComponent extends React.Component {
       <Block style={styles.container}>
         <Block row={true}>
           <Pressable
-            styles={{ marginHorizontal: 10 }}
+            style={{ marginHorizontal: 10 }}
             onPress={() =>
               this.setState({ ...this.state, filterByDate: 'true' })
             }
