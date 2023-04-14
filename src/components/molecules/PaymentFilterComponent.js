@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Block, Text, Button } from 'galio-framework';
-import ModalDropdown from 'react-native-modal-dropdown';
-import { Center, Menu, Select } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SelectMenu from '../atoms/SelectMenu';
 import { Pressable } from 'react-native';
@@ -33,7 +31,7 @@ class PaymentFilterComponent extends React.Component {
 
           <SelectMenu optionValues={['unpaid', 'paid']} text="status" />
         </Block>
-        {!this.state.filterByDate && (
+        {this.state.filterByDate && (
           <Block row={true} space="around" style={styles.bottomBlock}>
             <Block>
               <Text bold color={Theme.COLORS.BLACK}>
@@ -42,7 +40,7 @@ class PaymentFilterComponent extends React.Component {
               <SelectMenu
                 optionValues={['unpaid', 'paid']}
                 text="Month"
-                width="150"
+                width={150}
               />
             </Block>
             <Block>
@@ -52,7 +50,7 @@ class PaymentFilterComponent extends React.Component {
               <SelectMenu
                 optionValues={['March 2023', 'February 2023']}
                 text="Month"
-                width="150"
+                width={150}
               />
             </Block>
           </Block>
@@ -74,8 +72,8 @@ const styles = StyleSheet.create({
     padding: 5,
     marginHorizontal: 10,
   },
-  bottomBlock:{
-    marginVertical:10
-  }
+  bottomBlock: {
+    marginVertical: 10,
+  },
 });
 export default PaymentFilterComponent;
