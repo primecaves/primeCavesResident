@@ -4,6 +4,7 @@ import { Block, theme } from 'galio-framework';
 
 const { width } = Dimensions.get('screen');
 import argonTheme from '../../constants/Theme';
+import { EMPTY_STRING } from '../../constants';
 
 const defaultMenu = [
   { id: 'music', title: 'Music', },
@@ -48,9 +49,23 @@ export default class Tabs extends React.Component {
     });
   }
 
-  selectMenu = (id) => {
-    this.setState({ active: id });
 
+  selectMenu = (id) => {
+    const {active}=this.state
+    if(active === id){
+      this.setState({ active: null });
+
+      this.menuRef.current.scrollToIndex({
+        index: 0,
+        viewPosition: 0.5
+      });
+  
+      this.animate();
+      this.props.onChange && this.props.onChange({});
+      
+    }
+    else{
+    this.setState({ active: id });
     this.menuRef.current.scrollToIndex({
       index: this.props.data.findIndex(item => item.id === id),
       viewPosition: 0.5
@@ -59,6 +74,7 @@ export default class Tabs extends React.Component {
     this.animate();
     this.props.onChange && this.props.onChange(id);
   }
+}
 
   renderItem = (item) => {
     const isActive = this.state.active === item.id;
