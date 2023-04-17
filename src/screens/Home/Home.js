@@ -17,7 +17,7 @@ const { width } = Dimensions.get('screen');
 
 class Home extends React.Component {
   constructor(props) {
-    super(props);
+    super(props); 
     this.state = {
       isLoading: true,
       menu: [],

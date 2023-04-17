@@ -1,4 +1,4 @@
-
 import Amenities from './Amenities';
+import AllAmenities from './AllAmenities';
 
-export default Amenities;
+export default AllAmenities;

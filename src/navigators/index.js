@@ -1,26 +1,18 @@
-import {
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text } from 'react-native';
-import {
-  createNativeStackNavigator,
-} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React from 'react';
 import { Menu } from '../screens';
-import Amenities from '../screens/Amenities/Amenities';
+import Amenities from '../screens/Amenities';
 import Payments from '../screens/Payments/Payments';
 import Home from '../screens/Home/Home';
 import { Header } from '../components';
 import NoticeBoard from '../screens/NoticeBoard/NoticeBoard';
 import SinglePageNotice from '../screens/NoticeBoard/SinglePageNotice';
 
-
-const RenderTabBarIcon = ({
-  focused,
-  route,
-}) => {
+const RenderTabBarIcon = ({ focused, route }) => {
   let iconName = '';
 
   switch (route?.name) {
@@ -36,8 +28,7 @@ const RenderTabBarIcon = ({
   return <Icon name={iconName} size={30} color={'#161B21'} />;
 };
 
-
-const HomeStack = (props) => {
+const HomeStack = props => {
   const { Navigator, Screen } = createNativeStackNavigator();
   const navProps = {
     screenOptions: {
@@ -47,11 +38,24 @@ const HomeStack = (props) => {
   };
 
   return (
-    <Navigator {...navProps} initialRouteName="HomeMenu">
-      <Screen name="Menu" component={Home} />
-      <Screen name="Amenities" component={Amenities} />
+    <Navigator
+      {...navProps}
+      initialRouteName="Menu"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Screen name="HomeMenu" component={Home} />
+      <Screen
+        name="Amenities"
+        component={Amenities}
+        options={{
+          cardStyle: { backgroundColor: '#F8F9FE' },
+        }}
+      />
       <Screen name="Payments" component={Payments} />
-      <Screen name="NoticeBoard"
+      <Screen
+        name="NoticeBoard"
         component={NoticeBoard}
         options={{
           header: ({ navigation, scene }) => (
@@ -66,7 +70,8 @@ const HomeStack = (props) => {
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
-      <Screen name="SinglePageNotice"
+      <Screen
+        name="SinglePageNotice"
         component={SinglePageNotice}
         options={{
           header: ({ navigation, scene }) => (
@@ -102,7 +107,7 @@ const TabNavigator = () => {
       tabBarInactiveTintColor: 'gray',
       headerShown: false,
       tabBarHideOnKeyboard: true,
-      tabBarIcon: (tabBarIconProps) =>
+      tabBarIcon: tabBarIconProps =>
         RenderTabBarIcon({ ...tabBarIconProps, route }),
     }),
   };

@@ -22,7 +22,6 @@ class MenuCard extends React.Component {
             imageStyle,
             ctaRight
         } = this.props;
-
         const imageStyles = [
             full ? styles.fullImage : styles.horizontalImage,
             imageStyle
