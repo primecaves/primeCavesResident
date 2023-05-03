@@ -1,4 +1,5 @@
-import Amenities from './Amenities';
+import BookedAmenities from './Amenities';
 import AllAmenities from './AllAmenities';
+// const Amenities = { BookedAmenities, AllAmenities }
 
-export default AllAmenities;
+export { BookedAmenities, AllAmenities };

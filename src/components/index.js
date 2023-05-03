@@ -4,6 +4,7 @@ import Card from './atoms/Card';
 import DrawerItem from './atoms/DrawerItem';
 import Icon from './atoms/Icon';
 import Input from './atoms/Input';
+import SelectMenu from './atoms/SelectMenu';
 import Switch from './atoms/Switch';
 import Select from './atoms/Select';
 import Notification from './molecules//Notification';
@@ -16,7 +17,8 @@ import DynamicKeyCard from './molecules/DynamicKeyCard';
 import Form from './molecules/Form';
 import Modal from './molecules/Modal';
 import PriceFooter from './atoms/PriceFooter';
-import Slider from './molecules/Slider';
+import ImageSlider from './molecules/ImageSlider';
+import DynamicKeyPairs from './molecules/DynamicKeyPairs';
 export {
   Button,
   Card,
@@ -36,5 +38,7 @@ export {
   Modal,
   Note,
   PriceFooter,
-  Slider,
+  ImageSlider,
+  DynamicKeyPairs,
+  SelectMenu,
 };

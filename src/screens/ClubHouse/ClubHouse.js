@@ -1,61 +1,58 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Block, Text } from 'galio-framework';
-import API_1 from '../../constants/amenitiesResponse';
-import { DynamicKeyCard, Header, Button, Modal, Form } from '../../components';
+import API_1 from '../../constants/clubHouseResponse';
+import { DynamicKeyCard, Header, Button } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
 import _map from 'lodash/map';
 import _get from 'lodash/get';
 import AlertModal from '../../components/molecules/AlertModal';
-import { getBookedAmenities } from './amenities.services';
-import { FIELDS } from './amenities.constants';
+// import { getBookedClubHouse } from './clubHouse.services';
 import FooterButton from '../../components/molecules/FooterButton';
 
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
-class Amenities extends Component {
+class ClubHouse extends Component {
   state = {
     isLoading: false,
-    amenities: [],
+    clubHouse: [],
     initialCards: [],
     keyToRemove: [],
     displayNameKey: '',
     isAlertModalVisible: false,
-    isFormModalVisible: false,
   };
 
   componentDidMount() {
-    this.fetchAmenities();
+    this.fetchClubHouse();
   }
 
-  fetchAmenities = () => {
-    // const { data, key_to_remove, display_name_key } = API_1;
-    // this.setState({
-    // amenities: data,
-    // keyToRemove: key_to_remove,
-    // displayNameKey: display_name_key,
-    // });
+  fetchClubHouse = () => {
+    const { data, key_to_remove, display_name_key } = API_1;
+    this.setState({
+      clubHouse: data,
+      keyToRemove: key_to_remove,
+      displayNameKey: display_name_key,
+    });
     this.setState({ isLoading: true });
-    getBookedAmenities('644b68e005d65b3294c0771f')
-      .then(response => {
-        if (response) {
-          const {
-            data: { data, key_to_remove, display_name_key },
-          } = response;
-          this.setState({
-            isLoading: false,
-            amenities: data,
-            initialValues: data,
-            keyToRemove: key_to_remove,
-            displayNameKey: display_name_key,
-          });
-        }
-      })
-      .catch(() => {
-        this.setState({ isLoading: false });
-      });
+    // getBookedClubHouse('6441496305d65b3294c076ec')
+    //   .then(response => {
+    //     if (response) {
+    //       const {
+    //         data: { data, key_to_remove, display_name_key },
+    //       } = response;
+    //       this.setState({
+    //         isLoading: false,
+    //          clubHouse: data,
+    //         keyToRemove: key_to_remove,
+    //         displayNameKey: display_name_key,
+    //       });
+    //     }
+    //   })
+    //   .catch(() => {
+    //     this.setState({ isLoading: false });
+    //   });
   };
   toggleAlertModal = () => {
     this.setState(prevState => ({
@@ -63,33 +60,7 @@ class Amenities extends Component {
     }));
   };
 
-  toggleFormModal = item => {
-    this.setState(prevState => ({
-      isFormModalVisible: !prevState.isFormModalVisible,
-      initialValues: item,
-    }));
-  };
-  renderForm = () => {
-    const { initialValues } = this.state;
-    return (
-      <Form
-        isEdit
-        fields={FIELDS}
-        onClose={this.toggleFormModal}
-        initialValues={initialValues}
-        primaryButtonText="Pay Now"
-        secondaryButtonText="Close"
-        primaryButtonProps={{
-          style: styles.footerPrimaryButton,
-        }}
-        secondaryButtonProps={{
-          style: styles.footerSecondaryButton,
-        }}
-      />
-    );
-  };
-
-  renderFooter = item => {
+  renderFooter = () => {
     const { isAlertModalVisible } = this.state;
     return (
       <>
@@ -113,7 +84,7 @@ class Amenities extends Component {
           <Button
             shadowless
             style={styles.primaryButton}
-            onPress={() => this.toggleFormModal(item)}
+            // onPress={() => onEditClick(item)}
           >
             <Block row>
               <Text
@@ -131,20 +102,13 @@ class Amenities extends Component {
   };
 
   render() {
-    const {
-      amenities,
-      isLoading,
-      displayNameKey,
-      keyToRemove,
-      isFormModalVisible,
-    } = this.state;
+    const { clubHouse, isLoading, displayNameKey, keyToRemove } = this.state;
     const { navigation, scene } = this.props;
     return (
       <Block>
-        <Modal visible={isFormModalVisible} content={this.renderForm} />
         <ScrollView>
           <Header
-            title="Amenities"
+            title=" ClubHouse"
             back
             search
             showAdd
@@ -152,7 +116,7 @@ class Amenities extends Component {
             navigation={navigation}
             scene={scene}
           />
-          {_map(amenities, (item, index) => (
+          {_map(clubHouse, (item, index) => (
             <DynamicKeyCard
               key={index}
               showActions
@@ -166,12 +130,7 @@ class Amenities extends Component {
             />
           ))}
         </ScrollView>
-        <FooterButton
-          buttonText="Book Amenities"
-          iconName="wallet-outline"
-          navigationPath="AllAmenities"
-          navigation={navigation}
-        />
+        <FooterButton buttonText="Book  ClubHouse" />
       </Block>
     );
   }
@@ -223,16 +182,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: argonTheme.COLORS.PRIMARY,
   },
-  footerPrimaryButton: {
-    height: 25,
-    fontColor: argonTheme.COLORS.WHITE,
-    backgroundColor: argonTheme.COLORS.PRIMARY,
-  },
-  footerSecondaryButton: {
-    height: 25,
-    fontColor: argonTheme.COLORS.BLACK,
-    backgroundColor: argonTheme.COLORS.WHITE,
-  },
 });
 
-export default Amenities;
+export default ClubHouse;

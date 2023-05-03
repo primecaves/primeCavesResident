@@ -40,7 +40,7 @@ export const PriceFooter = ({ keysToMultiply, values }) => {
               color: argonTheme.COLORS.BLACK,
               fontFamily: 'open-sans-regular',
               padding: 8,
-              marginLeft: '73%',
+              marginLeft: '72%',
             }}
           >
             {result}

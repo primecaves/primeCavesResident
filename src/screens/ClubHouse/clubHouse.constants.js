@@ -9,7 +9,7 @@ export const FIELDS = [
     key: 'name',
     component: 'INPUT',
     editable: false,
-    label: 'Amenity',
+    label: 'Name',
   },
   {
     id: 'category',
@@ -19,23 +19,18 @@ export const FIELDS = [
     label: 'Category',
   },
   {
-    id: 'brand',
-    key: 'brand',
+    id: 'description',
+    key: 'description',
     component: 'INPUT',
     editable: false,
-    label: 'Brand',
+    label: 'Description',
   },
+
   {
-    id: 'noOfDays',
-    key: 'no_of_days',
-    component: 'COUNTER',
-    label: 'No Of Days',
-  },
-  {
-    id: 'noOfQuantity',
-    key: 'no_of_quantity',
-    component: 'COUNTER',
-    label: 'No Of Quantity',
+    id: 'pairs',
+    key: 'pairs',
+    component: 'KEYPAIRS',
+    label: 'Members',
   },
   {
     id: 'note',
@@ -46,6 +41,6 @@ export const FIELDS = [
     id: 'price',
     key: 'price',
     component: 'PRICE',
-    keysToMultiply: ['each_quantity_price', 'no_of_days', 'no_of_quantity'],
+    keysToMultiply: ['price', 'no_of_days', 'no_of_quantity'],
   },
 ];

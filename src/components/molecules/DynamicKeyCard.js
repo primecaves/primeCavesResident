@@ -1,35 +1,18 @@
 import React from 'react';
-
-import {
-  Dimensions,
-  View,
-  StyleSheet,
-  Pressable,
-  ScrollView,
-  Image,
-} from 'react-native';
-
+import { Dimensions, View, StyleSheet, ScrollView } from 'react-native';
 import { Block, Text } from 'galio-framework';
-
 import _get from 'lodash/get';
 import _noop from 'lodash/noop';
 import _find from 'lodash/find';
 import _remove from 'lodash/remove';
 import _includes from 'lodash/includes';
-import _startCase from 'lodash/startCase';
 import _cloneDeep from 'lodash/cloneDeep';
-import _size from 'lodash/size';
-import _drop from 'lodash/drop';
-import _take from 'lodash/take';
 import _isEmpty from 'lodash/isEmpty';
-import _isArray from 'lodash/isArray';
-
-import { Slider } from '../';
+import { ImageSlider } from '../';
 import argonTheme from '../../constants/Theme';
-
 import { Icon, Button, SkeletionLoader } from '..';
 import Modal from './Modal';
-// import Carousel from '../../../components/atoms/CarouselItem';
+
 const { width } = Dimensions.get('screen');
 // const Spacer = ({ height = 16 }) => <MotiView style={{ height }} />
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -146,7 +129,7 @@ class DynamicKeyCard extends React.Component {
   };
   renderImage = () => {
     const { image } = this.props;
-    return <Slider image={image} isDynamicCard />;
+    return <ImageSlider image={image} isDynamicCard />;
   };
   renderBody = () => {
     const { values, displayNameKey, image, selectedService } = this.props;
@@ -170,6 +153,14 @@ class DynamicKeyCard extends React.Component {
                 {_get(displayName, 'value')}
               </Text>
             </Block>
+          </Block>
+          <Block>
+            {/* <Icon
+              color={argonTheme.COLORS.WARNING}
+              name="delete"
+              family="AntDesign"
+              // onPress={this.handleRemoveChange}
+            /> */}
           </Block>
         </Block>
         {this.renderFields()}
@@ -245,9 +236,9 @@ class DynamicKeyCard extends React.Component {
       showActions = false,
     } = this.props;
     const { isModalVisible } = this.state;
-    if (isLoading) {
-      return <SkeletionLoader />;
-    }
+    // if (isLoading) {
+    //   return <SkeletionLoader />;
+    // }
     return (
       <Block style={{ padding: 15, paddingBottom: 10 }}>
         {

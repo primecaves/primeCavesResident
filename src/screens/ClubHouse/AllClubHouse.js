@@ -13,14 +13,14 @@ import { DynamicKeyCard, Form, Header, Modal } from '../../components';
 import { Button } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
-import { FIELDS } from './amenities.constants';
-import { fetchAllAmenities } from './amenities.services';
-import API_1 from '../../constants/amenitiesResponse';
+import { FIELDS } from './clubHouse.constants';
+import API_1 from '../../constants/clubHouseResponse';
+// import { fetchAllClubHouse } from './ clubHouse.services';
 
-class AllAmenities extends Component {
+class AllClubHouse extends Component {
   state = {
     isLoading: false,
-    amenities: [],
+    clubHouse: [],
     initialCards: [],
     keyToRemove: [],
     displayNameKey: '',
@@ -28,19 +28,19 @@ class AllAmenities extends Component {
   };
 
   componentDidMount() {
-    this.fetchAmenities();
+    this.fetchClubHouse();
   }
 
-  fetchAmenities = () => {
+  fetchClubHouse = () => {
     const { data, key_to_remove, display_name_key } = API_1;
     this.setState({
-      amenities: data,
-      intialAmenities: data,
+      clubHouse: data,
+      intialClubHouse: data,
       keyToRemove: key_to_remove,
       displayNameKey: display_name_key,
     });
     // this.setState({ isLoading: true });
-    // fetchAllAmenities()
+    // fetchAllClubHouse()
     //   .then(response => {
     //     if (response) {
     //       const {
@@ -49,8 +49,8 @@ class AllAmenities extends Component {
     //       console.log('Response', data, key_to_remove, display_name_key);
     //       this.setState({
     //         isLoading: false,
-    //         amenities: data,
-    //         intialAmenities: data,
+    //         clubHouse: data,
+    //         intialClubHouse: data,
     //         keyToRemove: key_to_remove,
     //         displayNameKey: display_name_key,
     //       });
@@ -93,14 +93,14 @@ class AllAmenities extends Component {
   };
 
   handleChangeTab = id => {
-    const { intialAmenities } = this.state;
+    const { intialClubHouse } = this.state;
     if (!_isEmpty(id)) {
       this.setState({
-        amenities: _filter(intialAmenities, ['category', id]),
+        clubHouse: _filter(intialClubHouse, ['category', id]),
       });
     } else {
       this.setState({
-        amenities: intialAmenities,
+        clubHouse: intialClubHouse,
       });
     }
   };
@@ -127,11 +127,11 @@ class AllAmenities extends Component {
 
   render() {
     const {
-      amenities,
+      clubHouse,
       isLoading,
       displayNameKey,
       keyToRemove,
-      intialAmenities,
+      intialClubHouse,
       isFormModalVisible,
     } = this.state;
     const { navigation, scene } = this.props;
@@ -142,18 +142,18 @@ class AllAmenities extends Component {
           refreshControl={
             <RefreshControl
               refreshing={isLoading}
-              onRefresh={this.fetchAmenities}
+              onRefresh={this.fetchClubHouse}
             />
           }
         >
           <Header
-            title="Amenities"
+            title="ClubHouse"
             back
             search
             showTabs
             onChangeTab={this.handleChangeTab}
             tabs={_uniqBy(
-              _map(intialAmenities, item => ({
+              _map(intialClubHouse, item => ({
                 id: item.category,
                 title: _startCase(item.category),
               })),
@@ -162,7 +162,7 @@ class AllAmenities extends Component {
             navigation={navigation}
             scene={scene}
           />
-          {_map(amenities, (item, key) => (
+          {_map(clubHouse, (item, key) => (
             <DynamicKeyCard
               key={key}
               showActions
@@ -212,4 +212,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AllAmenities;
+export default AllClubHouse;
