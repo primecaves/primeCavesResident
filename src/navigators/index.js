@@ -5,7 +5,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React from 'react';
 import { Menu } from '../screens';
+<<<<<<< Updated upstream
 import Amenities from '../screens/Amenities';
+=======
+import { Amenities, AllAmenities } from '../screens/Amenities';
+>>>>>>> Stashed changes
 import Payments from '../screens/Payments/Payments';
 import Home from '../screens/Home/Home';
 import { Header } from '../components';
