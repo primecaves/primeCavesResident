@@ -1,26 +1,34 @@
 import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 import { Block, Button, Text } from 'galio-framework';
-import { SelectMenu, Input } from '../';
+import { Select, Input } from '../';
 import argonTheme from '../../constants/Theme';
 import _map from 'lodash/map';
-import { EMPTY_STRING } from '../../constants';
+import { EMPTY_ARRAY, EMPTY_STRING } from '../../constants';
 import Icon from '../atoms/Icon';
-
+import _isEmpty from 'lodash/isEmpty';
+import _get from 'lodash/get';
 const COMPONENT = {
   INPUT: 'member',
   SELECT: 'time_slot',
 };
 
 export class DynamicKeyPairs extends Component {
-  state = {
-    field: [
-      {
-        member: '',
-        time_slot: '',
-      },
-    ],
-  };
+  constructor(props) {
+    super(props);
+    const { data = EMPTY_ARRAY } = props;
+    this.state = {
+      field: !_isEmpty(data)
+        ? data
+        : [
+            {
+              member: '',
+              time_slot: '',
+            },
+          ],
+    };
+  }
+
   handleChange = (value, index, component) => {
     const { field } = this.state;
     const list = [...field];
@@ -40,7 +48,7 @@ export class DynamicKeyPairs extends Component {
   };
   render() {
     const { field } = this.state;
-    const { label = EMPTY_STRING } = this.props;
+    const { label = EMPTY_STRING, showActions = true } = this.props;
     return (
       <>
         <Block paddingLeft={15}>
@@ -52,21 +60,22 @@ export class DynamicKeyPairs extends Component {
               <Input
                 style={{ width: '160' }}
                 shadowless
+                value={_get(item, 'member', EMPTY_STRING)}
                 onChange={val => this.handleChange(val, index, COMPONENT.INPUT)}
               />
             </Block>
             <Block>
-              <SelectMenu
+              <Select
                 width={110}
                 height={45}
-                optionValues={['1am-2am', '10am-11pm']}
-                text="10-12"
-                onChange={val =>
+                options={['1am-2am', '10am-11pm']}
+                onSelect={val =>
                   this.handleChange(val, index, COMPONENT.SELECT)
                 }
+                value={_get(item, 'time_slot', EMPTY_STRING)}
               />
             </Block>
-            {field.length - 1 === index && field.length < 4 && (
+            {showActions && field.length - 1 === index && field.length < 4 && (
               <Block>
                 <Button
                   shadowless
@@ -85,7 +94,7 @@ export class DynamicKeyPairs extends Component {
                 </Button>
               </Block>
             )}
-            {field.length !== 1 && (
+            {showActions && field.length !== 1 && (
               <Block>
                 <Icon
                   paddingLeft={20}

@@ -33,32 +33,31 @@ class AllAmenities extends Component {
 
   fetchAmenities = () => {
     const { data, key_to_remove, display_name_key } = API_1;
-    this.setState({
-      amenities: data,
-      intialAmenities: data,
-      keyToRemove: key_to_remove,
-      displayNameKey: display_name_key,
-    });
-    // this.setState({ isLoading: true });
-    // fetchAllAmenities()
-    //   .then(response => {
-    //     if (response) {
-    //       const {
-    //         data: { data, key_to_remove, display_name_key },
-    //       } = response;
-    //       console.log('Response', data, key_to_remove, display_name_key);
-    //       this.setState({
-    //         isLoading: false,
-    //         amenities: data,
-    //         intialAmenities: data,
-    //         keyToRemove: key_to_remove,
-    //         displayNameKey: display_name_key,
-    //       });
-    //     }
-    //   })
-    //   .catch(() => {
-    //     this.setState({ isLoading: false });
-    //   });
+    // this.setState({
+    //   amenities: data,
+    //   intialAmenities: data,
+    //   keyToRemove: key_to_remove,
+    //   displayNameKey: display_name_key,
+    // });
+    this.setState({ isLoading: true });
+    fetchAllAmenities()
+      .then(response => {
+        if (response) {
+          const {
+            data: { data, key_to_remove, display_name_key },
+          } = response;
+          this.setState({
+            isLoading: false,
+            amenities: data,
+            intialAmenities: data,
+            keyToRemove: key_to_remove,
+            displayNameKey: display_name_key,
+          });
+        }
+      })
+      .catch(() => {
+        this.setState({ isLoading: false });
+      });
   };
   toggleFormModal = item => {
     this.setState(prevState => ({
@@ -165,7 +164,6 @@ class AllAmenities extends Component {
           {_map(amenities, (item, key) => (
             <DynamicKeyCard
               key={key}
-              showActions
               isLoading={isLoading}
               item={item}
               values={getKeyValuePair(item)}

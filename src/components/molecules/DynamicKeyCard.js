@@ -8,10 +8,12 @@ import _remove from 'lodash/remove';
 import _includes from 'lodash/includes';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEmpty from 'lodash/isEmpty';
-import { ImageSlider } from '../';
+import { DynamicKeyPairs, ImageSlider } from '../';
 import argonTheme from '../../constants/Theme';
-import { Icon, Button, SkeletionLoader } from '..';
+import { Icon, Button, SkeletionLoader } from '../';
 import Modal from './Modal';
+import { EMPTY_ARRAY } from '../../constants';
+import { TouchableOpacity } from 'react-native';
 
 const { width } = Dimensions.get('screen');
 // const Spacer = ({ height = 16 }) => <MotiView style={{ height }} />
@@ -60,31 +62,32 @@ class DynamicKeyCard extends React.Component {
   //     )
   // }
 
-  // renderHeader = () => {
-  //     const { setModalVisibile, } = this.props
-  //     return (
-  //         <Block right >
-  //             <Block row  >
-  //                 <Icon
-  //                     name="edit"
-  //                     family="Feather"
-  //                     size={14}
-  //                     style={{ padding: 5 }}
-  //                 />
-  //                 < Icon
-  //                     name="delete"
-  //                     family="AntDesign"
-  //                     size={14}
-  //                     style={{ padding: 5 }}
-  //                     color={argonTheme.COLORS.RED}
-  //                     onPress={() => this.setState({ isModalVisible: true })}
-
-  //                 />
-  //             </Block >
-
-  //         </Block >
-  //     )
-  // }
+  renderHeader = () => {
+    const { editAction = _noop, item } = this.props;
+    return (
+      <Block right>
+        <Block row>
+          <TouchableOpacity>
+            <Icon
+              name="edit"
+              family="Feather"
+              size={14}
+              style={{ padding: 5 }}
+              onPress={() => editAction(item)}
+            />
+          </TouchableOpacity>
+          {/* <Icon
+            name="delete"
+            family="AntDesign"
+            size={14}
+            style={{ padding: 5 }}
+            color={argonTheme.COLORS.RED}
+            onPress={() => this.setState({ isModalVisible: true })}
+          /> */}
+        </Block>
+      </Block>
+    );
+  };
 
   renderFields = () => {
     const { values, displayNameKey, keyToRemove } = this.props;
@@ -123,7 +126,6 @@ class DynamicKeyCard extends React.Component {
             );
           })}
         </View>
-        {this.renderFooter()}
       </ScrollView>
     );
   };
@@ -132,8 +134,9 @@ class DynamicKeyCard extends React.Component {
     return <ImageSlider image={image} isDynamicCard />;
   };
   renderBody = () => {
-    const { values, displayNameKey, image, selectedService } = this.props;
+    const { values, displayNameKey, image, selectedService, item } = this.props;
     const displayName = _find(values, item => item.key === displayNameKey);
+    const members = _get(item, 'members', EMPTY_ARRAY);
     return (
       <Block>
         <Block row style={{ paddingLeft: 10 }}>
@@ -154,16 +157,12 @@ class DynamicKeyCard extends React.Component {
               </Text>
             </Block>
           </Block>
-          <Block>
-            {/* <Icon
-              color={argonTheme.COLORS.WARNING}
-              name="delete"
-              family="AntDesign"
-              // onPress={this.handleRemoveChange}
-            /> */}
-          </Block>
         </Block>
         {this.renderFields()}
+        {item?.members && (
+          <DynamicKeyPairs data={members} showActions={false} />
+        )}
+        {this.renderFooter()}
       </Block>
     );
   };
@@ -246,7 +245,8 @@ class DynamicKeyCard extends React.Component {
             card
             style={{ paddingTop: 8, backgroundColor: argonTheme.COLORS.GREY }}
           >
-            {/* {showActions && this.renderHeader()} */}
+            {showActions && this.renderHeader()}
+
             {this.renderBody()}
             {/* {showActions && this.renderFooter()} */}
           </Block>

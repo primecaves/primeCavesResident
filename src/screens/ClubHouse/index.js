@@ -1,4 +1,4 @@
-import ClubHouse from './ClubHouse';
+import ClubHouse from './BookedClubHouse';
 import AllClubHouse from './AllClubHouse';
 
-export default AllClubHouse;
+export { ClubHouse, AllClubHouse };

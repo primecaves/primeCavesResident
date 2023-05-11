@@ -14,7 +14,8 @@ import { Button } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
 import { FIELDS } from './clubHouse.constants';
-import API_1 from '../../constants/clubHouseResponse';
+import { API_1 } from '../../constants/clubHouseResponse';
+import ClubHouseForm from './Components/ClubHouseForm';
 // import { fetchAllClubHouse } from './ clubHouse.services';
 
 class AllClubHouse extends Component {
@@ -46,7 +47,6 @@ class AllClubHouse extends Component {
     //       const {
     //         data: { data, key_to_remove, display_name_key },
     //       } = response;
-    //       console.log('Response', data, key_to_remove, display_name_key);
     //       this.setState({
     //         isLoading: false,
     //         clubHouse: data,
@@ -105,26 +105,6 @@ class AllClubHouse extends Component {
     }
   };
 
-  renderForm = () => {
-    const { initialValues } = this.state;
-    return (
-      <Form
-        isEdit
-        fields={FIELDS}
-        onClose={this.toggleFormModal}
-        initialValues={initialValues}
-        primaryButtonText="Pay Now"
-        secondaryButtonText="Close"
-        primaryButtonProps={{
-          style: styles.footerPrimaryButton,
-        }}
-        secondaryButtonProps={{
-          style: styles.footerSecondaryButton,
-        }}
-      />
-    );
-  };
-
   render() {
     const {
       clubHouse,
@@ -133,11 +113,20 @@ class AllClubHouse extends Component {
       keyToRemove,
       intialClubHouse,
       isFormModalVisible,
+      initialValues,
     } = this.state;
     const { navigation, scene } = this.props;
     return (
       <Block>
-        <Modal visible={isFormModalVisible} content={this.renderForm} />
+        <Modal
+          visible={isFormModalVisible}
+          content={() => (
+            <ClubHouseForm
+              initialValues={initialValues}
+              onClose={this.toggleFormModal}
+            />
+          )}
+        />
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -165,7 +154,6 @@ class AllClubHouse extends Component {
           {_map(clubHouse, (item, key) => (
             <DynamicKeyCard
               key={key}
-              showActions
               isLoading={isLoading}
               item={item}
               values={getKeyValuePair(item)}
@@ -199,16 +187,6 @@ const styles = StyleSheet.create({
     backgroundColor: argonTheme.COLORS.PRIMARY,
     alignItems: 'center',
     color: argonTheme.COLORS.WHITE,
-  },
-  footerPrimaryButton: {
-    height: 25,
-    fontColor: argonTheme.COLORS.WHITE,
-    backgroundColor: argonTheme.COLORS.PRIMARY,
-  },
-  footerSecondaryButton: {
-    height: 25,
-    fontColor: argonTheme.COLORS.BLACK,
-    backgroundColor: argonTheme.COLORS.WHITE,
   },
 });
 

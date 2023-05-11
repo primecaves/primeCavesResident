@@ -5,13 +5,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React from 'react';
 import { Menu } from '../screens';
-import { BookedAmenities, AllAmenities } from '../screens/Amenities';
+import { Amenities, AllAmenities } from '../screens/Amenities';
 import Payments from '../screens/Payments/Payments';
 import Home from '../screens/Home/Home';
 import { Header } from '../components';
 import NoticeBoard from '../screens/NoticeBoard/NoticeBoard';
 import SinglePageNotice from '../screens/NoticeBoard/SinglePageNotice';
-import ClubHouse from '../screens/ClubHouse';
+import { ClubHouse, AllClubHouse } from '../screens/ClubHouse';
 
 const RenderTabBarIcon = ({ focused, route }) => {
   let iconName = '';
@@ -48,8 +48,8 @@ const HomeStack = props => {
     >
       <Screen name="HomeMenu" component={Home} />
       <Screen
-        name="BookedAmenities"
-        component={BookedAmenities}
+        name="Amenities"
+        component={Amenities}
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
@@ -64,6 +64,13 @@ const HomeStack = props => {
       <Screen
         name="ClubHouse"
         component={ClubHouse}
+        options={{
+          cardStyle: { backgroundColor: '#F8F9FE' },
+        }}
+      />
+      <Screen
+        name="AllClubHouse"
+        component={AllClubHouse}
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}

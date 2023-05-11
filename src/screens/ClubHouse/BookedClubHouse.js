@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Block, Text } from 'galio-framework';
-import API_1 from '../../constants/clubHouseResponse';
-import { DynamicKeyCard, Header, Button } from '../../components';
+import { API_1, API_2 } from '../../constants/clubHouseResponse';
+import { DynamicKeyCard, Header, Button, Modal } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
 import _map from 'lodash/map';
@@ -10,11 +10,12 @@ import _get from 'lodash/get';
 import AlertModal from '../../components/molecules/AlertModal';
 // import { getBookedClubHouse } from './clubHouse.services';
 import FooterButton from '../../components/molecules/FooterButton';
+import ClubHouseForm from './Components/ClubHouseForm';
 
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
-class ClubHouse extends Component {
+class BookedClubHouse extends Component {
   state = {
     isLoading: false,
     clubHouse: [],
@@ -22,6 +23,7 @@ class ClubHouse extends Component {
     keyToRemove: [],
     displayNameKey: '',
     isAlertModalVisible: false,
+    isFormModalVisible: false,
   };
 
   componentDidMount() {
@@ -29,7 +31,7 @@ class ClubHouse extends Component {
   }
 
   fetchClubHouse = () => {
-    const { data, key_to_remove, display_name_key } = API_1;
+    const { data, key_to_remove, display_name_key } = API_2;
     this.setState({
       clubHouse: data,
       keyToRemove: key_to_remove,
@@ -59,8 +61,13 @@ class ClubHouse extends Component {
       isAlertModalVisible: !prevState.isAlertModalVisible,
     }));
   };
-
-  renderFooter = () => {
+  toggleFormModal = item => {
+    this.setState(prevState => ({
+      isFormModalVisible: !prevState.isFormModalVisible,
+      initialValues: item,
+    }));
+  };
+  renderFooter = item => {
     const { isAlertModalVisible } = this.state;
     return (
       <>
@@ -84,7 +91,7 @@ class ClubHouse extends Component {
           <Button
             shadowless
             style={styles.primaryButton}
-            // onPress={() => onEditClick(item)}
+            onPress={() => this.toggleFormModal(item)}
           >
             <Block row>
               <Text
@@ -102,10 +109,27 @@ class ClubHouse extends Component {
   };
 
   render() {
-    const { clubHouse, isLoading, displayNameKey, keyToRemove } = this.state;
+    const {
+      clubHouse,
+      isLoading,
+      displayNameKey,
+      keyToRemove,
+      isFormModalVisible,
+      initialValues,
+    } = this.state;
     const { navigation, scene } = this.props;
     return (
       <Block>
+        <Modal
+          visible={isFormModalVisible}
+          content={() => (
+            <ClubHouseForm
+              initialValues={initialValues}
+              onClose={this.toggleFormModal}
+              primaryButtonText="Save"
+            />
+          )}
+        />
         <ScrollView>
           <Header
             title=" ClubHouse"
@@ -127,10 +151,16 @@ class ClubHouse extends Component {
               image={_get(item, 'image', '')}
               keyToRemove={keyToRemove}
               footer={this.renderFooter}
+              editAction={this.toggleFormModal}
             />
           ))}
         </ScrollView>
-        <FooterButton buttonText="Book  ClubHouse" />
+        <FooterButton
+          buttonText="Book ClubHouse"
+          iconName="wallet-outline"
+          navigationPath="AllClubHouse"
+          navigation={navigation}
+        />
       </Block>
     );
   }
@@ -184,4 +214,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ClubHouse;
+export default BookedClubHouse;

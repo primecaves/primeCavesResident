@@ -155,7 +155,6 @@ class Amenities extends Component {
           {_map(amenities, (item, index) => (
             <DynamicKeyCard
               key={index}
-              showActions
               isLoading={isLoading}
               item={item}
               values={getKeyValuePair(item)}

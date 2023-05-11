@@ -9,7 +9,7 @@ export default [
     title: 'Amenities',
     image:
       'https://raw.githubusercontent.com/amdsubham/icons/main/amenities.png',
-    cta: 'BookedAmenities',
+    cta: 'Amenities',
   },
   {
     title: 'ClubHouse',

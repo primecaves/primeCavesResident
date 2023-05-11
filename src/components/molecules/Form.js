@@ -17,7 +17,7 @@ import {
   Switch,
   DynamicKeyPairs,
 } from '../';
-import { argonTheme } from '../../constants';
+import { EMPTY_ARRAY, argonTheme } from '../../constants';
 import Counter from './Counter';
 // import InputWithTags from './inputWithTags/InputWithTags';
 const DIVIDER_COLOR = 'E5E7EB';
@@ -37,9 +37,6 @@ const getInitialValues = fields => {
 };
 
 class Form extends Component {
-  calculateAmenitiesPrice = (price, quantity, days) => price * quantity * days;
-  // result = 0;
-
   renderFooter = ({ handleSubmit, values }) => {
     const {
       onClose = _noop,
@@ -232,7 +229,10 @@ class Form extends Component {
       case 'KEYPAIRS':
         return (
           <Block style={{ marginBottom: 5 }}>
-            <DynamicKeyPairs {...item} />
+            <DynamicKeyPairs
+              {...item}
+              data={_get(values, 'members', EMPTY_ARRAY)}
+            />
           </Block>
         );
       default:
