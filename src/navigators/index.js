@@ -11,7 +11,8 @@ import Home from '../screens/Home/Home';
 import { Header } from '../components';
 import NoticeBoard from '../screens/NoticeBoard/NoticeBoard';
 import SinglePageNotice from '../screens/NoticeBoard/SinglePageNotice';
-// import Authentication from '../screens/Login/Authentication';
+import OtpScreen from '../screens/Login/OtpScreen';
+import Authentication from '../screens/Login/Authentication';
 
 const RenderTabBarIcon = ({ focused, route }) => {
   let iconName = '';
@@ -41,13 +42,14 @@ const HomeStack = props => {
   return (
     <Navigator
       {...navProps}
-      initialRouteName="menu"
+      initialRouteName="Authentication"
       screenOptions={{
         headerShown: false,
       }}
     >
       <Screen name="HomeMenu" component={Home} />
-      {/* <Screen name="Authentication" component={Authentication} /> */}
+      <Screen name="OtpScreen" component={OtpScreen} />
+      <Screen name="Authentication" component={Authentication} />
       <Screen
         name="Amenities"
         component={Amenities}

@@ -17,6 +17,7 @@ import Form from './molecules/Form';
 import Modal from './molecules/Modal';
 import PriceFooter from './atoms/PriceFooter';
 import Slider from './molecules/Slider';
+import ActionSheet from './molecules/ActionSheet';
 export {
   Button,
   Card,
@@ -37,4 +38,5 @@ export {
   Note,
   PriceFooter,
   Slider,
+  ActionSheet,
 };
