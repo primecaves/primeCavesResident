@@ -7,7 +7,7 @@ import { Text, Input, Button, Block } from 'galio-framework';
 import ActionSheet from '../../components/molecules/ActionSheet';
 
 const Authentication = ({ navigation }) => {
-  const { Layout, Gutters } = useTheme();
+  const { Layout } = useTheme();
   const content = () => {
     return (
       <Block>

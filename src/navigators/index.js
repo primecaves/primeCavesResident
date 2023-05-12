@@ -5,17 +5,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React from 'react';
 import { Menu } from '../screens';
-<<<<<<< Updated upstream
 import Amenities from '../screens/Amenities';
-=======
-import { Amenities, AllAmenities } from '../screens/Amenities';
->>>>>>> Stashed changes
 import Payments from '../screens/Payments/Payments';
 import Home from '../screens/Home/Home';
 import { Header } from '../components';
 import NoticeBoard from '../screens/NoticeBoard/NoticeBoard';
 import SinglePageNotice from '../screens/NoticeBoard/SinglePageNotice';
-import Authentication from '../screens/Login/Authentication';
+// import Authentication from '../screens/Login/Authentication';
 
 const RenderTabBarIcon = ({ focused, route }) => {
   let iconName = '';
@@ -45,13 +41,13 @@ const HomeStack = props => {
   return (
     <Navigator
       {...navProps}
-      initialRouteName="Authentication"
+      initialRouteName="menu"
       screenOptions={{
         headerShown: false,
       }}
     >
       <Screen name="HomeMenu" component={Home} />
-      <Screen name="Authentication" component={Authentication} />
+      {/* <Screen name="Authentication" component={Authentication} /> */}
       <Screen
         name="Amenities"
         component={Amenities}
