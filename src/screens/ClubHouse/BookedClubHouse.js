@@ -122,6 +122,7 @@ class BookedClubHouse extends Component {
       <Block>
         <Modal
           visible={isFormModalVisible}
+          // eslint-disable-next-line react/no-unstable-nested-components
           content={() => (
             <ClubHouseForm
               initialValues={initialValues}
@@ -156,7 +157,7 @@ class BookedClubHouse extends Component {
           ))}
         </ScrollView>
         <FooterButton
-          buttonText="Book ClubHouse"
+          buttonText="Book Clubhouse"
           iconName="wallet-outline"
           navigationPath="AllClubHouse"
           navigation={navigation}

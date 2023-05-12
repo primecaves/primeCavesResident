@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import { ScrollView, View, StyleSheet, RefreshControl } from 'react-native';
 import { Block, Text } from 'galio-framework';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,15 +14,15 @@ import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
 import { FIELDS } from './amenities.constants';
 import { fetchAllAmenities } from './amenities.services';
-import API_1 from '../../constants/amenitiesResponse';
+import { EMPTY_ARRAY, EMPTY_STRING, SERVICES } from '../../constants';
 
 class AllAmenities extends Component {
   state = {
     isLoading: false,
-    amenities: [],
-    initialCards: [],
-    keyToRemove: [],
-    displayNameKey: '',
+    amenities: EMPTY_ARRAY,
+    initialCards: EMPTY_ARRAY,
+    keyToRemove: EMPTY_ARRAY,
+    displayNameKey: EMPTY_STRING,
     isFormModalVisible: false,
   };
 
@@ -32,13 +31,6 @@ class AllAmenities extends Component {
   }
 
   fetchAmenities = () => {
-    const { data, key_to_remove, display_name_key } = API_1;
-    // this.setState({
-    //   amenities: data,
-    //   intialAmenities: data,
-    //   keyToRemove: key_to_remove,
-    //   displayNameKey: display_name_key,
-    // });
     this.setState({ isLoading: true });
     fetchAllAmenities()
       .then(response => {
@@ -104,12 +96,25 @@ class AllAmenities extends Component {
     }
   };
 
+
+  getFields = () => {
+    return [
+      ...FIELDS,
+      {
+        id: 'price',
+        key: 'price',
+        component: 'PRICE',
+        keysToMultiply: ['each_quantity_price', 'no_of_days', 'no_of_quantity'],
+      },
+    ];
+  };
+
   renderForm = () => {
     const { initialValues } = this.state;
     return (
       <Form
         isEdit
-        fields={FIELDS}
+        fields={this.getFields()}
         onClose={this.toggleFormModal}
         initialValues={initialValues}
         primaryButtonText="Pay Now"
@@ -120,6 +125,7 @@ class AllAmenities extends Component {
         secondaryButtonProps={{
           style: styles.footerSecondaryButton,
         }}
+        service={SERVICES.AMENITIES}
       />
     );
   };

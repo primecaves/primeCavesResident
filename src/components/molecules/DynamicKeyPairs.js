@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
-import { Block, Button, Text } from 'galio-framework';
+import { Block, Text } from 'galio-framework';
 import { Select, Input } from '../';
 import argonTheme from '../../constants/Theme';
 import _map from 'lodash/map';
@@ -8,6 +8,7 @@ import { EMPTY_ARRAY, EMPTY_STRING } from '../../constants';
 import Icon from '../atoms/Icon';
 import _isEmpty from 'lodash/isEmpty';
 import _get from 'lodash/get';
+
 const COMPONENT = {
   INPUT: 'member',
   SELECT: 'time_slot',
@@ -21,30 +22,38 @@ export class DynamicKeyPairs extends Component {
       field: !_isEmpty(data)
         ? data
         : [
-            {
-              member: '',
-              time_slot: '',
-            },
-          ],
+          {
+            member: '',
+            time_slot: '',
+          },
+        ],
     };
   }
 
   handleChange = (value, index, component) => {
+    const { onChange } = this.props;
     const { field } = this.state;
     const list = [...field];
     list[index][component] = value;
     this.setState({ field: list });
+    onChange(list);
   };
 
   handleAddChange = () => {
+    const { onChange } = this.props;
     const { field } = this.state;
-    this.setState({ field: [...field, { member: '', time_slot: '' }] });
+    const updatedField = [...field, { member: '', time_slot: '' }];
+    this.setState({ field: updatedField });
+    onChange(updatedField);
   };
+
   handleRemoveChange = index => {
+    const { onChange } = this.props;
     const { field } = this.state;
     const list = [...field];
     list.splice(index, 1);
     this.setState({ field: list });
+    onChange(list);
   };
   render() {
     const { field } = this.state;
@@ -52,22 +61,27 @@ export class DynamicKeyPairs extends Component {
     return (
       <>
         <Block paddingLeft={15}>
-          <Text>{label}</Text>
+          <Text >{label}</Text>
         </Block>
         {_map(field, (item, index) => (
           <Block flex row>
-            <Block>
+            <Block >
               <Input
-                style={{ width: '160' }}
-                shadowless
+                style={{
+                  borderRadius: 4,
+                  borderColor: argonTheme.COLORS.BORDER,
+                  height: 44,
+                  backgroundColor: '#FFFFFF',
+                  width: 180,
+                }}
+                editable={showActions}
                 value={_get(item, 'member', EMPTY_STRING)}
                 onChange={val => this.handleChange(val, index, COMPONENT.INPUT)}
               />
             </Block>
-            <Block>
+            <Block style={{ paddingLeft: 10 }}>
               <Select
-                width={110}
-                height={45}
+                disabled={!showActions}
                 options={['1am-2am', '10am-11pm']}
                 onSelect={val =>
                   this.handleChange(val, index, COMPONENT.SELECT)
@@ -77,28 +91,22 @@ export class DynamicKeyPairs extends Component {
             </Block>
             {showActions && field.length - 1 === index && field.length < 4 && (
               <Block>
-                <Button
-                  shadowless
-                  style={styles.plusButton}
+                <Icon
+                  paddingLeft={10}
+                  paddingTop={25}
+                  size={16}
+                  color={argonTheme.COLORS.BLACK}
+                  name="plus"
+                  family="AntDesign"
                   onPress={this.handleAddChange}
-                >
-                  <Block center>
-                    <Text
-                      fontFamily={'open-sans-regular'}
-                      color={argonTheme.COLORS.WHITE}
-                      size={18}
-                    >
-                      +
-                    </Text>
-                  </Block>
-                </Button>
+                />
               </Block>
             )}
             {showActions && field.length !== 1 && (
               <Block>
                 <Icon
-                  paddingLeft={20}
-                  paddingTop={14}
+                  paddingLeft={10}
+                  paddingTop={25}
                   size={16}
                   color={argonTheme.COLORS.WARNING}
                   name="delete"

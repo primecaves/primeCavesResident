@@ -1,21 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Text, Block } from 'galio-framework';
 import argonTheme from '../../constants/Theme';
 import { StyleSheet, View } from 'react-native';
-import _get from 'lodash/get';
+import priceCalc from '../../utils/priceCalc';
 
 const DIVIDER_COLOR = 'E5E7EB';
 
-export const PriceFooter = ({ keysToMultiply, values }) => {
-  const calculateAmenitiesPrice = (price, quantity, days) =>
-    price * quantity * days;
-
-  const result = calculateAmenitiesPrice(
-    _get(values, keysToMultiply[0], 0),
-    _get(values, keysToMultiply[1], 1),
-    _get(values, keysToMultiply[2], 1),
-  );
-
+export const PriceFooter = ({ service, keysToMultiply, values }) => {
+  const price = priceCalc({ service, values, keysToMultiply });
   return (
     <>
       <View style={styles.horizontalLine} />
@@ -23,11 +15,7 @@ export const PriceFooter = ({ keysToMultiply, values }) => {
         <Block>
           <Text
             size={18}
-            style={{
-              color: argonTheme.COLORS.BLACK,
-              fontFamily: 'open-sans-regular',
-              padding: 8,
-            }}
+            style={styles.priceFooterLabel}
           >
             Price:
           </Text>
@@ -36,26 +24,34 @@ export const PriceFooter = ({ keysToMultiply, values }) => {
           <Text
             size={18}
             bold
-            style={{
-              color: argonTheme.COLORS.BLACK,
-              fontFamily: 'open-sans-regular',
-              padding: 8,
-              marginLeft: '72%',
-            }}
+            style={styles.priceFooterValue}
           >
-            {result}
+            {price}
           </Text>
         </Block>
-      </Block>
+      </Block >
     </>
   );
 };
 
 export default PriceFooter;
+
 const styles = StyleSheet.create({
   horizontalLine: {
     borderBottomColor: DIVIDER_COLOR,
     borderBottomWidth: 0.5,
     bottom: 5,
+  },
+  priceFooterLabel: {
+    color: argonTheme.COLORS.BLACK,
+    fontFamily: 'open-sans-regular',
+    padding: 8,
+
+  },
+  priceFooterValue: {
+    color: argonTheme.COLORS.BLACK,
+    fontFamily: 'open-sans-regular',
+    padding: 8,
+    marginLeft: '72%',
   },
 });

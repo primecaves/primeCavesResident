@@ -107,6 +107,7 @@ class Form extends Component {
     values,
     setFieldValue,
   }) => {
+    const { service } = this.props;
     switch (component) {
       case 'INPUT':
         return (
@@ -209,14 +210,18 @@ class Form extends Component {
                 values,
                 'maximum_days_booking',
                 0,
-              )} days you can book an amenity.`}
+              )} days you can book an ${service || ''}.`}
             />
           </Block>
         );
       case 'PRICE':
         return (
           <Block>
-            <PriceFooter {...item} values={values} />
+            <PriceFooter
+              {...item}
+              values={values}
+              service={service}
+            />
           </Block>
         );
       case 'SLIDER':
@@ -232,6 +237,7 @@ class Form extends Component {
             <DynamicKeyPairs
               {...item}
               data={_get(values, 'members', EMPTY_ARRAY)}
+              onChange={val => setFieldValue(_get(item, 'key', ''), val)}
             />
           </Block>
         );

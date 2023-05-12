@@ -8,9 +8,12 @@ import Icon from '../atoms/Icon';
 import argonTheme from '../../constants/Theme';
 
 class DropDown extends React.Component {
-  state = {
-    value: 1,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.value,
+    };
+  }
 
   handleOnSelect = (index, value) => {
     const { onSelect } = this.props;
@@ -52,23 +55,32 @@ class DropDown extends React.Component {
           flex
           row
           middle
+          center
           style={{
             borderRadius: 4,
+            borderWidth: 1,
             borderColor: argonTheme.COLORS.BORDER,
             height: 44,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: argonTheme.COLORS.WHITE,
+            width: 100,
           }}
-          space="between"
+          space="evenly"
         >
+          <Icon
+            size={18}
+            color={argonTheme.COLORS.ICON}
+            name="time-slot"
+            family="Entypo"
+          />
           <Text size={12} style={textStyles}>
             {this.state.value}
           </Text>
-          {/* <Icon
-            name={iconName || 'nav-select-arrows'}
-            family={iconFamily || 'Entypo'}
+          <Icon
+            name={iconName || 'caretdown'}
+            family={iconFamily || 'AntDesign'}
             size={iconSize || 10}
-            color={iconColor || argonTheme.COLORS.WHITE}
-          /> */}
+            color={iconColor || argonTheme.COLORS.BLACK}
+          />
         </Block>
       </ModalDropdown>
     );
@@ -98,7 +110,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
   },
   text: {
-    color: argonTheme.COLORS.PRIMARY,
+    color: argonTheme.COLORS.TEXT,
     fontWeight: '600',
   },
   dropdown: {

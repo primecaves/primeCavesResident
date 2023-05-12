@@ -111,14 +111,13 @@ class DynamicKeyCard extends React.Component {
                 style={{
                   marginTop: cardGap,
                   width: cardWidth,
-                  paddingLeft: 15,
                 }}
               >
                 <Block style={{ fontFamily: 'open-sans-bold' }}>
-                  <Text style={{ fontFamily: 'open-sans-bold' }} size={12}>
+                  <Text center bold style={{ fontFamily: 'open-sans-bold' }} size={12}>
                     {item.title}
                   </Text>
-                  <Text style={{ fontFamily: 'open-sans-regular' }} size={12}>
+                  <Text center style={{ fontFamily: 'open-sans-regular' }} size={12}>
                     {item.value}
                   </Text>
                 </Block>
@@ -133,6 +132,7 @@ class DynamicKeyCard extends React.Component {
     const { image } = this.props;
     return <ImageSlider image={image} isDynamicCard />;
   };
+
   renderBody = () => {
     const { values, displayNameKey, image, selectedService, item } = this.props;
     const displayName = _find(values, item => item.key === displayNameKey);

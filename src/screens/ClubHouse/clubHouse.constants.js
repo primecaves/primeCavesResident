@@ -27,8 +27,8 @@ export const FIELDS = [
   },
 
   {
-    id: 'pairs',
-    key: 'pairs',
+    id: 'members',
+    key: 'members',
     component: 'KEYPAIRS',
     label: 'Members',
   },
@@ -36,11 +36,5 @@ export const FIELDS = [
     id: 'note',
     key: 'note',
     component: 'NOTE',
-  },
-  {
-    id: 'price',
-    key: 'price',
-    component: 'PRICE',
-    keysToMultiply: ['price', 'no_of_days', 'no_of_quantity'],
   },
 ];

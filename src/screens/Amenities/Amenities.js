@@ -11,6 +11,7 @@ import AlertModal from '../../components/molecules/AlertModal';
 import { getBookedAmenities } from './amenities.services';
 import { FIELDS } from './amenities.constants';
 import FooterButton from '../../components/molecules/FooterButton';
+import { SERVICES } from '../../constants';
 
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -85,6 +86,7 @@ class Amenities extends Component {
         secondaryButtonProps={{
           style: styles.footerSecondaryButton,
         }}
+        service={SERVICES.AMENITIES}
       />
     );
   };

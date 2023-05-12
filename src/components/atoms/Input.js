@@ -1,11 +1,11 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { Input } from "galio-framework";
+import { Input } from 'galio-framework';
 
 import Icon from '../atoms/Icon';
-import argonTheme from "../../constants/Theme";
+import argonTheme from '../../constants/Theme';
 
 class ArInput extends React.Component {
   render() {
@@ -16,12 +16,12 @@ class ArInput extends React.Component {
       !shadowless && styles.shadow,
       success && styles.success,
       error && styles.error,
-      { ...this.props.style }
+      { ...this.props.style },
     ];
 
     return (
       <Input
-        placeholder="write something here"
+        placeholder="type here"
         placeholderTextColor={argonTheme.COLORS.MUTED}
         style={inputStyles}
         color={argonTheme.COLORS.HEADER}
@@ -29,8 +29,8 @@ class ArInput extends React.Component {
           <Icon
             size={14}
             color={argonTheme.COLORS.ICON}
-            name="link"
-            family="AntDesign"
+            name="user"
+            family="Feather"
           />
         }
         {...this.props}
@@ -42,21 +42,21 @@ class ArInput extends React.Component {
 ArInput.defaultProps = {
   shadowless: false,
   success: false,
-  error: false
+  error: false,
 };
 
 ArInput.propTypes = {
+  error: PropTypes.bool,
   shadowless: PropTypes.bool,
   success: PropTypes.bool,
-  error: PropTypes.bool
-}
+};
 
 const styles = StyleSheet.create({
   input: {
     borderRadius: 4,
     borderColor: argonTheme.COLORS.BORDER,
     height: 44,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
   },
   success: {
     borderColor: argonTheme.COLORS.INPUT_SUCCESS,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     shadowOpacity: 0.13,
     elevation: 2,
-  }
+  },
 });
 
 export default ArInput;
