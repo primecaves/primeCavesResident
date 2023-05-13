@@ -8,23 +8,11 @@ const ClubHouseForm = ({
   onClose,
   primaryButtonText = 'Pay Now',
 }) => {
-
-  const getFields = () => {
-    return [
-      ...FIELDS,
-      {
-        id: 'price',
-        key: 'price',
-        component: 'PRICE',
-        keysToMultiply: ['each_quantity_price', 'no_of_days', 'no_of_quantity'],
-      },
-    ];
-  };
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
     <Form
       isEdit
-      fields={getFields()}
+      fields={FIELDS}
       onClose={onClose}
       initialValues={initialValues}
       primaryButtonText={primaryButtonText}

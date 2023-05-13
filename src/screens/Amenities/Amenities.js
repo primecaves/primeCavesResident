@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import { Block, Text } from 'galio-framework';
-import API_1 from '../../constants/amenitiesResponse';
 import { DynamicKeyCard, Header, Button, Modal, Form } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
 import _map from 'lodash/map';
 import _get from 'lodash/get';
 import AlertModal from '../../components/molecules/AlertModal';
-import { getBookedAmenities } from './amenities.services';
+import Toast from 'react-native-toast-message';
+import {
+  getBookedAmenities,
+  deleteAmenitiesFromResident,
+} from './amenities.services';
 import { FIELDS } from './amenities.constants';
 import FooterButton from '../../components/molecules/FooterButton';
 import { SERVICES } from '../../constants';
@@ -32,12 +41,6 @@ class Amenities extends Component {
   }
 
   fetchAmenities = () => {
-    // const { data, key_to_remove, display_name_key } = API_1;
-    // this.setState({
-    // amenities: data,
-    // keyToRemove: key_to_remove,
-    // displayNameKey: display_name_key,
-    // });
     this.setState({ isLoading: true });
     getBookedAmenities('644b68e005d65b3294c0771f')
       .then(response => {
@@ -70,6 +73,34 @@ class Amenities extends Component {
       initialValues: item,
     }));
   };
+  handleDeleteAmenity = item => {
+    const request = {
+      amenity_id: item.amenity_id,
+    };
+    deleteAmenitiesFromResident('644b68e005d65b3294c0771f', request)
+      .then(response => {
+        if (response) {
+          this.setState({ isAlertModalVisible: false });
+          Toast.show({
+            type: 'success',
+            text1: 'Amenity Deleted Successfully',
+          });
+          this.fetchAmenities();
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'Amenity Deletion Failed',
+          });
+        }
+      })
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'Amenity Deletion Failed',
+        });
+        this.setState({ isAlertModalVisible: false });
+      });
+  };
   renderForm = () => {
     const { initialValues } = this.state;
     return (
@@ -100,6 +131,7 @@ class Amenities extends Component {
           <AlertModal
             visible={isAlertModalVisible}
             onClose={this.toggleAlertModal}
+            onSubmit={() => this.handleDeleteAmenity(item)}
           />
 
           <Button
@@ -144,7 +176,14 @@ class Amenities extends Component {
     return (
       <Block>
         <Modal visible={isFormModalVisible} content={this.renderForm} />
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={this.fetchAmenities}
+            />
+          }
+        >
           <Header
             title="Amenities"
             back

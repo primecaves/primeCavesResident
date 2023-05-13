@@ -1,7 +1,7 @@
 import API from '../../services/baseApi';
 
 export const fetchAllClubHouse = () => {
-  const url = '/clubhouse';
+  const url = '/clubhouses';
   return API.get(url);
 };
 
@@ -18,4 +18,9 @@ export const addClubHouseToResident = id => {
 export const getBookedClubHouse = id => {
   const url = `/bookclubhouse?id=${id}`;
   return API.get(url);
+};
+
+export const deleteClubhouseFromResident = (residentId, request) => {
+  const url = `/deleteClubhouseFromResident?id=${residentId}`;
+  return API.put(url, request);
 };

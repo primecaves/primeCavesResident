@@ -19,3 +19,8 @@ export const getBookedAmenities = id => {
   const url = `/bookamenities?id=${id}`;
   return API.get(url);
 };
+
+export const deleteAmenitiesFromResident = (residentId, request) => {
+  const url = `/deleteAmenitiesFromResident?id=${residentId}`;
+  return API.put(url, request);
+};

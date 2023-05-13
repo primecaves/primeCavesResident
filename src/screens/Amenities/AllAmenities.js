@@ -96,25 +96,12 @@ class AllAmenities extends Component {
     }
   };
 
-
-  getFields = () => {
-    return [
-      ...FIELDS,
-      {
-        id: 'price',
-        key: 'price',
-        component: 'PRICE',
-        keysToMultiply: ['each_quantity_price', 'no_of_days', 'no_of_quantity'],
-      },
-    ];
-  };
-
   renderForm = () => {
     const { initialValues } = this.state;
     return (
       <Form
         isEdit
-        fields={this.getFields()}
+        fields={FIELDS}
         onClose={this.toggleFormModal}
         initialValues={initialValues}
         primaryButtonText="Pay Now"

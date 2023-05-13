@@ -37,4 +37,9 @@ export const FIELDS = [
     key: 'note',
     component: 'NOTE',
   },
+  {
+    id: 'price',
+    key: 'price',
+    component: 'PRICE',
+  },
 ];

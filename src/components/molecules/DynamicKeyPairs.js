@@ -22,11 +22,11 @@ export class DynamicKeyPairs extends Component {
       field: !_isEmpty(data)
         ? data
         : [
-          {
-            member: '',
-            time_slot: '',
-          },
-        ],
+            {
+              member: '',
+              time_slot: '',
+            },
+          ],
     };
   }
 
@@ -61,25 +61,19 @@ export class DynamicKeyPairs extends Component {
     return (
       <>
         <Block paddingLeft={15}>
-          <Text >{label}</Text>
+          <Text>{label}</Text>
         </Block>
         {_map(field, (item, index) => (
           <Block flex row>
-            <Block >
+            <Block>
               <Input
-                style={{
-                  borderRadius: 4,
-                  borderColor: argonTheme.COLORS.BORDER,
-                  height: 44,
-                  backgroundColor: '#FFFFFF',
-                  width: 180,
-                }}
+                style={styles.input}
                 editable={showActions}
                 value={_get(item, 'member', EMPTY_STRING)}
                 onChange={val => this.handleChange(val, index, COMPONENT.INPUT)}
               />
             </Block>
-            <Block style={{ paddingLeft: 10 }}>
+            <Block paddingLeft={10}>
               <Select
                 disabled={!showActions}
                 options={['1am-2am', '10am-11pm']}
@@ -129,6 +123,13 @@ const styles = StyleSheet.create({
     width: '150%',
     borderRadius: 5,
     backgroundColor: argonTheme.COLORS.BLACK,
+  },
+  input: {
+    borderRadius: 4,
+    borderColor: argonTheme.COLORS.BORDER,
+    height: 44,
+    backgroundColor: '#FFFFFF',
+    width: 180,
   },
 });
 

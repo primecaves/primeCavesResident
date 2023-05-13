@@ -13,9 +13,8 @@ import { DynamicKeyCard, Form, Header, Modal } from '../../components';
 import { Button } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
-import { API_1 } from '../../constants/clubHouseResponse';
 import ClubHouseForm from './Components/ClubHouseForm';
-// import { fetchAllClubHouse } from './ clubHouse.services';
+import { fetchAllClubHouse } from './clubHouse.services';
 
 class AllClubHouse extends Component {
   state = {
@@ -32,32 +31,25 @@ class AllClubHouse extends Component {
   }
 
   fetchClubHouse = () => {
-    const { data, key_to_remove, display_name_key } = API_1;
-    this.setState({
-      clubHouse: data,
-      intialClubHouse: data,
-      keyToRemove: key_to_remove,
-      displayNameKey: display_name_key,
-    });
-    // this.setState({ isLoading: true });
-    // fetchAllClubHouse()
-    //   .then(response => {
-    //     if (response) {
-    //       const {
-    //         data: { data, key_to_remove, display_name_key },
-    //       } = response;
-    //       this.setState({
-    //         isLoading: false,
-    //         clubHouse: data,
-    //         intialClubHouse: data,
-    //         keyToRemove: key_to_remove,
-    //         displayNameKey: display_name_key,
-    //       });
-    //     }
-    //   })
-    //   .catch(() => {
-    //     this.setState({ isLoading: false });
-    //   });
+    this.setState({ isLoading: true });
+    fetchAllClubHouse()
+      .then(response => {
+        if (response) {
+          const {
+            data: { data, key_to_remove, display_name_key },
+          } = response;
+          this.setState({
+            isLoading: false,
+            clubHouse: data,
+            intialClubHouse: data,
+            keyToRemove: key_to_remove,
+            displayNameKey: display_name_key,
+          });
+        }
+      })
+      .catch(() => {
+        this.setState({ isLoading: false });
+      });
   };
   toggleFormModal = item => {
     this.setState(prevState => ({
@@ -119,6 +111,7 @@ class AllClubHouse extends Component {
       <Block>
         <Modal
           visible={isFormModalVisible}
+          // eslint-disable-next-line react/no-unstable-nested-components
           content={() => (
             <ClubHouseForm
               initialValues={initialValues}

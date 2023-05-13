@@ -42,4 +42,10 @@ export const FIELDS = [
     key: 'note',
     component: 'NOTE',
   },
+  {
+    id: 'price',
+    key: 'price',
+    component: 'PRICE',
+    keysToMultiply: ['each_quantity_price', 'no_of_days', 'no_of_quantity'],
+  },
 ];

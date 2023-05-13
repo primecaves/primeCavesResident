@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import { Block, Text } from 'galio-framework';
 import { API_1, API_2 } from '../../constants/clubHouseResponse';
 import { DynamicKeyCard, Header, Button, Modal } from '../../components';
 import { getKeyValuePair } from '../../utils';
+import Toast from 'react-native-toast-message';
 import argonTheme from '../../constants/Theme';
 import _map from 'lodash/map';
 import _get from 'lodash/get';
 import AlertModal from '../../components/molecules/AlertModal';
-// import { getBookedClubHouse } from './clubHouse.services';
+import {
+  getBookedClubHouse,
+  deleteClubhouseFromResident,
+} from './clubHouse.services';
 import FooterButton from '../../components/molecules/FooterButton';
 import ClubHouseForm from './Components/ClubHouseForm';
 
@@ -31,30 +41,30 @@ class BookedClubHouse extends Component {
   }
 
   fetchClubHouse = () => {
-    const { data, key_to_remove, display_name_key } = API_2;
-    this.setState({
-      clubHouse: data,
-      keyToRemove: key_to_remove,
-      displayNameKey: display_name_key,
-    });
+    // const { data, key_to_remove, display_name_key } = API_2;
+    // this.setState({
+    //   clubHouse: data,
+    //   keyToRemove: key_to_remove,
+    //   displayNameKey: display_name_key,
+    // });
     this.setState({ isLoading: true });
-    // getBookedClubHouse('6441496305d65b3294c076ec')
-    //   .then(response => {
-    //     if (response) {
-    //       const {
-    //         data: { data, key_to_remove, display_name_key },
-    //       } = response;
-    //       this.setState({
-    //         isLoading: false,
-    //          clubHouse: data,
-    //         keyToRemove: key_to_remove,
-    //         displayNameKey: display_name_key,
-    //       });
-    //     }
-    //   })
-    //   .catch(() => {
-    //     this.setState({ isLoading: false });
-    //   });
+    getBookedClubHouse('644b68e005d65b3294c0771f')
+      .then(response => {
+        if (response) {
+          const {
+            data: { data, key_to_remove, display_name_key },
+          } = response;
+          this.setState({
+            isLoading: false,
+            clubHouse: data,
+            keyToRemove: key_to_remove,
+            displayNameKey: display_name_key,
+          });
+        }
+      })
+      .catch(() => {
+        this.setState({ isLoading: false });
+      });
   };
   toggleAlertModal = () => {
     this.setState(prevState => ({
@@ -67,6 +77,34 @@ class BookedClubHouse extends Component {
       initialValues: item,
     }));
   };
+  handleDeleteClubhouse = item => {
+    const request = {
+      clubhouse_id: item.clubhouse_id,
+    };
+    deleteClubhouseFromResident('644b68e005d65b3294c0771f', request)
+      .then(response => {
+        if (response) {
+          this.setState({ isAlertModalVisible: false });
+          Toast.show({
+            type: 'success',
+            text1: 'Clubhouse Deleted Successfully',
+          });
+          this.fetchClubHouse();
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'Clubhouse Deletion Failed',
+          });
+        }
+      })
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'Clubhouse Deletion Failed',
+        });
+        this.setState({ isAlertModalVisible: false });
+      });
+  };
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;
     return (
@@ -76,6 +114,7 @@ class BookedClubHouse extends Component {
           <AlertModal
             visible={isAlertModalVisible}
             onClose={this.toggleAlertModal}
+            onSubmit={() => this.handleDeleteClubhouse(item)}
           />
 
           <Button
@@ -131,7 +170,14 @@ class BookedClubHouse extends Component {
             />
           )}
         />
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={this.fetchClubHouse}
+            />
+          }
+        >
           <Header
             title=" ClubHouse"
             back
