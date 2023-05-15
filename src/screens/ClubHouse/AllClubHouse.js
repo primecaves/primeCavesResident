@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import { ScrollView, View, StyleSheet, RefreshControl } from 'react-native';
 import { Block, Text } from 'galio-framework';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,27 +13,26 @@ import { DynamicKeyCard, Form, Header, Modal } from '../../components';
 import { Button } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
-import { FIELDS } from './amenities.constants';
-import { fetchAllAmenities } from './amenities.services';
-import { EMPTY_ARRAY, EMPTY_STRING, SERVICES } from '../../constants';
+import ClubHouseForm from './Components/ClubHouseForm';
+import { fetchAllClubHouse } from './clubHouse.services';
 
-class AllAmenities extends Component {
+class AllClubHouse extends Component {
   state = {
     isLoading: false,
-    amenities: EMPTY_ARRAY,
-    initialCards: EMPTY_ARRAY,
-    keyToRemove: EMPTY_ARRAY,
-    displayNameKey: EMPTY_STRING,
+    clubHouse: [],
+    initialCards: [],
+    keyToRemove: [],
+    displayNameKey: '',
     isFormModalVisible: false,
   };
 
   componentDidMount() {
-    this.fetchAmenities();
+    this.fetchClubHouse();
   }
 
-  fetchAmenities = () => {
+  fetchClubHouse = () => {
     this.setState({ isLoading: true });
-    fetchAllAmenities()
+    fetchAllClubHouse()
       .then(response => {
         if (response) {
           const {
@@ -40,8 +40,8 @@ class AllAmenities extends Component {
           } = response;
           this.setState({
             isLoading: false,
-            amenities: data,
-            intialAmenities: data,
+            clubHouse: data,
+            intialClubHouse: data,
             keyToRemove: key_to_remove,
             displayNameKey: display_name_key,
           });
@@ -84,68 +84,57 @@ class AllAmenities extends Component {
   };
 
   handleChangeTab = id => {
-    const { intialAmenities } = this.state;
+    const { intialClubHouse } = this.state;
     if (!_isEmpty(id)) {
       this.setState({
-        amenities: _filter(intialAmenities, ['category', id]),
+        clubHouse: _filter(intialClubHouse, ['category', id]),
       });
     } else {
       this.setState({
-        amenities: intialAmenities,
+        clubHouse: intialClubHouse,
       });
     }
   };
 
-  renderForm = () => {
-    const { initialValues } = this.state;
-    return (
-      <Form
-        isEdit
-        fields={FIELDS}
-        onClose={this.toggleFormModal}
-        initialValues={initialValues}
-        primaryButtonText="Pay Now"
-        secondaryButtonText="Close"
-        primaryButtonProps={{
-          style: styles.footerPrimaryButton,
-        }}
-        secondaryButtonProps={{
-          style: styles.footerSecondaryButton,
-        }}
-        service={SERVICES.AMENITIES}
-      />
-    );
-  };
-
   render() {
     const {
-      amenities,
+      clubHouse,
       isLoading,
       displayNameKey,
       keyToRemove,
-      intialAmenities,
+      intialClubHouse,
       isFormModalVisible,
+      initialValues,
     } = this.state;
     const { navigation, scene } = this.props;
     return (
       <Block>
-        <Modal visible={isFormModalVisible} content={this.renderForm} />
+        <Modal
+          visible={isFormModalVisible}
+          // eslint-disable-next-line react/no-unstable-nested-components
+          content={() => (
+            <ClubHouseForm
+              initialValues={initialValues}
+              onClose={this.toggleFormModal}
+            />
+          )}
+        />
         <ScrollView
           refreshControl={
             <RefreshControl
               refreshing={isLoading}
-              onRefresh={this.fetchAmenities}
+              onRefresh={this.fetchClubHouse}
             />
           }
         >
           <Header
-            title="Amenities"
+            title="ClubHouse"
             back
             search
             showTabs
             onChangeTab={this.handleChangeTab}
             tabs={_uniqBy(
-              _map(intialAmenities, item => ({
+              _map(intialClubHouse, item => ({
                 id: item.category,
                 title: _startCase(item.category),
               })),
@@ -154,7 +143,7 @@ class AllAmenities extends Component {
             navigation={navigation}
             scene={scene}
           />
-          {_map(amenities, (item, key) => (
+          {_map(clubHouse, (item, key) => (
             <DynamicKeyCard
               key={key}
               isLoading={isLoading}
@@ -191,16 +180,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     color: argonTheme.COLORS.WHITE,
   },
-  footerPrimaryButton: {
-    height: 25,
-    fontColor: argonTheme.COLORS.WHITE,
-    backgroundColor: argonTheme.COLORS.PRIMARY,
-  },
-  footerSecondaryButton: {
-    height: 25,
-    fontColor: argonTheme.COLORS.BLACK,
-    backgroundColor: argonTheme.COLORS.WHITE,
-  },
 });
 
-export default AllAmenities;
+export default AllClubHouse;

@@ -20,6 +20,11 @@ const TIME_UNITS = {
   MINUTES: 'minutes',
 };
 
+const SERVICES = {
+  MAINTENANCE: 'maintenance',
+  AMENITIES: 'amenities',
+  CLUBHOUSE: 'clubhouse',
+};
 export {
   EMPTY_ARRAY,
   EMPTY_SET,
@@ -38,4 +43,5 @@ export {
   EMPTY_ROW,
   argonTheme,
   Images,
+  SERVICES,
 };

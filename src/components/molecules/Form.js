@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
-
 import _noop from 'lodash/noop';
-
-import { Block, theme, Text } from 'galio-framework';
-
-import { StyleSheet, View, Dimensions, ScrollView, Image } from 'react-native';
-
+import { Block, Text } from 'galio-framework';
+import { StyleSheet, View, Dimensions, ScrollView } from 'react-native';
 import { Formik } from 'formik';
-
 import _get from 'lodash/get';
 import _map from 'lodash/map';
-
-import { SliderBox } from 'react-native-image-slider-box';
-
 import _forEach from 'lodash/forEach';
-import _isArray from 'lodash/isArray';
-
 import {
   Button,
   Icon,
@@ -23,11 +13,11 @@ import {
   Note,
   PriceFooter,
   Select,
-  Slider,
+  ImageSlider,
   Switch,
+  DynamicKeyPairs,
 } from '../';
-import { argonTheme } from '../../constants';
-
+import { EMPTY_ARRAY, argonTheme } from '../../constants';
 import Counter from './Counter';
 // import InputWithTags from './inputWithTags/InputWithTags';
 const DIVIDER_COLOR = 'E5E7EB';
@@ -47,9 +37,6 @@ const getInitialValues = fields => {
 };
 
 class Form extends Component {
-  calculateAmenitiesPrice = (price, quantity, days) => price * quantity * days;
-  // result = 0;
-
   renderFooter = ({ handleSubmit, values }) => {
     const {
       onClose = _noop,
@@ -120,6 +107,7 @@ class Form extends Component {
     values,
     setFieldValue,
   }) => {
+    const { service } = this.props;
     switch (component) {
       case 'INPUT':
         return (
@@ -222,21 +210,35 @@ class Form extends Component {
                 values,
                 'maximum_days_booking',
                 0,
-              )} days you can book an amenity.`}
+              )} days you can book an ${service || ''}.`}
             />
           </Block>
         );
       case 'PRICE':
         return (
           <Block>
-            <PriceFooter {...item} values={values} />
+            <PriceFooter
+              {...item}
+              values={values}
+              service={service}
+            />
           </Block>
         );
       case 'SLIDER':
         const { image } = values;
         return (
           <Block>
-            <Slider image={image} />
+            <ImageSlider image={image} />
+          </Block>
+        );
+      case 'KEYPAIRS':
+        return (
+          <Block style={{ marginBottom: 5 }}>
+            <DynamicKeyPairs
+              {...item}
+              data={_get(values, 'members', EMPTY_ARRAY)}
+              onChange={val => setFieldValue(_get(item, 'key', ''), val)}
+            />
           </Block>
         );
       default:
@@ -294,7 +296,6 @@ class Form extends Component {
             <Block>
               {
                 <Block row>
-                  {/* {console.log(initialValues)} */}
                   {/* <Block flex right>
                                             <TouchableOpacity
                                                 onPress={primaryIconAction}

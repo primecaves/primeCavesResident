@@ -4,13 +4,14 @@ import { Block, Text } from 'galio-framework';
 import { Pressable, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Theme from '../../constants/Theme';
+import { height } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
 class SelectMenu extends React.Component {
   state = {
     menuText: this.props.text,
   };
   render() {
-    const { optionValues, text, width } = this.props;
+    const { optionValues, text, width, height } = this.props;
 
     return (
       <Menu
@@ -18,7 +19,7 @@ class SelectMenu extends React.Component {
         backgroundColor={'black'}
         placement="bottom"
         w={width ? width : 100}
-        mt={16}
+        h={height ? height : 10}
         trigger={triggerProps => {
           return (
             <Pressable {...triggerProps}>
@@ -27,12 +28,13 @@ class SelectMenu extends React.Component {
                 row={true}
                 style={styles.block}
                 width={width ? width : 100}
+                height={height ? height : 50}
                 space="between"
               >
                 <Text style={{ marginHorizontal: 10 }}>
                   {this.state.menuText}
                 </Text>
-                <Icon name="chevron-down" size={16}></Icon>
+                <Icon name="chevron-down" size={16} />
               </Block>
             </Pressable>
           );

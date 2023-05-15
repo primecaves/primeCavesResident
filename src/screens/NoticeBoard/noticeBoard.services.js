@@ -1,5 +1,3 @@
-import { EMPTY_STRING } from 'tbase/app.constants';
-import { MAIN_APPLICATION_FEATURE_TYPE } from 'constants/app.constants';
 import API from '../../services/baseApi';
 
 export const fetchAllNotices = () => {
@@ -7,7 +5,7 @@ export const fetchAllNotices = () => {
   return API.get(url);
 };
 
-export const fetchSingleNotice = (id) => {
+export const fetchSingleNotice = id => {
   const url = `/notice?id=${id}`;
   return API.get(url);
 };
