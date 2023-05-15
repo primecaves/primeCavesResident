@@ -1,35 +1,20 @@
 import React from 'react';
-
-import {
-  Dimensions,
-  View,
-  StyleSheet,
-  Pressable,
-  ScrollView,
-  Image,
-} from 'react-native';
-
+import { Dimensions, View, StyleSheet, ScrollView } from 'react-native';
 import { Block, Text } from 'galio-framework';
-
 import _get from 'lodash/get';
 import _noop from 'lodash/noop';
 import _find from 'lodash/find';
 import _remove from 'lodash/remove';
 import _includes from 'lodash/includes';
-import _startCase from 'lodash/startCase';
 import _cloneDeep from 'lodash/cloneDeep';
-import _size from 'lodash/size';
-import _drop from 'lodash/drop';
-import _take from 'lodash/take';
 import _isEmpty from 'lodash/isEmpty';
-import _isArray from 'lodash/isArray';
-
-import { Slider } from '../';
+import { DynamicKeyPairs, ImageSlider } from '../';
 import argonTheme from '../../constants/Theme';
-
-import { Icon, Button, SkeletionLoader } from '..';
+import { Icon, Button, SkeletionLoader } from '../';
 import Modal from './Modal';
-// import Carousel from '../../../components/atoms/CarouselItem';
+import { EMPTY_ARRAY } from '../../constants';
+import { TouchableOpacity } from 'react-native';
+
 const { width } = Dimensions.get('screen');
 // const Spacer = ({ height = 16 }) => <MotiView style={{ height }} />
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -77,31 +62,32 @@ class DynamicKeyCard extends React.Component {
   //     )
   // }
 
-  // renderHeader = () => {
-  //     const { setModalVisibile, } = this.props
-  //     return (
-  //         <Block right >
-  //             <Block row  >
-  //                 <Icon
-  //                     name="edit"
-  //                     family="Feather"
-  //                     size={14}
-  //                     style={{ padding: 5 }}
-  //                 />
-  //                 < Icon
-  //                     name="delete"
-  //                     family="AntDesign"
-  //                     size={14}
-  //                     style={{ padding: 5 }}
-  //                     color={argonTheme.COLORS.RED}
-  //                     onPress={() => this.setState({ isModalVisible: true })}
-
-  //                 />
-  //             </Block >
-
-  //         </Block >
-  //     )
-  // }
+  renderHeader = () => {
+    const { editAction = _noop, item } = this.props;
+    return (
+      <Block right>
+        <Block row>
+          <TouchableOpacity>
+            <Icon
+              name="edit"
+              family="Feather"
+              size={14}
+              style={{ padding: 5 }}
+              onPress={() => editAction(item)}
+            />
+          </TouchableOpacity>
+          {/* <Icon
+            name="delete"
+            family="AntDesign"
+            size={14}
+            style={{ padding: 5 }}
+            color={argonTheme.COLORS.RED}
+            onPress={() => this.setState({ isModalVisible: true })}
+          /> */}
+        </Block>
+      </Block>
+    );
+  };
 
   renderFields = () => {
     const { values, displayNameKey, keyToRemove } = this.props;
@@ -125,14 +111,13 @@ class DynamicKeyCard extends React.Component {
                 style={{
                   marginTop: cardGap,
                   width: cardWidth,
-                  paddingLeft: 15,
                 }}
               >
                 <Block style={{ fontFamily: 'open-sans-bold' }}>
-                  <Text style={{ fontFamily: 'open-sans-bold' }} size={12}>
+                  <Text center bold style={{ fontFamily: 'open-sans-bold' }} size={12}>
                     {item.title}
                   </Text>
-                  <Text style={{ fontFamily: 'open-sans-regular' }} size={12}>
+                  <Text center style={{ fontFamily: 'open-sans-regular' }} size={12}>
                     {item.value}
                   </Text>
                 </Block>
@@ -140,17 +125,18 @@ class DynamicKeyCard extends React.Component {
             );
           })}
         </View>
-        {this.renderFooter()}
       </ScrollView>
     );
   };
   renderImage = () => {
     const { image } = this.props;
-    return <Slider image={image} isDynamicCard />;
+    return <ImageSlider image={image} isDynamicCard />;
   };
+
   renderBody = () => {
-    const { values, displayNameKey, image, selectedService } = this.props;
+    const { values, displayNameKey, image, selectedService, item } = this.props;
     const displayName = _find(values, item => item.key === displayNameKey);
+    const members = _get(item, 'members', EMPTY_ARRAY);
     return (
       <Block>
         <Block row style={{ paddingLeft: 10 }}>
@@ -173,6 +159,10 @@ class DynamicKeyCard extends React.Component {
           </Block>
         </Block>
         {this.renderFields()}
+        {item?.members && (
+          <DynamicKeyPairs data={members} showActions={false} />
+        )}
+        {this.renderFooter()}
       </Block>
     );
   };
@@ -245,9 +235,9 @@ class DynamicKeyCard extends React.Component {
       showActions = false,
     } = this.props;
     const { isModalVisible } = this.state;
-    if (isLoading) {
-      return <SkeletionLoader />;
-    }
+    // if (isLoading) {
+    //   return <SkeletionLoader />;
+    // }
     return (
       <Block style={{ padding: 15, paddingBottom: 10 }}>
         {
@@ -255,7 +245,8 @@ class DynamicKeyCard extends React.Component {
             card
             style={{ paddingTop: 8, backgroundColor: argonTheme.COLORS.GREY }}
           >
-            {/* {showActions && this.renderHeader()} */}
+            {showActions && this.renderHeader()}
+
             {this.renderBody()}
             {/* {showActions && this.renderFooter()} */}
           </Block>

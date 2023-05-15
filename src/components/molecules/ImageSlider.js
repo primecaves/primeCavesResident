@@ -8,7 +8,7 @@ import { Block } from 'galio-framework';
 
 import _isArray from 'lodash/isArray';
 const { width } = Dimensions.get('screen');
-const Slider = ({ image, isDynamicCard }) => {
+const ImageSlider = ({ image, isDynamicCard }) => {
   const sliderDimension = isDynamicCard
     ? { parentWidth: 50, sliderBoxHeight: 50 }
     : { parentWidth: width * 0.8, sliderBoxHeight: 80 };
@@ -37,7 +37,7 @@ const Slider = ({ image, isDynamicCard }) => {
   );
 };
 
-export default Slider;
+export default ImageSlider;
 
 const styles = StyleSheet.create({
   userImage: {
