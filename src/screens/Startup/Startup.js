@@ -14,7 +14,7 @@ const Startup = ({ navigation }) => {
     await setDefaultTheme({ theme: 'default', darkMode: null });
     navigation.reset({
       index: 0,
-      routes: [{ name: 'Main' }],
+      routes: [{ name: 'Authentication' }],
     });
   };
   useEffect(() => {
