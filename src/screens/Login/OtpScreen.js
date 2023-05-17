@@ -33,7 +33,7 @@ export class OtpScreen extends Component {
         <Text color={argonTheme.COLORS.PRIMARY}>{number} </Text>
         <OTPInputView
           pinCount={6}
-          style={{ with: '80%', height: 200 }}
+          style={{ width: '70%', height: 200 }}
           autoFocusOnLoad
           codeInputFieldStyle={styles.underlineStyleBase}
           codeInputHighlightStyle={styles.underlineStyleHighLighted}

@@ -1,15 +1,13 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-
-import { Input } from 'galio-framework';
-
+import { Block, Input, Text } from 'galio-framework';
 import Icon from '../atoms/Icon';
 import argonTheme from '../../constants/Theme';
-
+import _isEmpty from 'lodash/isEmpty';
 class ArInput extends React.Component {
   render() {
-    const { shadowless, success, error } = this.props;
+    const { shadowless, success, error, errorMessage } = this.props;
 
     const inputStyles = [
       styles.input,
@@ -20,21 +18,24 @@ class ArInput extends React.Component {
     ];
 
     return (
-      <Input
-        placeholder="type here"
-        placeholderTextColor={argonTheme.COLORS.MUTED}
-        style={inputStyles}
-        color={argonTheme.COLORS.HEADER}
-        iconContent={
-          <Icon
-            size={14}
-            color={argonTheme.COLORS.ICON}
-            name="user"
-            family="Feather"
-          />
-        }
-        {...this.props}
-      />
+      <>
+        <Input
+          placeholder="type here"
+          placeholderTextColor={argonTheme.COLORS.MUTED}
+          style={inputStyles}
+          color={argonTheme.COLORS.HEADER}
+          iconContent={
+            <Icon
+              size={14}
+              color={argonTheme.COLORS.ICON}
+              name="user"
+              family="Feather"
+            />
+          }
+          {...this.props}
+        />
+        {!_isEmpty(errorMessage) && <Text style={styles.errorText} >{errorMessage}</Text>}
+      </>
     );
   }
 }
@@ -57,6 +58,10 @@ const styles = StyleSheet.create({
     borderColor: argonTheme.COLORS.BORDER,
     height: 44,
     backgroundColor: '#FFFFFF',
+  },
+  errorText: {
+    left: 30,
+    color: argonTheme.COLORS.ERROR,
   },
   success: {
     borderColor: argonTheme.COLORS.INPUT_SUCCESS,
