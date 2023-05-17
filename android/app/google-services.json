@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "865850659826",
+    "project_id": "primecaves-acd8c",
+    "storage_bucket": "primecaves-acd8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865850659826:android:c7c0a8c08b52d50915d16b",
+        "android_client_info": {
+          "package_name": "com.primecavesresident"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "865850659826-frc501h084k5r8olbcdapus5cd8dpleq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1GuMFYexXUCzo8BaUmxDKdIOKrbjNEm0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "865850659826-frc501h084k5r8olbcdapus5cd8dpleq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
