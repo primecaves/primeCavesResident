@@ -22,10 +22,12 @@ export class LoginScreen extends Component {
   }
 
   componentDidMount() {
-    console.log('Here Mounted');
-  }
-  componentWillUnmount() {
-    console.log('Here UNNN');
+    this.setState({
+      confirm: null,
+      code: null,
+      isLoading: false,
+      errorMessage: EMPTY_STRING,
+    });
   }
   signInWithPhoneNumber = async phoneNumber => {
     this.setState({ isLoading: true });
