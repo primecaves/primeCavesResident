@@ -13,10 +13,14 @@ import {
 import { MMKV } from 'react-native-mmkv';
 import { api } from '../services/api';
 import theme from './theme';
+import appReducer from '../reducers/app.reducer';
+
 const reducers = combineReducers({
   theme,
+  appReducer,
   [api.reducerPath]: api.reducer,
 });
+
 const storage = new MMKV();
 export const reduxStorage = {
   setItem: (key, value) => {

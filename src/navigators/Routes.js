@@ -7,6 +7,7 @@ import _isEmpty from 'lodash/isEmpty';
 import _isUndefined from 'lodash/isUndefined';
 import { loginUser } from '../screens/Authentication/login.services';
 import { SET_USER_DETAILS } from '../screens/Authentication/authentication.actionTypes';
+import { connect } from 'react-redux';
 
 const Routes = () => {
   const [token, setToken] = useState();
@@ -45,4 +46,15 @@ const Routes = () => {
   );
 };
 
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     increaseTheValue: () => {
+//       dispatch(increase());
+//     },
+
+//     decreaseTheValue: () => {
+//       dispatch(decrease());
+//     },
+//   };
+// };
 export default Routes;
