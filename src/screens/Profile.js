@@ -23,14 +23,13 @@ class Profile extends React.Component {
     user: {},
   };
   componentDidMount() {
-    AsyncStorage.getItem('userDetails').then((user) => {
-      this.setState({ user: JSON.parse(user) });
-    });
+    const { userDetails } = this.props;
+    this.setState({ user: userDetails });
   }
 
   handleRemoveDataFromAsyncStorage = () => {
     AsyncStorage.removeItem('accessToken');
-    AsyncStorage.removeItem('userDetails');
+    AsyncStorage.removeItem('userId');
   };
 
   render() {

@@ -8,6 +8,7 @@ import { withNavigation } from '@react-navigation/compat';
 import { loginUser } from './login.services';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import _get from 'lodash/get';
 
 export class OtpScreen extends Component {
   state = {
@@ -32,10 +33,9 @@ export class OtpScreen extends Component {
               'accessToken',
               accessToken,
             );
-
             await AsyncStorage.setItem(
-              'useDetails',
-              JSON.parse(data),
+              'userId',
+              _get(data, '_id'),
             );
           } else {
             Toast.show({

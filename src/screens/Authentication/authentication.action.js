@@ -1,8 +1,8 @@
-import { FETCH_USER_DETAILS } from './authentication.actionTypes';
+import { SET_USER_DETAILS } from './authentication.actionTypes';
 
-export function fetchUserDetails(userDetails) {
+export function setUserDetails(user) {
   return {
-    type: FETCH_USER_DETAILS,
-    userDetails,
+    type: SET_USER_DETAILS,
+    user,
   };
 }
