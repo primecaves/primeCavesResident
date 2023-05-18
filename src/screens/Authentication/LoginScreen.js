@@ -21,14 +21,6 @@ export class LoginScreen extends Component {
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      confirm: null,
-      code: null,
-      isLoading: false,
-      errorMessage: EMPTY_STRING,
-    });
-  }
   signInWithPhoneNumber = async phoneNumber => {
     this.setState({ isLoading: true });
     const { navigation } = this.props;

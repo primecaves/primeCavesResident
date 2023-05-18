@@ -79,10 +79,10 @@ class Header extends React.Component {
   };
 
   renderRight = () => {
-    const { white, title, navigation } = this.props;
+    const { white, title, navigation, right } = this.props;
     // const { routeName } = navigation.state;
 
-    if (title === 'Title') {
+    if (right) {
       return [
         <BellButton key="chat-title" navigation={navigation} isWhite={white} />,
         <BasketButton
@@ -296,18 +296,19 @@ class Header extends React.Component {
           rightStyle={{ alignItems: 'center' }}
           onLeftPress={this.handleLeftPress}
           left={
-            <Icon
-              name={back ? 'chevron-left' : 'menu'}
-              family="entypo"
-              // name={back ? 'nav-left' : "menu-8"} family="ArgonExtra"
-              size={back ? 20 : 20}
-              onPress={this.handleLeftPress}
-              color={
-                iconColor ||
-                (white ? argonTheme.COLORS.WHITE : argonTheme.COLORS.ICON)
-              }
-              style={{ marginTop: 2 }}
-            />
+            back && (
+              <Icon
+                name={'chevron-left'}
+                family="entypo"
+                // name={back ? 'nav-left' : "menu-8"} family="ArgonExtra"
+                size={back ? 20 : 20}
+                onPress={this.handleLeftPress}
+                color={
+                  iconColor ||
+                  (white ? argonTheme.COLORS.WHITE : argonTheme.COLORS.ICON)
+                }
+                style={{ marginTop: 2 }}
+              />)
           }
           leftStyle={{ paddingVertical: 12, flex: 0.2 }}
           titleStyle={[

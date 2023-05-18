@@ -1,7 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { OtpScreen } from '../screens/Login/OtpScreen';
-import LoginScreen from '../screens/Login/LoginScreen';
+import { OtpScreen, LoginScreen } from '../screens/Authentication';
 const Stack = createStackNavigator();
 
 const AuthStack = () => {

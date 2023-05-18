@@ -9,15 +9,13 @@ import {
 import { Block, theme, Text } from 'galio-framework';
 import { MenuCard } from '../../components';
 import menu from '../../constants/menu';
-import _map from 'lodash/map';
-import _get from 'lodash/get';
 import argonTheme from '../../constants/Theme';
 import RemainderCard from '../../components/molecules/RemainderCard';
 const { width } = Dimensions.get('screen');
 
 class Home extends React.Component {
   constructor(props) {
-    super(props); 
+    super(props);
     this.state = {
       isLoading: true,
       menu: [],

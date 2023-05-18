@@ -2,15 +2,16 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Amenities, AllAmenities } from '../screens/Amenities';
 import Payments from '../screens/Payments/Payments';
 import Home from '../screens/Home/Home';
-import { Header } from '../components';
+import { Header, Icon } from '../components';
 import NoticeBoard from '../screens/NoticeBoard/NoticeBoard';
 import SinglePageNotice from '../screens/NoticeBoard/SinglePageNotice';
 import { ClubHouse, AllClubHouse } from '../screens/ClubHouse';
+import { argonTheme } from '../constants';
+import { Button } from 'galio-framework';
+import Profile from '../screens/Profile';
 
 const RenderTabBarIcon = ({ focused, route }) => {
   let iconName = '';
@@ -42,7 +43,29 @@ const HomeStack = props => {
       {...navProps}
       initialRouteName="HomeMenu"
       screenOptions={{
-        headerShown: false,
+        header: ({ navigation, scene }) => (
+          <Header
+            title="Menu"
+            navigation={navigation}
+            scene={scene}
+            right={[
+              <Button
+                shadowless
+                onPress={() => navigation.navigate('Profile')}
+                style={{
+                  backgroundColor: argonTheme.COLORS.WHITE,
+                  width: 40,
+                  height: 40,
+                }}
+                iconColor={argonTheme.COLORS.ICON}
+                onlyIcon
+                icon="user"
+                iconFamily="antdesign"
+                size={16}
+              />,
+
+            ]}
+          />),
       }}
     >
       <Screen name="HomeMenu" component={Home} />
@@ -65,6 +88,8 @@ const HomeStack = props => {
         component={ClubHouse}
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
+
+
         }}
       />
       <Screen
@@ -74,6 +99,15 @@ const HomeStack = props => {
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
+      <Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          cardStyle: { backgroundColor: '#F8F9FE' },
+        }}
+      />
+
+
       <Screen name="Payments" component={Payments} />
       <Screen
         name="NoticeBoard"
@@ -106,7 +140,7 @@ const HomeStack = props => {
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
-    </Navigator>
+    </Navigator >
   );
 };
 

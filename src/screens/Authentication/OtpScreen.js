@@ -5,27 +5,61 @@ import { StyleSheet } from 'react-native';
 import { argonTheme } from '../../constants';
 import { Button } from 'galio-framework';
 import { withNavigation } from '@react-navigation/compat';
+import { loginUser } from './login.services';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class OtpScreen extends Component {
   state = {
     code: '',
   };
   confirmCode = async () => {
-    const { route, navigation } = this.props;
-    const { confirm } = route.params;
     const { code } = this.state;
+    const { route } = this.props;
+    const { number, confirm } = route.params;
+    const request = {
+      contact_number: number,
+    };
     try {
-      await confirm.confirm(code);
-      navigation.navigate('HomeMenu');
+      await confirm.confirm(code).then(res => {
+        console.log(res);
+      });
+      loginUser(request).
+        then(async response => {
+          if (response) {
+            const { accessToken, data } = response;
+            await AsyncStorage.setItem(
+              'accessToken',
+              accessToken,
+            );
+
+            await AsyncStorage.setItem(
+              'useDetails',
+              JSON.parse(data),
+            );
+          } else {
+            Toast.show({
+              type: 'error',
+              position: 'top',
+              text2: 'Please enter a valid OTP',
+            });
+          }
+        }
+        );
     } catch (error) {
-      console.log('Invalid code.');
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text2: 'Please enter a valid OTP',
+      });
     }
   };
+
   handleCodeChanged = code => this.setState({ code });
 
   render() {
     const { route } = this.props;
-    const { number, confirm } = route.params;
+    const { number } = route.params;
     return (
       <Block style={styles.container}>
         <Text style={styles.title}> Verification Code </Text>
