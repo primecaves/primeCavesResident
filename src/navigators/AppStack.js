@@ -8,6 +8,7 @@ import Home from '../screens/Home/Home';
 import { Header, Icon } from '../components';
 import NoticeBoard from '../screens/NoticeBoard/NoticeBoard';
 import SinglePageNotice from '../screens/NoticeBoard/SinglePageNotice';
+import Complain from '../screens/Complain/Complain';
 import { ClubHouse, AllClubHouse } from '../screens/ClubHouse';
 import { argonTheme } from '../constants';
 import { Button } from 'galio-framework';
@@ -63,9 +64,9 @@ const HomeStack = props => {
                 iconFamily="antdesign"
                 size={16}
               />,
-
             ]}
-          />),
+          />
+        ),
       }}
     >
       <Screen name="HomeMenu" component={Home} />
@@ -88,8 +89,6 @@ const HomeStack = props => {
         component={ClubHouse}
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
-
-
         }}
       />
       <Screen
@@ -107,8 +106,14 @@ const HomeStack = props => {
         }}
       />
 
-
       <Screen name="Payments" component={Payments} />
+      <Screen
+        name="Complain"
+        component={Complain}
+        options={{
+          cardStyle: { backgroundColor: '#F8F9FE' },
+        }}
+      />
       <Screen
         name="NoticeBoard"
         component={NoticeBoard}
@@ -140,7 +145,7 @@ const HomeStack = props => {
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
-    </Navigator >
+    </Navigator>
   );
 };
 

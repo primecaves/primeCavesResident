@@ -19,7 +19,7 @@ class DropDown extends React.Component {
     const { onSelect } = this.props;
 
     this.setState({ value: value });
-    onSelect && onSelect(index, value);
+    onSelect && onSelect(value);
   };
 
   render() {
@@ -32,6 +32,8 @@ class DropDown extends React.Component {
       color,
       textStyle,
       style,
+      label,
+      width = 100,
       ...props
     } = this.props;
 
@@ -44,45 +46,49 @@ class DropDown extends React.Component {
     const textStyles = [styles.text, textStyle];
 
     return (
-      <ModalDropdown
-        style={modalStyles}
-        onSelect={this.handleOnSelect}
-        dropdownStyle={styles.dropdown}
-        dropdownTextStyle={{ paddingLeft: 16, fontSize: 12 }}
-        {...props}
-      >
-        <Block
-          flex
-          row
-          middle
-          center
-          style={{
-            borderRadius: 4,
-            borderWidth: 1,
-            borderColor: argonTheme.COLORS.BORDER,
-            height: 44,
-            backgroundColor: argonTheme.COLORS.WHITE,
-            width: 100,
-          }}
-          space="evenly"
-        >
-          <Icon
-            size={18}
-            color={argonTheme.COLORS.ICON}
-            name="time-slot"
-            family="Entypo"
-          />
-          <Text size={12} style={textStyles}>
-            {this.state.value}
+      <>
+        {label && (
+          <Text
+            style={{ fontFamily: 'open-sans-regular', marginLeft: 14 }}
+            size={14}
+            color={argonTheme.COLORS.TEXT}
+          >
+            {label}
           </Text>
-          <Icon
-            name={iconName || 'caretdown'}
-            family={iconFamily || 'AntDesign'}
-            size={iconSize || 10}
-            color={iconColor || argonTheme.COLORS.BLACK}
-          />
-        </Block>
-      </ModalDropdown>
+        )}
+        <ModalDropdown
+          style={modalStyles}
+          onSelect={this.handleOnSelect}
+          dropdownStyle={styles.dropdown}
+          dropdownTextStyle={{ paddingLeft: 16, fontSize: 12 }}
+          {...props}
+        >
+          <Block
+            flex
+            row
+            middle
+            center
+            style={{ ...styles.selectContainer, width }}
+            space="evenly"
+          >
+            <Icon
+              size={18}
+              color={argonTheme.COLORS.ICON}
+              name="time-slot"
+              family="Entypo"
+            />
+            <Text size={12} style={textStyles}>
+              {this.state.value}
+            </Text>
+            <Icon
+              name={iconName || 'caretdown'}
+              family={iconFamily || 'AntDesign'}
+              size={iconSize || 10}
+              color={iconColor || argonTheme.COLORS.BLACK}
+            />
+          </Block>
+        </ModalDropdown>
+      </>
     );
   }
 }
@@ -117,6 +123,13 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginLeft: -16,
     width: 100,
+  },
+  selectContainer: {
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: argonTheme.COLORS.BORDER,
+    height: 44,
+    backgroundColor: argonTheme.COLORS.WHITE,
   },
 });
 

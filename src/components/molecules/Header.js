@@ -56,8 +56,8 @@ const SearchButton = ({ isWhite, style, navigation }) => (
   >
     <Icon
       size={16}
-      family="Galio"
-      name="search-zoom-in"
+      family="ant-design"
+      name="search"
       color={theme.COLORS[isWhite ? 'WHITE' : 'ICON']}
     />
   </TouchableOpacity>
@@ -136,8 +136,8 @@ class Header extends React.Component {
           <Icon
             size={16}
             color={theme.COLORS.MUTED}
-            name="search-zoom-in"
-            family="ArgonExtra"
+            name="search"
+            family="ant-design"
           />
         }
       />
@@ -308,7 +308,8 @@ class Header extends React.Component {
                   (white ? argonTheme.COLORS.WHITE : argonTheme.COLORS.ICON)
                 }
                 style={{ marginTop: 2 }}
-              />)
+              />
+            )
           }
           leftStyle={{ paddingVertical: 12, flex: 0.2 }}
           titleStyle={[

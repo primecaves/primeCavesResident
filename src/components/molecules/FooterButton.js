@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
     position: 'absolute',
-    top: Dimensions.get('screen').height * 0.7,
+    top: Dimensions.get('screen').height * 0.6,
     height: 150,
     width: Dimensions.get('screen').width,
   },

@@ -15,7 +15,7 @@ const Routes = () => {
 
   const fetchUserDetailsServices = () => {
     const { dispatch } = this.props;
-    loginUser({ user_id: userId }).then((response) => {
+    loginUser({ user_id: userId }).then(response => {
       if (response) {
         dispatch({
           type: SET_USER_DETAILS,
@@ -41,7 +41,7 @@ const Routes = () => {
 
   return (
     <NavigationContainer>
-      {!_isEmpty(token) ? <AppStack /> : <AuthStack />}
+      {!_isEmpty(token) ? <AuthStack /> : <AppStack />}
     </NavigationContainer>
   );
 };

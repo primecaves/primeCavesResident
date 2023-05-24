@@ -75,6 +75,13 @@ class Home extends React.Component {
             />
             <MenuCard item={menu[5]} />
           </Block>
+          <Block flex row>
+            <MenuCard
+              item={menu[6]}
+              style={{ marginRight: theme.SIZES.BASE }}
+            />
+            <MenuCard item={menu[6]} />
+          </Block>
         </Block>
       </ScrollView>
     );

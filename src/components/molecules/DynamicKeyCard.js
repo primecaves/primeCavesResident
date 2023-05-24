@@ -8,7 +8,7 @@ import _remove from 'lodash/remove';
 import _includes from 'lodash/includes';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEmpty from 'lodash/isEmpty';
-import { DynamicKeyPairs, ImageSlider } from '../';
+import { DynamicKeyPairs, ImageSlider, Switch } from '../';
 import argonTheme from '../../constants/Theme';
 import { Icon, Button, SkeletionLoader } from '../';
 import Modal from './Modal';
@@ -114,10 +114,19 @@ class DynamicKeyCard extends React.Component {
                 }}
               >
                 <Block style={{ fontFamily: 'open-sans-bold' }}>
-                  <Text center bold style={{ fontFamily: 'open-sans-bold' }} size={12}>
+                  <Text
+                    center
+                    bold
+                    style={{ fontFamily: 'open-sans-bold' }}
+                    size={12}
+                  >
                     {item.title}
                   </Text>
-                  <Text center style={{ fontFamily: 'open-sans-regular' }} size={12}>
+                  <Text
+                    center
+                    style={{ fontFamily: 'open-sans-regular' }}
+                    size={12}
+                  >
                     {item.value}
                   </Text>
                 </Block>

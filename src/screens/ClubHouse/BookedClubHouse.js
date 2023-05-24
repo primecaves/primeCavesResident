@@ -66,17 +66,7 @@ class BookedClubHouse extends Component {
         this.setState({ isLoading: false });
       });
   };
-  toggleAlertModal = () => {
-    this.setState(prevState => ({
-      isAlertModalVisible: !prevState.isAlertModalVisible,
-    }));
-  };
-  toggleFormModal = item => {
-    this.setState(prevState => ({
-      isFormModalVisible: !prevState.isFormModalVisible,
-      initialValues: item,
-    }));
-  };
+
   handleDeleteClubhouse = item => {
     const request = {
       clubhouse_id: item.clubhouse_id,
@@ -105,6 +95,19 @@ class BookedClubHouse extends Component {
         this.setState({ isAlertModalVisible: false });
       });
   };
+
+  toggleAlertModal = () => {
+    this.setState(prevState => ({
+      isAlertModalVisible: !prevState.isAlertModalVisible,
+    }));
+  };
+  toggleFormModal = item => {
+    this.setState(prevState => ({
+      isFormModalVisible: !prevState.isFormModalVisible,
+      initialValues: item,
+    }));
+  };
+
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;
     return (

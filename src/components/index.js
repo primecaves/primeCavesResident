@@ -20,6 +20,7 @@ import PriceFooter from './atoms/PriceFooter';
 import ActionSheet from './molecules/ActionSheet';
 import ImageSlider from './molecules/ImageSlider';
 import DynamicKeyPairs from './molecules/DynamicKeyPairs';
+import FooterButton from './molecules/FooterButton';
 export {
   Button,
   Card,
@@ -43,4 +44,5 @@ export {
   ImageSlider,
   DynamicKeyPairs,
   SelectMenu,
+  FooterButton,
 };

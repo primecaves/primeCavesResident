@@ -22,7 +22,7 @@ export class LoginScreen extends Component {
   }
 
   signInWithPhoneNumber = async phoneNumber => {
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, errorMessage: EMPTY_STRING });
     const { navigation } = this.props;
     const request = {
       contact_number: phoneNumber,
@@ -41,7 +41,6 @@ export class LoginScreen extends Component {
               navigation.navigate('OtpScreen', {
                 number: phoneNumber,
                 confirm: confirmation,
-
               });
             })
             .catch(() => {
@@ -49,7 +48,6 @@ export class LoginScreen extends Component {
                 isLoading: false,
                 errorMessage: 'Otp send failed',
               });
-
             });
         } else {
           this.setState({
@@ -87,7 +85,6 @@ export class LoginScreen extends Component {
                 type="phone-pad"
                 error={!_isEmpty(errorMessage)}
                 errorMessage={errorMessage}
-
               />
               <Text />
               <Button
@@ -108,10 +105,7 @@ export class LoginScreen extends Component {
   render() {
     const { confirm } = this.state;
     return (
-      <View>
-        {_isNull(confirm) &&
-          <ActionSheet content={this.content} />}
-      </View>
+      <View>{_isNull(confirm) && <ActionSheet content={this.content} />}</View>
     );
   }
 }
@@ -131,7 +125,7 @@ const styles = StyleSheet.create({
     width: '90%',
     backgroundColor: argonTheme.COLORS.PRIMARY,
     borderRadius: 10,
-    marginTop: 30,
+    marginTop: 20,
     marginLeft: 25,
   },
 });
