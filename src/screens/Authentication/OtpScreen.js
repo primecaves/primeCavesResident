@@ -19,33 +19,36 @@ export class OtpScreen extends Component {
     const { route } = this.props;
     const { number, confirm } = route.params;
     const request = {
-      contact_number: number,
+      contact_number: `+91${number}`,
     };
     try {
       await confirm.confirm(code).then(res => {
-        console.log(res);
-      });
-      loginUser(request).
-        then(async response => {
-          if (response) {
-            const { accessToken, data } = response;
-            await AsyncStorage.setItem(
-              'accessToken',
-              accessToken,
+        if (res) {
+          loginUser(request).
+            then(async response => {
+              if (response) {
+                const { accessToken, data } = response.data;
+                await AsyncStorage.setItem(
+                  'accessToken',
+                  accessToken,
+                );
+                await AsyncStorage.setItem(
+                  'userId',
+                  _get(data, '_id'),
+                );
+              } else {
+                Toast.show({
+                  type: 'error',
+                  position: 'top',
+                  text2: 'Please enter a valid OTP',
+                });
+              }
+            }
             );
-            await AsyncStorage.setItem(
-              'userId',
-              _get(data, '_id'),
-            );
-          } else {
-            Toast.show({
-              type: 'error',
-              position: 'top',
-              text2: 'Please enter a valid OTP',
-            });
-          }
+
         }
-        );
+      });
+
     } catch (error) {
       Toast.show({
         type: 'error',

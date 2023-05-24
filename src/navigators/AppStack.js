@@ -30,7 +30,7 @@ const RenderTabBarIcon = ({ focused, route }) => {
   return <Icon name={iconName} size={30} color={'#161B21'} />;
 };
 
-const HomeStack = props => {
+const HomeStack = () => {
   const { Navigator, Screen } = createNativeStackNavigator();
   const navProps = {
     screenOptions: {
@@ -43,6 +43,7 @@ const HomeStack = props => {
     <Navigator
       {...navProps}
       initialRouteName="HomeMenu"
+      initialParams={{ itemId: 42 }}
       screenOptions={{
         header: ({ navigation, scene }) => (
           <Header

@@ -11,6 +11,7 @@ import { MenuCard } from '../../components';
 import menu from '../../constants/menu';
 import argonTheme from '../../constants/Theme';
 import RemainderCard from '../../components/molecules/RemainderCard';
+import withAuthProps from '../../hoc/withAuthProps';
 const { width } = Dimensions.get('screen');
 
 class Home extends React.Component {
@@ -89,6 +90,7 @@ class Home extends React.Component {
 
   render() {
     const { isLoading } = this.state;
+    console.log('HomeScreen', this.props);
     if (isLoading) {
       return (
         <View>
@@ -115,4 +117,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default withAuthProps(Home);

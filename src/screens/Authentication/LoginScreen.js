@@ -10,6 +10,8 @@ import { validateUserCredential } from './login.services';
 import _isNull from 'lodash/isNull';
 import _isEmpty from 'lodash/isEmpty';
 
+const COUNTRY_CODE = '+91';
+
 export class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -31,7 +33,7 @@ export class LoginScreen extends Component {
       .then(response => {
         if (response) {
           auth()
-            .signInWithPhoneNumber(phoneNumber)
+            .signInWithPhoneNumber(COUNTRY_CODE + phoneNumber)
             .then(confirmation => {
               this.setState({
                 confirm: confirmation,
@@ -56,13 +58,14 @@ export class LoginScreen extends Component {
           });
         }
       })
-      .catch(() => {
+      .catch((err) => {
         this.setState({
           isLoading: false,
           errorMessage: 'Number Invalid',
         });
         this.setState({ isLoading: false });
       });
+
   };
 
   content = () => {
