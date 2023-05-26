@@ -39,4 +39,9 @@ export const FIELDS = [
     ],
   },
   { id: 'urgent', key: 'urgent', component: 'SWITCH', label: 'Urgent' },
+  {
+    id: 'image',
+    key: 'image',
+    component: 'IMAGE',
+  },
 ];

@@ -19,6 +19,7 @@ import {
 } from '../';
 import { EMPTY_ARRAY, argonTheme } from '../../constants';
 import Counter from './Counter';
+import ImagePickerPC from '../atoms/ImagePicker';
 // import InputWithTags from './inputWithTags/InputWithTags';
 const DIVIDER_COLOR = 'E5E7EB';
 const { width } = Dimensions.get('screen');
@@ -235,6 +236,12 @@ class Form extends Component {
               data={_get(values, 'members', EMPTY_ARRAY)}
               onChange={val => setFieldValue(_get(item, 'key', ''), val)}
             />
+          </Block>
+        );
+      case 'IMAGE':
+        return (
+          <Block style={{ marginBottom: 5 }}>
+            <ImagePickerPC />
           </Block>
         );
       default:

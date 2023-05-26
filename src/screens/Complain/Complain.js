@@ -25,6 +25,7 @@ import AlertModal from '../../components/molecules/AlertModal';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { FIELDS } from './complain.constant';
 import { Dimensions } from 'react-native';
+import ImagePickerPC from '../../components/atoms/ImagePicker';
 export class Complain extends Component {
   state = {
     isLoading: false,
@@ -124,43 +125,46 @@ export class Complain extends Component {
       isFormModalVisible,
     } = this.state;
     return (
+      // <Block>
+      //   <Modal visible={isFormModalVisible} content={this.renderForm} />
+      //   <ScrollView
+      //     refreshControl={
+      //       <RefreshControl
+      //         refreshing={isLoading}
+      //         onRefresh={this.fetchComplain}
+      //       />
+      //     }
+      //   >
+      //     <Header title="Complain" back search />
+      //     {_map(complain, (item, index) => (
+      //       <DynamicKeyCard
+      //         key={index}
+      //         isLoading={isLoading}
+      //         item={item}
+      //         values={getKeyValuePair(item)}
+      //         displayNameKey={displayNameKey}
+      //         // image={_get(item, 'image', '')}
+      //         keyToRemove={keyToRemove}
+      //         footer={this.renderFooter}
+      //       />
+      //     ))}
+      //   </ScrollView>
+      //   <Block style={styles.buttonContainer} middle>
+      //     <Button
+      //       shadowless
+      //       style={styles.bookButton}
+      //       onPress={this.toggleFormModal}
+      //     >
+      //       <Block row>
+      //         <Text style={styles.text} size={15}>
+      //           Book Complain
+      //         </Text>
+      //       </Block>
+      //     </Button>
+      //   </Block>
+      // </Block>
       <Block>
-        <Modal visible={isFormModalVisible} content={this.renderForm} />
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={isLoading}
-              onRefresh={this.fetchComplain}
-            />
-          }
-        >
-          <Header title="Complain" back search />
-          {_map(complain, (item, index) => (
-            <DynamicKeyCard
-              key={index}
-              isLoading={isLoading}
-              item={item}
-              values={getKeyValuePair(item)}
-              displayNameKey={displayNameKey}
-              // image={_get(item, 'image', '')}
-              keyToRemove={keyToRemove}
-              footer={this.renderFooter}
-            />
-          ))}
-        </ScrollView>
-        <Block style={styles.buttonContainer} middle>
-          <Button
-            shadowless
-            style={styles.bookButton}
-            onPress={this.toggleFormModal}
-          >
-            <Block row>
-              <Text style={styles.text} size={15}>
-                Book Complain
-              </Text>
-            </Block>
-          </Button>
-        </Block>
+        <ImagePickerPC />
       </Block>
     );
   }
