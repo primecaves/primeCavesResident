@@ -25,7 +25,7 @@ class PaymentFilterComponent extends React.Component {
               <Text muted={true} style={{ marginRight: 10 }}>
                 Select Months
               </Text>
-              <Icon name="calendar" size={16} color={'grey'}></Icon>
+              <Icon name="calendar" size={16} color={'grey'} />
             </Block>
           </Pressable>
 

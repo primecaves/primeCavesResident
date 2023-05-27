@@ -90,7 +90,6 @@ class Home extends React.Component {
 
   render() {
     const { isLoading } = this.state;
-    console.log('HomeScreen', this.props);
     if (isLoading) {
       return (
         <View>

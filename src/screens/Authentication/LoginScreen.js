@@ -108,7 +108,9 @@ export class LoginScreen extends Component {
   render() {
     const { confirm } = this.state;
     return (
-      <View>{_isNull(confirm) && <ActionSheet content={this.content} />}</View>
+      <View >
+        {_isNull(confirm) && <ActionSheet content={this.content} />}
+      </View>
     );
   }
 }

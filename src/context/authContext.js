@@ -1,20 +1,21 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginUser } from '../screens/Authentication/login.services';
-import { EMPTY_STRING } from '../constants';
-import _get from 'lodash/get';
+import { EMPTY_OBJECT, EMPTY_STRING } from '../constants';
+import _isEmpty from 'lodash/isEmpty';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [userInfo, setUserInfo] = useState({});
+    const [userInfo, setUserInfo] = useState(EMPTY_OBJECT);
+    const [token, setToken] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [splashLoading, setSplashLoading] = useState(false);
     const [error, setError] = useState(EMPTY_STRING);
 
-    const login = async (email, password, contact_number) => {
+    const login = async (request) => {
         setIsLoading(true);
         try {
-            loginUser({ email, password, contact_number }).
+            loginUser(request).
                 then(async response => {
                     if (response) {
                         const { accessToken, data } = response.data;
@@ -23,10 +24,6 @@ export const AuthProvider = ({ children }) => {
                         await AsyncStorage.setItem(
                             'accessToken',
                             accessToken,
-                        );
-                        await AsyncStorage.setItem(
-                            'userId',
-                            _get(data, '_id'),
                         );
                         await AsyncStorage.setItem('userInfo', JSON.stringify(data));
                     }
@@ -48,11 +45,9 @@ export const AuthProvider = ({ children }) => {
         AsyncStorage.removeItem(
             'accessToken',
         );
-        AsyncStorage.removeItem(
-            'userId',
-        );
         AsyncStorage.removeItem('userInfo');
-        setUserInfo({});
+        setUserInfo(EMPTY_OBJECT);
+        setUserInfo(EMPTY_STRING);
         setIsLoading(false);
         setError(null);
     };
@@ -61,12 +56,12 @@ export const AuthProvider = ({ children }) => {
         try {
             setSplashLoading(true);
             let userInfo = await AsyncStorage.getItem('userInfo');
+            let token = await AsyncStorage.getItem('accessToken');
             userInfo = JSON.parse(userInfo);
-
-            if (userInfo) {
+            if (userInfo && !_isEmpty(token)) {
                 setUserInfo(userInfo);
+                setToken(token);
             }
-
             setSplashLoading(false);
         } catch (e) {
             setSplashLoading(false);
@@ -87,6 +82,7 @@ export const AuthProvider = ({ children }) => {
                 error,
                 login,
                 logout,
+                token,
             }}>
             {children}
         </AuthContext.Provider>

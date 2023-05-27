@@ -5,10 +5,8 @@ import { StyleSheet } from 'react-native';
 import { argonTheme } from '../../constants';
 import { Button } from 'galio-framework';
 import { withNavigation } from '@react-navigation/compat';
-import { loginUser } from './login.services';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import _get from 'lodash/get';
+
 
 export class OtpScreen extends Component {
   state = {
@@ -16,7 +14,7 @@ export class OtpScreen extends Component {
   };
   confirmCode = async () => {
     const { code } = this.state;
-    const { route } = this.props;
+    const { route, login } = this.props;
     const { number, confirm } = route.params;
     const request = {
       contact_number: `+91${number}`,
@@ -24,31 +22,16 @@ export class OtpScreen extends Component {
     try {
       await confirm.confirm(code).then(res => {
         if (res) {
-          loginUser(request).
-            then(async response => {
-              if (response) {
-                const { accessToken, data } = response.data;
-                await AsyncStorage.setItem(
-                  'accessToken',
-                  accessToken,
-                );
-                await AsyncStorage.setItem(
-                  'userId',
-                  _get(data, '_id'),
-                );
-              } else {
-                Toast.show({
-                  type: 'error',
-                  position: 'top',
-                  text2: 'Please enter a valid OTP',
-                });
-              }
-            }
-            );
-
+          login(request);
+        }
+        else {
+          Toast.show({
+            type: 'error',
+            position: 'top',
+            text2: 'Please enter a valid OTP',
+          });
         }
       });
-
     } catch (error) {
       Toast.show({
         type: 'error',
@@ -63,6 +46,7 @@ export class OtpScreen extends Component {
   render() {
     const { route } = this.props;
     const { number } = route.params;
+    console.log('this.props', this.props);
     return (
       <Block style={styles.container}>
         <Text style={styles.title}> Verification Code </Text>
@@ -91,6 +75,7 @@ export class OtpScreen extends Component {
 }
 
 export default withNavigation(OtpScreen);
+
 
 const styles = StyleSheet.create({
   borderStyleBase: {

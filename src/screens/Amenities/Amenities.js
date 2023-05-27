@@ -182,7 +182,9 @@ class Amenities extends Component {
     const { navigation, scene } = this.props;
     return (
       <Block>
-        <Modal visible={isFormModalVisible} content={this.renderForm} />
+        <Modal
+          visible={isFormModalVisible}
+          content={this.renderForm} />
         <ScrollView
           refreshControl={
             <RefreshControl

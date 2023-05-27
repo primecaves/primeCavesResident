@@ -29,7 +29,6 @@ class Profile extends React.Component {
 
   handleRemoveDataFromAsyncStorage = () => {
     AsyncStorage.removeItem('accessToken');
-    AsyncStorage.removeItem('userId');
   };
 
   render() {
