@@ -8,7 +8,13 @@ import _startCase from 'lodash/startCase';
 import _uniqBy from 'lodash/uniqBy';
 import _filter from 'lodash/filter';
 import _isEmpty from 'lodash/isEmpty';
-import { DynamicKeyCard, Form, Header, Modal } from '../../components';
+import {
+  DynamicKeyCard,
+  Form,
+  Header,
+  Modal,
+  SkeletionLoader,
+} from '../../components';
 import { Button } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
@@ -116,6 +122,15 @@ class AllAmenities extends Component {
       />
     );
   };
+  renderSkeletonLoader = () => {
+    return (
+      <Block>
+        <SkeletionLoader />
+        <SkeletionLoader />
+        <SkeletionLoader />
+      </Block>
+    );
+  };
 
   render() {
     const {
@@ -127,6 +142,9 @@ class AllAmenities extends Component {
       isFormModalVisible,
     } = this.state;
     const { navigation, scene } = this.props;
+    if (isLoading) {
+      return this.renderSkeletonLoader();
+    }
     return (
       <Block>
         <Modal visible={isFormModalVisible} content={this.renderForm} />

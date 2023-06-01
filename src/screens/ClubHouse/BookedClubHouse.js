@@ -8,7 +8,13 @@ import {
 } from 'react-native';
 import { Block, Text } from 'galio-framework';
 import { API_1, API_2 } from '../../constants/clubHouseResponse';
-import { DynamicKeyCard, Header, Button, Modal } from '../../components';
+import {
+  DynamicKeyCard,
+  Header,
+  Button,
+  Modal,
+  SkeletionLoader,
+} from '../../components';
 import { getKeyValuePair } from '../../utils';
 import Toast from 'react-native-toast-message';
 import argonTheme from '../../constants/Theme';
@@ -27,7 +33,7 @@ const thumbMeasure = (width - 48 - 32) / 3;
 
 class BookedClubHouse extends Component {
   state = {
-    isLoading: false,
+    isLoading: true,
     clubHouse: [],
     initialCards: [],
     keyToRemove: [],
@@ -108,6 +114,16 @@ class BookedClubHouse extends Component {
     }));
   };
 
+  renderSkeletonLoader = () => {
+    return (
+      <Block>
+        <SkeletionLoader button clubhouse />
+        <SkeletionLoader button clubhouse />
+        <SkeletionLoader button clubhouse />
+      </Block>
+    );
+  };
+
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;
     return (
@@ -160,6 +176,9 @@ class BookedClubHouse extends Component {
       initialValues,
     } = this.state;
     const { navigation, scene } = this.props;
+    if (isLoading) {
+      return this.renderSkeletonLoader();
+    }
     return (
       <Block>
         <Modal
