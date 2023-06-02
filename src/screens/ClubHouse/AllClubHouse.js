@@ -87,15 +87,15 @@ class AllClubHouse extends Component {
       </>
     );
   };
-  renderSkeletonLoader = () => {
-    return (
-      <Block>
-        <SkeletionLoader />
-        <SkeletionLoader />
-        <SkeletionLoader />
-      </Block>
-    );
-  };
+  // renderSkeletonLoader = () => {
+  //   return (
+  //     <Block>
+  //       <SkeletionLoader />
+  //       <SkeletionLoader />
+  //       <SkeletionLoader />
+  //     </Block>
+  //   );
+  // };
 
   handleChangeTab = id => {
     const { intialClubHouse } = this.state;
@@ -121,9 +121,9 @@ class AllClubHouse extends Component {
       initialValues,
     } = this.state;
     const { navigation, scene } = this.props;
-    if (isLoading) {
-      return this.renderSkeletonLoader();
-    }
+    // if (isLoading) {
+    //   return this.renderSkeletonLoader();
+    // }
     return (
       <Block>
         <Modal

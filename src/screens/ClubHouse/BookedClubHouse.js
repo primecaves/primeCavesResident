@@ -114,15 +114,15 @@ class BookedClubHouse extends Component {
     }));
   };
 
-  renderSkeletonLoader = () => {
-    return (
-      <Block>
-        <SkeletionLoader button clubhouse />
-        <SkeletionLoader button clubhouse />
-        <SkeletionLoader button clubhouse />
-      </Block>
-    );
-  };
+  // renderSkeletonLoader = () => {
+  //   return (
+  //     <Block>
+  //       <SkeletionLoader button clubhouse />
+  //       <SkeletionLoader button clubhouse />
+  //       <SkeletionLoader button clubhouse />
+  //     </Block>
+  //   );
+  // };
 
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;
@@ -176,9 +176,9 @@ class BookedClubHouse extends Component {
       initialValues,
     } = this.state;
     const { navigation, scene } = this.props;
-    if (isLoading) {
-      return this.renderSkeletonLoader();
-    }
+    // if (isLoading) {
+    //   return this.renderSkeletonLoader();
+    // }
     return (
       <Block>
         <Modal
@@ -221,6 +221,7 @@ class BookedClubHouse extends Component {
               keyToRemove={keyToRemove}
               footer={this.renderFooter}
               editAction={this.toggleFormModal}
+              loaderProps={{ button: true, clubhouse: true }}
             />
           ))}
         </ScrollView>
@@ -229,6 +230,7 @@ class BookedClubHouse extends Component {
           iconName="wallet-outline"
           navigationPath="AllClubHouse"
           navigation={navigation}
+          isLoading={isLoading}
         />
       </Block>
     );

@@ -12,7 +12,7 @@ import { DynamicKeyPairs, ImageSlider, Switch } from '../';
 import argonTheme from '../../constants/Theme';
 import { Icon, Button, SkeletionLoader } from '../';
 import Modal from './Modal';
-import { EMPTY_ARRAY } from '../../constants';
+import { EMPTY_ARRAY, EMPTY_OBJECT } from '../../constants';
 import { TouchableOpacity } from 'react-native';
 
 const { width } = Dimensions.get('screen');
@@ -242,11 +242,12 @@ class DynamicKeyCard extends React.Component {
       setModalVisibile = _noop,
       modalContent = _noop,
       showActions = false,
+      loaderProps = EMPTY_OBJECT,
     } = this.props;
     const { isModalVisible } = this.state;
-    // if (isLoading) {
-    //   return <SkeletionLoader />;
-    // }
+    if (isLoading) {
+      return <SkeletionLoader {...loaderProps} />;
+    }
     return (
       <Block style={{ padding: 15, paddingBottom: 10 }}>
         {

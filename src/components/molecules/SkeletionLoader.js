@@ -60,7 +60,7 @@ class SkeletionLoader extends Component {
                 />
               </HStack>
               {clubhouse && (
-                <HStack space="5" marginBottom={8}>
+                <HStack space="5" marginBottom={10}>
                   <Skeleton
                     h="5"
                     flex="1"

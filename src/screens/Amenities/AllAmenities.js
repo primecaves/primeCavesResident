@@ -122,15 +122,6 @@ class AllAmenities extends Component {
       />
     );
   };
-  renderSkeletonLoader = () => {
-    return (
-      <Block>
-        <SkeletionLoader />
-        <SkeletionLoader />
-        <SkeletionLoader />
-      </Block>
-    );
-  };
 
   render() {
     const {
@@ -142,9 +133,6 @@ class AllAmenities extends Component {
       isFormModalVisible,
     } = this.state;
     const { navigation, scene } = this.props;
-    if (isLoading) {
-      return this.renderSkeletonLoader();
-    }
     return (
       <Block>
         <Modal visible={isFormModalVisible} content={this.renderForm} />

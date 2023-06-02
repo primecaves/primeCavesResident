@@ -128,15 +128,6 @@ class Amenities extends Component {
       />
     );
   };
-  renderSkeletonLoader = () => {
-    return (
-      <Block>
-        <SkeletionLoader button />
-        <SkeletionLoader button />
-        <SkeletionLoader button />
-      </Block>
-    );
-  };
 
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;
@@ -189,9 +180,6 @@ class Amenities extends Component {
       isFormModalVisible,
     } = this.state;
     const { navigation, scene } = this.props;
-    if (isLoading) {
-      return this.renderSkeletonLoader();
-    }
     return (
       <Block>
         <Modal visible={isFormModalVisible} content={this.renderForm} />
@@ -222,6 +210,7 @@ class Amenities extends Component {
               image={_get(item, 'image', '')}
               keyToRemove={keyToRemove}
               footer={this.renderFooter}
+              loaderProps={{ button: true }}
             />
           ))}
         </ScrollView>
