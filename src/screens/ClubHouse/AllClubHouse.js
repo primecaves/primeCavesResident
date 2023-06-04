@@ -13,7 +13,6 @@ import {
   DynamicKeyCard,
   Header,
   Modal,
-  SkeletionLoader,
 } from '../../components';
 import { Button } from '../../components';
 import { getKeyValuePair } from '../../utils';

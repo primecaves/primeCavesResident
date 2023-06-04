@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
-import { Block, Input, Text } from 'galio-framework';
+import { Input, Text } from 'galio-framework';
 import Icon from '../atoms/Icon';
 import argonTheme from '../../constants/Theme';
 import _isEmpty from 'lodash/isEmpty';
+const { width } = Dimensions.get('screen');
 class ArInput extends React.Component {
   render() {
     const { shadowless, success, error, errorMessage } = this.props;

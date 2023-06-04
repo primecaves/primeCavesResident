@@ -1,19 +1,19 @@
-import { Text, Block } from 'galio-framework';
+import { Text } from 'galio-framework';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Theme from '../../constants/Theme';
 
 export default class TextLabel extends React.Component {
   render() {
-    const { color, status } = this.props;
+    const { status } = this.props;
 
     const textStyle = [
       styles.label,
       status === 'PAID'
         ? styles.paid
         : status === 'OVERDUE'
-        ? styles.overdue
-        : styles.unpaid,
+          ? styles.overdue
+          : styles.unpaid,
     ];
 
     return (

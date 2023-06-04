@@ -1,9 +1,9 @@
-import React from "react";
-import { StyleSheet, TouchableWithoutFeedback } from "react-native";
-import PropTypes from "prop-types";
-import { Block, Text } from "galio-framework";
-import Icon from "../atoms/Icon";
-import argonTheme from "../../constants/Theme";
+import React from 'react';
+import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import PropTypes from 'prop-types';
+import { Block, Text } from 'galio-framework';
+import Icon from '../atoms/Icon';
+import argonTheme from '../../constants/Theme';
 
 export default class Notification extends React.Component {
   render() {
@@ -19,14 +19,14 @@ export default class Notification extends React.Component {
       system,
       time,
       title,
-      transparent
+      transparent,
     } = this.props;
 
     const iconContainer = [
       styles.iconContainer,
       { backgroundColor: color || argonTheme.COLORS.PRIMARY },
       system && { width: 34, height: 34 },
-      !system && styles.iconShadow
+      !system && styles.iconShadow,
     ];
 
     const container = [
@@ -34,12 +34,12 @@ export default class Notification extends React.Component {
       !transparent && { backgroundColor: argonTheme.COLORS.WHITE },
       !transparent && styles.cardShadow,
       system && { height: 78 },
-      style
+      style,
     ];
     return (
       <Block style={container} middle>
         <TouchableWithoutFeedback onPress={onPress}>
-          <Block row style={{ width: "95%" }}>
+          <Block row style={{ width: '95%' }}>
             <Block top flex={system ? 0.12 : 0.2} middle>
               <Block middle style={iconContainer}>
                 <Icon
@@ -66,9 +66,9 @@ export default class Notification extends React.Component {
                     <Text
                       color={argonTheme.COLORS.MUTED}
                       style={{
-                        fontFamily: "open-sans-regular",
+                        fontFamily: 'open-sans-regular',
                         marginLeft: 3,
-                        marginTop: -3
+                        marginTop: -3,
                       }}
                       size={12}
                     >
@@ -80,7 +80,7 @@ export default class Notification extends React.Component {
               <Text
                 color={argonTheme.COLORS.TEXT}
                 size={system ? 13 : 14}
-                style={{ fontFamily: system ? "open-sans-bold" : "open-sans-regular" }}
+                style={{ fontFamily: system ? 'open-sans-bold' : 'open-sans-regular' }}
               >
                 {body}
               </Text>
@@ -96,9 +96,9 @@ export default class Notification extends React.Component {
                 <Text
                   color={argonTheme.COLORS.MUTED}
                   style={{
-                    fontFamily: "open-sans-regular",
+                    fontFamily: 'open-sans-regular',
                     marginLeft: 3,
-                    marginTop: -2
+                    marginTop: -2,
                   }}
                   size={12}
                 >
@@ -133,25 +133,25 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 23,
-    marginTop: 2
+    marginTop: 2,
   },
   iconShadow: {
-    shadowColor: "black",
+    shadowColor: 'black',
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 4,
     shadowOpacity: 0.1,
-    elevation: 2
+    elevation: 2,
   },
   card: {
     zIndex: 2,
     height: 127,
-    borderRadius: 6
+    borderRadius: 6,
   },
   cardShadow: {
     shadowColor: argonTheme.COLORS.BLACK,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     shadowOpacity: 0.1,
-    elevation: 2
-  }
+    elevation: 2,
+  },
 });

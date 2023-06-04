@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Block, Text, Button } from 'galio-framework';
+import { Block, Text } from 'galio-framework';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SelectMenu from '../atoms/SelectMenu';
 import { Pressable } from 'react-native';
@@ -25,7 +25,7 @@ class PaymentFilterComponent extends React.Component {
               <Text muted={true} style={{ marginRight: 10 }}>
                 Select Months
               </Text>
-              <Icon name="calendar" size={16} color={'grey'}></Icon>
+              <Icon name="calendar" size={16} color={'grey'} />
             </Block>
           </Pressable>
 

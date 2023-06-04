@@ -1,11 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Block, Text, theme, Button } from 'galio-framework';
+import { Block, Text, Button } from 'galio-framework';
 import TextLabel from '../atoms/TextLabel';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Theme from '../../constants/Theme';
-import { useState } from 'react';
 
 class MaintenanceChargesCard extends React.Component {
   state = {

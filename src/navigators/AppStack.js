@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Amenities, AllAmenities } from '../screens/Amenities';
 import Payments from '../screens/Payments/Payments';
 import Home from '../screens/Home/Home';
-import { Header, Icon } from '../components';
+import { Header } from '../components';
 import NoticeBoard from '../screens/NoticeBoard/NoticeBoard';
 import SinglePageNotice from '../screens/NoticeBoard/SinglePageNotice';
 import Complain from '../screens/Complain/Complain';
@@ -13,24 +13,55 @@ import { ClubHouse, AllClubHouse } from '../screens/ClubHouse';
 import { argonTheme } from '../constants';
 import { Button } from 'galio-framework';
 import Profile from '../screens/Profile';
+import { renderIcon } from '../constants/utils';
 
-const RenderTabBarIcon = ({ focused, route }) => {
-  let iconName = '';
-
-  switch (route?.name) {
-    case 'Home':
-      iconName = focused ? 'home-circle' : 'home-circle-outline';
-      break;
-    case 'Service':
-      iconName = focused ? 'basket' : 'basket-outline';
-      break;
-    default:
-      break;
-  }
-  return <Icon name={iconName} size={30} color={'#161B21'} />;
+const renderHomeHeader = ({ navigation, scene }) => {
+  return (
+    <Header
+      title="Menu"
+      navigation={navigation}
+      scene={scene}
+      right={[
+        <Button
+          shadowless
+          onPress={() => navigation.navigate('Profile')}
+          style={{
+            backgroundColor: argonTheme.COLORS.WHITE,
+            width: 40,
+            height: 40,
+          }}
+          iconColor={argonTheme.COLORS.ICON}
+          onlyIcon
+          icon="user"
+          iconFamily="antdesign"
+          size={16}
+        />,
+      ]}
+    />
+  );
 };
 
-const HomeStack = props => {
+const renderBasicHeader = ({ props }) => {
+  return (
+    <Header
+      title="Notice Board"
+      back
+      search
+      {...props}
+    />
+  );
+};
+
+const RenderTabBarIcon = ({ focused, route }) => {
+  const { name } = route;
+  const styles = {
+    width: 20, height: 20,
+    color: focused ? argonTheme.COLORS.PRIMARY : argonTheme.COLORS.BLACK,
+  };
+  return renderIcon(name, styles);
+};
+
+const HomeStack = (contextProps) => {
   const { Navigator, Screen } = createNativeStackNavigator();
   const navProps = {
     screenOptions: {
@@ -43,30 +74,9 @@ const HomeStack = props => {
     <Navigator
       {...navProps}
       initialRouteName="HomeMenu"
+      initialParams={{ itemId: 42 }}
       screenOptions={{
-        header: ({ navigation, scene }) => (
-          <Header
-            title="Menu"
-            navigation={navigation}
-            scene={scene}
-            right={[
-              <Button
-                shadowless
-                onPress={() => navigation.navigate('Profile')}
-                style={{
-                  backgroundColor: argonTheme.COLORS.WHITE,
-                  width: 40,
-                  height: 40,
-                }}
-                iconColor={argonTheme.COLORS.ICON}
-                onlyIcon
-                icon="user"
-                iconFamily="antdesign"
-                size={16}
-              />,
-            ]}
-          />
-        ),
+        header: ({ navigation, scene }) => renderHomeHeader({ navigation, scene }),
       }}
     >
       <Screen name="HomeMenu" component={Home} />
@@ -100,7 +110,7 @@ const HomeStack = props => {
       />
       <Screen
         name="Profile"
-        component={Profile}
+        component={() => <Profile {...contextProps} />}
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
@@ -118,15 +128,11 @@ const HomeStack = props => {
         name="NoticeBoard"
         component={NoticeBoard}
         options={{
-          header: ({ navigation, scene }) => (
-            <Header
-              title="Notice Board"
-              back
-              search
-              navigation={navigation}
-              scene={scene}
-            />
-          ),
+          header: ({ navigation, scene }) => renderBasicHeader({
+            navigation,
+            scene, back: true, search: true, title: 'Notice Board',
+          })
+          ,
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
@@ -134,18 +140,15 @@ const HomeStack = props => {
         name="SinglePageNotice"
         component={SinglePageNotice}
         options={{
-          header: ({ navigation, scene }) => (
-            <Header
-              title="Notice Board"
-              back
-              navigation={navigation}
-              scene={scene}
-            />
-          ),
+          header: ({ navigation, scene }) =>
+            renderBasicHeader({
+              navigation,
+              scene, back: true, search: true, title: 'Notice Board',
+            }),
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
-    </Navigator>
+    </Navigator >
   );
 };
 
@@ -159,7 +162,7 @@ const ServiceStack = () => {
   );
 };
 
-const TabNavigator = () => {
+const TabNavigator = (contextProps) => {
   const { Navigator, Screen } = createBottomTabNavigator();
   const tabNavProps = {
     screenOptions: ({ route }) => ({
@@ -174,10 +177,10 @@ const TabNavigator = () => {
 
   return (
     <Navigator {...tabNavProps}>
-      <Screen name="Home" component={HomeStack} />
-      <Screen name="Service" component={ServiceStack} />
+      <Screen name="Home" component={() => <HomeStack {...contextProps} />} />
+      <Screen name="Service" component={() => <ServiceStack {...contextProps} />} />
     </Navigator>
   );
 };
 
-export default () => <TabNavigator />;
+export default (contextProps) => <TabNavigator {...contextProps} />;

@@ -7,14 +7,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { Block, Text } from 'galio-framework';
-import { API_1, API_2 } from '../../constants/clubHouseResponse';
-import {
-  DynamicKeyCard,
-  Header,
-  Button,
-  Modal,
-  SkeletionLoader,
-} from '../../components';
+import { DynamicKeyCard, Header, Button, Modal } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import Toast from 'react-native-toast-message';
 import argonTheme from '../../constants/Theme';
@@ -47,12 +40,6 @@ class BookedClubHouse extends Component {
   }
 
   fetchClubHouse = () => {
-    // const { data, key_to_remove, display_name_key } = API_2;
-    // this.setState({
-    //   clubHouse: data,
-    //   keyToRemove: key_to_remove,
-    //   displayNameKey: display_name_key,
-    // });
     this.setState({ isLoading: true });
     getBookedClubHouse('644b68e005d65b3294c0771f')
       .then(response => {
@@ -113,16 +100,6 @@ class BookedClubHouse extends Component {
       initialValues: item,
     }));
   };
-
-  // renderSkeletonLoader = () => {
-  //   return (
-  //     <Block>
-  //       <SkeletionLoader button clubhouse />
-  //       <SkeletionLoader button clubhouse />
-  //       <SkeletionLoader button clubhouse />
-  //     </Block>
-  //   );
-  // };
 
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;

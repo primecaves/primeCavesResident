@@ -1,6 +1,81 @@
+import React from 'react';
 import { Platform, StatusBar } from 'react-native';
 import { theme } from 'galio-framework';
+import { MENU_SERVICES } from '.';
+import {
+    Payment,
+    Amenities,
+    Clubhouse,
+    Complaint,
+    NoticeBoard,
+    User,
+    Services,
+    Home,
+    PrimeCavesLogo,
+} from '../assets';
 
 export const StatusHeight = StatusBar.currentHeight;
 export const HeaderHeight = (theme.SIZES.BASE * 3.5 + (StatusHeight || 0));
-export const iPhoneX = () => Platform.OS === 'ios' && (height === 812 || width === 812);
+
+export const componentWithProps = (Component, props) => < Component {...props} />;
+const DEFAULT_ICON_STYLE = {
+    height: 100,
+    width: 100,
+};
+
+export const renderIcon = (requestIcon, styles = DEFAULT_ICON_STYLE) => {
+    switch (requestIcon) {
+        case MENU_SERVICES.MAINTENANCE:
+            return (
+                <Payment
+                    {...styles}
+                />);
+        case MENU_SERVICES.AMENITIES:
+            return (
+                <Amenities
+                    {...styles}
+                />);
+
+        case MENU_SERVICES.CLUBHOUSE:
+            return (
+                <Clubhouse
+                    {...styles}
+                />);
+
+        case MENU_SERVICES.COMPLAIN:
+            return (
+                <Complaint
+                    {...styles}
+                />);
+
+        case MENU_SERVICES.NOTICEBOARD:
+            return (
+                <NoticeBoard
+                    {...styles}
+                />);
+
+        case MENU_SERVICES.SERVICES:
+            return (
+                <Services
+                    {...styles}
+                />);
+
+        case MENU_SERVICES.HOME:
+            return (
+                <Home
+                    {...styles}
+                />);
+        case MENU_SERVICES.PRIME_CAVES:
+            return (
+                <PrimeCavesLogo
+                    {...styles}
+                />);
+        default:
+            return (
+                <User
+                    {...styles}
+                />);
+    }
+};
+
+// export const iPhoneX = () => Platform.OS === 'ios' && (height === 812 || width === 812);

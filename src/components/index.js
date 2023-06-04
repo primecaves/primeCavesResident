@@ -7,6 +7,8 @@ import Input from './atoms/Input';
 import SelectMenu from './atoms/SelectMenu';
 import Switch from './atoms/Switch';
 import Select from './atoms/Select';
+import PriceFooter from './atoms/PriceFooter';
+import ImagePicker from './atoms/ImagePicker';
 import Notification from './molecules//Notification';
 import MenuCard from './molecules/MenuCard';
 import NoticeCard from './molecules/NoticeCard';
@@ -16,11 +18,11 @@ import SkeletionLoader from './molecules/SkeletionLoader';
 import DynamicKeyCard from './molecules/DynamicKeyCard';
 import Form from './molecules/Form';
 import Modal from './molecules/Modal';
-import PriceFooter from './atoms/PriceFooter';
 import ActionSheet from './molecules/ActionSheet';
 import ImageSlider from './molecules/ImageSlider';
 import DynamicKeyPairs from './molecules/DynamicKeyPairs';
 import FooterButton from './molecules/FooterButton';
+
 export {
   Button,
   Card,
@@ -45,4 +47,5 @@ export {
   DynamicKeyPairs,
   SelectMenu,
   FooterButton,
+  ImagePicker,
 };

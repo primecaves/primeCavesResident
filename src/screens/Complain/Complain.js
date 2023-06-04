@@ -69,7 +69,7 @@ export class Complain extends Component {
           <AlertModal
             visible={isAlertModalVisible}
             onClose={this.toggleAlertModal}
-            // onSubmit={() => this.handleDeleteClubhouse(item)}
+          // onSubmit={() => this.handleDeleteClubhouse(item)}
           />
 
           <Button
@@ -104,6 +104,7 @@ export class Complain extends Component {
         isEdit
         fields={FIELDS}
         onClose={this.toggleFormModal}
+        //onSubmit={(vall) => console.log('dkjdbfdskj', vall)}
         initialValues={initialValues}
         primaryButtonText="Register"
         secondaryButtonText="Close"
@@ -125,47 +126,47 @@ export class Complain extends Component {
       isFormModalVisible,
     } = this.state;
     return (
-      // <Block>
-      //   <Modal visible={isFormModalVisible} content={this.renderForm} />
-      //   <ScrollView
-      //     refreshControl={
-      //       <RefreshControl
-      //         refreshing={isLoading}
-      //         onRefresh={this.fetchComplain}
-      //       />
-      //     }
-      //   >
-      //     <Header title="Complain" back search />
-      //     {_map(complain, (item, index) => (
-      //       <DynamicKeyCard
-      //         key={index}
-      //         isLoading={isLoading}
-      //         item={item}
-      //         values={getKeyValuePair(item)}
-      //         displayNameKey={displayNameKey}
-      //         // image={_get(item, 'image', '')}
-      //         keyToRemove={keyToRemove}
-      //         footer={this.renderFooter}
-      //       />
-      //     ))}
-      //   </ScrollView>
-      //   <Block style={styles.buttonContainer} middle>
-      //     <Button
-      //       shadowless
-      //       style={styles.bookButton}
-      //       onPress={this.toggleFormModal}
-      //     >
-      //       <Block row>
-      //         <Text style={styles.text} size={15}>
-      //           Book Complain
-      //         </Text>
-      //       </Block>
-      //     </Button>
-      //   </Block>
-      // </Block>
       <Block>
-        <ImagePickerPC />
+        <Modal
+          visible={isFormModalVisible}
+          content={this.renderForm} />
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={this.fetchComplain}
+            />
+          }
+        >
+          <Header title="Complain" back search />
+          {_map(complain, (item, index) => (
+            <DynamicKeyCard
+              key={index}
+              isLoading={isLoading}
+              item={item}
+              values={getKeyValuePair(item)}
+              displayNameKey={displayNameKey}
+              // image={_get(item, 'image', '')}
+              keyToRemove={keyToRemove}
+              footer={this.renderFooter}
+            />
+          ))}
+        </ScrollView>
+        <Block style={styles.buttonContainer} middle>
+          <Button
+            shadowless
+            style={styles.bookButton}
+            onPress={this.toggleFormModal}
+          >
+            <Block row>
+              <Text style={styles.text} size={15}>
+                Book Complain
+              </Text>
+            </Block>
+          </Button>
+        </Block>
       </Block>
+
     );
   }
 }

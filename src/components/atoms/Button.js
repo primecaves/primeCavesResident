@@ -1,8 +1,8 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import { Button } from "galio-framework";
-import argonTheme from "../../constants/Theme";
+import { Button } from 'galio-framework';
+import argonTheme from '../../constants/Theme';
 
 class ArButton extends React.Component {
   render() {
@@ -14,7 +14,7 @@ class ArButton extends React.Component {
       small && styles.smallButton,
       color && { backgroundColor: colorStyle },
       !shadowless && styles.shadow,
-      { ...style }
+      { ...style },
     ];
 
     return (
@@ -31,18 +31,18 @@ class ArButton extends React.Component {
 }
 
 ArButton.propTypes = {
-  small: PropTypes.bool,
-  shadowless: PropTypes.bool,
   color: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.oneOf(['default', 'primary', 'secondary', 'info', 'error', 'success', 'warning'])
-  ])
-}
+    PropTypes.oneOf(['default', 'primary', 'secondary', 'info', 'error', 'success', 'warning']),
+  ]),
+  shadowless: PropTypes.bool,
+  small: PropTypes.bool,
+};
 
 const styles = StyleSheet.create({
   smallButton: {
     width: 75,
-    height: 28
+    height: 28,
   },
   shadow: {
     shadowColor: 'black',

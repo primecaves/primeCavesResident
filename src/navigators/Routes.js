@@ -1,50 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
 import _isEmpty from 'lodash/isEmpty';
-import _isUndefined from 'lodash/isUndefined';
-import { loginUser } from '../screens/Authentication/login.services';
-import { SET_USER_DETAILS } from '../screens/Authentication/authentication.actionTypes';
 import { connect } from 'react-redux';
+import { AuthContext } from '../context/authContext';
+import { Spinner } from 'native-base';
 
 const Routes = () => {
-  const [token, setToken] = useState();
-  const [userId, setUserId] = useState();
+  const {
+    isLoading = false,
+    userInfo,
+    splashLoading,
+    error,
+    login,
+    logout,
+    token,
+  } = useContext(AuthContext);
 
-  const fetchUserDetailsServices = () => {
-    const { dispatch } = this.props;
-    loginUser({ user_id: userId }).then(response => {
-      if (response) {
-        dispatch({
-          type: SET_USER_DETAILS,
-          payload: response.data,
-        });
-      }
-    });
+  if (splashLoading) {
+    return <Spinner size="lg" />;
+  }
+  const authProps = {
+    isLoading,
+    userInfo,
+    splashLoading,
+    error,
+    login,
+    logout,
+    token,
   };
-
-  const fetchToken = async () => {
-    const persistToken = await AsyncStorage.getItem('accessToken');
-    const persistUserId = await AsyncStorage.getItem('userId');
-    if (!_isUndefined(token) && !_isUndefined(userId)) {
-      setToken(persistToken);
-      setUserId(persistUserId);
-      fetchUserDetailsServices();
-    }
-  };
-
-  useEffect(() => {
-    fetchToken();
-  }, [token, userId]);
-
   return (
-    <NavigationContainer>
-      {!_isEmpty(token) ? <AuthStack /> : <AppStack />}
-    </NavigationContainer>
+    <NavigationContainer >
+      {_isEmpty(userInfo) ?
+        <AuthStack {...authProps} /> : <AppStack {...authProps} />}
+    </NavigationContainer >
   );
 };
+
+
+const mapStateToProps = (state) => ({
+  userDetails: state.appReducer.userDetails,
+});
 
 // const mapDispatchToProps = dispatch => {
 //   return {
@@ -57,4 +54,4 @@ const Routes = () => {
 //     },
 //   };
 // };
-export default Routes;
+export default connect(mapStateToProps,)(Routes);

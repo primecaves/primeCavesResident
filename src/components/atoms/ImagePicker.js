@@ -2,30 +2,41 @@ import { Block, Button } from 'galio-framework';
 import React from 'react';
 import {
   StyleSheet,
-  Text,
+
   View,
   TouchableOpacity,
   Image,
   PermissionsAndroid,
+  ScrollView,
 } from 'react-native';
 import {
   launchCamera,
   launchImageLibrary,
-  showImagePicker,
 } from 'react-native-image-picker';
 import Modal from '../molecules/Modal';
-import { EMPTY_ARRAY } from '../../constants';
+import { EMPTY_ARRAY, argonTheme } from '../../constants';
+import _get from 'lodash/get';
 import _map from 'lodash/map';
+import ActionSheet from '../molecules/ActionSheet';
+
+
+import { Text } from 'galio-framework';
+import { Center } from 'native-base';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 export default class ImagePickerPC extends React.Component {
   constructor(props) {
     super(props);
+    const exisitingImages = _map(_get(props, 'value', EMPTY_ARRAY), item => { return { uri: item }; });
     this.state = {
       resourcePath: {},
+      selectedFiles: exisitingImages,
       showModal: false,
     };
   }
   componentDidMount() {
     this.requestCameraPermission();
+    this.requestReadWritePermission();
   }
   requestCameraPermission = async () => {
     try {
@@ -50,48 +61,37 @@ export default class ImagePickerPC extends React.Component {
       console.warn(err);
     }
   };
-
-  // selectFile = () => {
-  //   var options = {
-  //     title: 'Select Image',
-  //     customButtons: [
-  //       {
-  //         name: 'customOptionKey',
-  //         title: 'Choose file from Custom Option',
-  //       },
-  //     ],
-  //     storageOptions: {
-  //       skipBackup: true,
-  //       path: 'images',
-  //     },
-  //   };
-  //   (options, res => {
-  //     console.log('Response = ', res);
-  //     if (res.didCancel) {
-  //       console.log('User cancelled image picker');
-  //     } else if (res.error) {
-  //       console.log('ImagePicker Error: ', res.error);
-  //     } else if (res.customButton) {
-  //       console.log('User tapped custom button: ', res.customButton);
-  //       alert(res.customButton);
-  //     } else {
-  //       let source = res;
-  //       this.setState({
-  //         resourcePath: source,
-  //       });
-  //     }
-  //   });
-  // };
-  // Launch Camera
+  requestReadWritePermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Cool Photo App  Permission',
+          message:
+            'App needs access to your Write External Storage ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the Write External Storage');
+      } else {
+        console.log('Write External Storage permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
   cameraLaunch = () => {
+    const { onValueChange } = this.props;
     let options = {
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
+      selectionLimit: 5,
+      includeBase64: false,
+      saveToPhotos: true,
     };
     launchCamera(options, res => {
-      console.log('Response = ', res);
       if (res.didCancel) {
         console.log('User cancelled image picker');
       } else if (res.error) {
@@ -100,26 +100,22 @@ export default class ImagePickerPC extends React.Component {
         console.log('User tapped custom button: ', res.customButton);
         alert(res.customButton);
       } else {
-        const source = { uri: res.uri };
-        console.log('response', JSON.stringify(res));
         this.setState({
-          filePath: res,
-          fileData: res.data,
-          fileUri: res.uri,
+          selectedFiles: _get(res, 'assets', EMPTY_ARRAY),
+          showModal: false,
         });
+        onValueChange(_map(_get(res, 'assets', EMPTY_ARRAY), item => { return { uri: item.uri }; }));
       }
     });
   };
   imageGalleryLaunch = () => {
+    const { onValueChange } = this.props;
     let options = {
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-      selectionLimit: 0,
+      selectionLimit: 5,
+      mediaType: 'photo',
+      includeBase64: false,
     };
     launchImageLibrary(options, res => {
-      console.log('Response = ', res);
       if (res.didCancel) {
         console.log('User cancelled image picker');
       } else if (res.error) {
@@ -128,111 +124,102 @@ export default class ImagePickerPC extends React.Component {
         console.log('User tapped custom button: ', res.customButton);
         alert(res.customButton);
       } else {
-        const source = { uri: res.uri };
-        console.log('response', JSON.stringify(res));
         this.setState({
-          filePath: res,
-          fileData: res.data,
-          fileUri: res.uri,
+          selectedFiles: _get(res, 'assets', EMPTY_ARRAY),
+          showModal: false,
+
         });
+        onValueChange(_map(_get(res, 'assets', EMPTY_ARRAY), item => { return { uri: item.uri }; }));
+
       }
     });
   };
-  renderModal = () => (
-    <View style={styles.container}>
-      <View style={styles.container}>
-        <Image
-          source={{
-            uri: 'data:image/jpeg;base64,' + this.state.resourcePath.data,
-          }}
-          style={{ width: 100, height: 100 }}
-        />
-        <Image
-          source={{ uri: this.state.resourcePath.uri }}
-          style={{ width: 200, height: 200 }}
-        />
-        <Text style={{ alignItems: 'center' }}>
-          {this.state.resourcePath.uri}
-        </Text>
-        {/* <TouchableOpacity onPress={this.selectFile} style={styles.button}>
-      <Text style={styles.buttonText}>Select File</Text>
-    </TouchableOpacity> */}
-        <TouchableOpacity onPress={this.cameraLaunch} style={styles.button}>
-          <Text style={styles.buttonText}>Launch Camera Directly</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={this.imageGalleryLaunch}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Launch Image Gallery Directly</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+  renderContent = () => (
+    <ScrollView
+      // horizontal={true}
+      showsHorizontalScrollIndicator={false}
+    >
+      <Button
+        style={styles.button}
+        onPress={this.cameraLaunch}
+        iconFamily="Entypo"
+        onlyIcon
+        icon="camera"
+        iconSize={50}
+      />
+      <Button
+        style={styles.button}
+        onPress={this.imageGalleryLaunch}
+        iconFamily="FontAwesome"
+        onlyIcon
+        icon="photo"
+        iconSize={50}
+      />
+    </ScrollView>
   );
-  handleModal = () => {
-    this.setState({ showModal: true });
+  toggleModal = () => {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal,
+    }));
+
   };
   render() {
     const {
       showModal,
-      // resourcePath: {
-      //   filePath: { assets = EMPTY_ARRAY },
-      // },
-      filePath,
+      selectedFiles,
     } = this.state;
-    console.log(this.state);
-    // console.log('Asserts', filePath.assets[0].uri);
     return (
-      <Block>
-        {showModal && <Modal visibe={showModal} content={this.renderModal} />}
-
-        {/* {_map(filePath.assets, item => (
-          <Image
-            source={{
-              uri: item.uri,
-              width: 50,
-              height: 50,
-            }}
+      <>
+        {/* <ActionSheet
+          visible={true}
+          content={this.renderContent}
+          onClose={this.toggleModal}
+        /> */}
+        {showModal && (<Modal
+          visible={showModal}
+          content={this.renderContent}
+        />)}
+        <ScrollView horizontal={true}>
+          {_map(selectedFiles, (item, index) => (
+            item.uri ? (<Image
+              style={styles.image}
+              key={index}
+              source={{
+                uri: item.uri,
+                width: 100,
+                height: 100,
+              }}
+            />) : null
+          ))}
+        </ScrollView>
+        <Block center>
+          <Button
+            onPress={this.toggleModal}
+            onlyIcon
+            icon="folder-images"
+            iconFamily="Entypo"
+            iconSize={50}
+            color={argonTheme.COLORS.PRIMARY}
+            iconColor="#fff"
+            style={{ width: 70, height: 70 }}
           />
-        ))} */}
-        <Button
-          onPress={this.handleModal}
-          onlyIcon
-          icon="tags"
-          iconFamily="antdesign"
-          iconSize={30}
-          color="warning"
-          iconColor="#fff"
-          style={{ width: 40, height: 40 }}
-        />
-      </Block>
+        </Block>
+      </>
     );
   }
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
   },
   button: {
-    width: 250,
-    height: 60,
-    backgroundColor: '#3740ff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    marginBottom: 12,
+    backgroundColor: argonTheme.COLORS.PRIMARY,
   },
-  buttonText: {
-    textAlign: 'center',
-    fontSize: 15,
-    color: '#fff',
+  image: {
+    borderColor: argonTheme.COLORS.WHITE,
+    borderWidth: 2,
   },
 });
-
-// filePath = {
-//   assets: [{ filename: '', uri: '' }],
-// };

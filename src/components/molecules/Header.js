@@ -72,7 +72,7 @@ class Header extends React.Component {
   }
 
   handleLeftPress = () => {
-    const { back, navigation, scene } = this.props;
+    const { back, navigation } = this.props;
     return back
       ? navigation.dispatch(CommonActions.goBack())
       : navigation.openDrawer();
@@ -212,8 +212,6 @@ class Header extends React.Component {
 
   renderAddButton = () => {
     const {
-      navigation,
-      route,
       onAddButtonClick,
       rightActionIconName = 'add',
       rightActionIconFamily = 'materialicon',
