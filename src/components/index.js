@@ -17,10 +17,10 @@ import DynamicKeyCard from './molecules/DynamicKeyCard';
 import Form from './molecules/Form';
 import Modal from './molecules/Modal';
 import PriceFooter from './atoms/PriceFooter';
-import Slider from './molecules/Slider';
 import ActionSheet from './molecules/ActionSheet';
 import ImageSlider from './molecules/ImageSlider';
 import DynamicKeyPairs from './molecules/DynamicKeyPairs';
+import FooterButton from './molecules/FooterButton';
 export {
   Button,
   Card,
@@ -40,9 +40,9 @@ export {
   Modal,
   Note,
   PriceFooter,
-  Slider,
   ActionSheet,
   ImageSlider,
   DynamicKeyPairs,
   SelectMenu,
+  FooterButton,
 };

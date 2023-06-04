@@ -8,7 +8,13 @@ import {
 } from 'react-native';
 import { Block, Text } from 'galio-framework';
 import { API_1, API_2 } from '../../constants/clubHouseResponse';
-import { DynamicKeyCard, Header, Button, Modal } from '../../components';
+import {
+  DynamicKeyCard,
+  Header,
+  Button,
+  Modal,
+  SkeletionLoader,
+} from '../../components';
 import { getKeyValuePair } from '../../utils';
 import Toast from 'react-native-toast-message';
 import argonTheme from '../../constants/Theme';
@@ -27,7 +33,7 @@ const thumbMeasure = (width - 48 - 32) / 3;
 
 class BookedClubHouse extends Component {
   state = {
-    isLoading: false,
+    isLoading: true,
     clubHouse: [],
     initialCards: [],
     keyToRemove: [],
@@ -66,17 +72,7 @@ class BookedClubHouse extends Component {
         this.setState({ isLoading: false });
       });
   };
-  toggleAlertModal = () => {
-    this.setState(prevState => ({
-      isAlertModalVisible: !prevState.isAlertModalVisible,
-    }));
-  };
-  toggleFormModal = item => {
-    this.setState(prevState => ({
-      isFormModalVisible: !prevState.isFormModalVisible,
-      initialValues: item,
-    }));
-  };
+
   handleDeleteClubhouse = item => {
     const request = {
       clubhouse_id: item.clubhouse_id,
@@ -105,6 +101,29 @@ class BookedClubHouse extends Component {
         this.setState({ isAlertModalVisible: false });
       });
   };
+
+  toggleAlertModal = () => {
+    this.setState(prevState => ({
+      isAlertModalVisible: !prevState.isAlertModalVisible,
+    }));
+  };
+  toggleFormModal = item => {
+    this.setState(prevState => ({
+      isFormModalVisible: !prevState.isFormModalVisible,
+      initialValues: item,
+    }));
+  };
+
+  // renderSkeletonLoader = () => {
+  //   return (
+  //     <Block>
+  //       <SkeletionLoader button clubhouse />
+  //       <SkeletionLoader button clubhouse />
+  //       <SkeletionLoader button clubhouse />
+  //     </Block>
+  //   );
+  // };
+
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;
     return (
@@ -157,6 +176,9 @@ class BookedClubHouse extends Component {
       initialValues,
     } = this.state;
     const { navigation, scene } = this.props;
+    // if (isLoading) {
+    //   return this.renderSkeletonLoader();
+    // }
     return (
       <Block>
         <Modal
@@ -199,6 +221,7 @@ class BookedClubHouse extends Component {
               keyToRemove={keyToRemove}
               footer={this.renderFooter}
               editAction={this.toggleFormModal}
+              loaderProps={{ button: true, clubhouse: true }}
             />
           ))}
         </ScrollView>
@@ -207,6 +230,7 @@ class BookedClubHouse extends Component {
           iconName="wallet-outline"
           navigationPath="AllClubHouse"
           navigation={navigation}
+          isLoading={isLoading}
         />
       </Block>
     );

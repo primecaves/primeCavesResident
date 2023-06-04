@@ -7,7 +7,14 @@ import {
   RefreshControl,
 } from 'react-native';
 import { Block, Text } from 'galio-framework';
-import { DynamicKeyCard, Header, Button, Modal, Form } from '../../components';
+import {
+  DynamicKeyCard,
+  Header,
+  Button,
+  Modal,
+  Form,
+  SkeletionLoader,
+} from '../../components';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
 import _map from 'lodash/map';
@@ -27,7 +34,7 @@ const thumbMeasure = (width - 48 - 32) / 3;
 
 class Amenities extends Component {
   state = {
-    isLoading: false,
+    isLoading: true,
     amenities: [],
     initialCards: [],
     keyToRemove: [],
@@ -203,6 +210,7 @@ class Amenities extends Component {
               image={_get(item, 'image', '')}
               keyToRemove={keyToRemove}
               footer={this.renderFooter}
+              loaderProps={{ button: true }}
             />
           ))}
         </ScrollView>

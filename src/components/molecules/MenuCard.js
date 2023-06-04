@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 import {
     StyleSheet,
     Image,
-    TouchableWithoutFeedback
-} from "react-native";
-import { Block, Text, theme } from "galio-framework";
-import argonTheme from "../../constants/Theme";
+    TouchableWithoutFeedback,
+} from 'react-native';
+import { Block, Text, theme } from 'galio-framework';
+import argonTheme from '../../constants/Theme';
 
 class MenuCard extends React.Component {
     render() {
@@ -20,17 +20,17 @@ class MenuCard extends React.Component {
             style,
             ctaColor,
             imageStyle,
-            ctaRight
+            ctaRight,
         } = this.props;
         const imageStyles = [
             full ? styles.fullImage : styles.horizontalImage,
-            imageStyle
+            imageStyle,
         ];
         const cardContainer = [styles.card, styles.shadow, style];
         const imgContainer = [
             styles.imageContainer,
             horizontal ? styles.horizontalStyles : styles.verticalStyles,
-            styles.shadow
+            styles.shadow,
         ];
 
         return (
@@ -50,7 +50,7 @@ class MenuCard extends React.Component {
                     </Block>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
-                    onPress={() => navigation.navigate("Service", { selectedService: item })}
+                    onPress={() => navigation.navigate('Service', { selectedService: item })}
                 >
                     <Block flex space="between" style={styles.cardDescription}>
                         <Block right={ctaRight ? true : false}>
@@ -71,12 +71,12 @@ class MenuCard extends React.Component {
 }
 
 MenuCard.propTypes = {
-    item: PropTypes.object,
-    horizontal: PropTypes.bool,
-    full: PropTypes.bool,
     ctaColor: PropTypes.string,
+    ctaRight: PropTypes.bool,
+    full: PropTypes.bool,
+    horizontal: PropTypes.bool,
     imageStyle: PropTypes.any,
-    ctaRight: PropTypes.bool
+    item: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     },
     cardDescription: {
         padding: theme.SIZES.BASE / 2,
-        backgroundColor: '#FAFAFA'
+        backgroundColor: '#FAFAFA',
     },
     imageContainer: {
         borderRadius: 3,
@@ -101,28 +101,28 @@ const styles = StyleSheet.create({
     },
     horizontalImage: {
         height: 110,
-        width: "auto",
+        width: 'auto',
 
     },
     horizontalStyles: {
         borderTopRightRadius: 0,
-        borderBottomRightRadius: 0
+        borderBottomRightRadius: 0,
     },
     verticalStyles: {
         borderBottomRightRadius: 0,
-        borderBottomLeftRadius: 0
+        borderBottomLeftRadius: 0,
     },
     fullImage: {
-        height: 215
+        height: 215,
     },
     shadow: {
-        shadowColor: "#8898AA",
+        shadowColor: '#8898AA',
         shadowOffset: { width: 0, height: 1 },
         shadowRadius: 6,
         shadowOpacity: 0.1,
-        elevation: 2
+        elevation: 2,
 
-    }
+    },
 });
 
 export default withNavigation(MenuCard);

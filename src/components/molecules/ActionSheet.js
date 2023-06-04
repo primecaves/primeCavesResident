@@ -14,7 +14,7 @@ export class ActionSheet extends Component {
     return (
       <RBSheet
         height={280}
-        openDuration={250}
+        keyboardAvoidingViewEnabled={true}
         ref={ref => {
           this.RBSheet = ref;
         }}

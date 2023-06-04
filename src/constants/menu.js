@@ -1,24 +1,26 @@
 export default [
   {
     title: 'Payments',
-    image: 'https://raw.githubusercontent.com/amdsubham/icons/main/cashless-payment.png',
+    image:
+      'https://raw.githubusercontent.com/amdsubham/icons/main/cashless-payment.png',
     cta: 'Payments',
   },
   {
     title: 'Amenities',
-    image: 'https://raw.githubusercontent.com/amdsubham/icons/main/amenities.png',
+    image:
+      'https://raw.githubusercontent.com/amdsubham/icons/main/amenities.png',
     cta: 'Amenities',
   },
   {
-    title: 'Clubhouse',
-    image: 'https://raw.githubusercontent.com/amdsubham/icons/main/night-club.png',
-    cta: 'Clubhouse',
-   },
-  {
     title: 'ClubHouse',
-    image: 'https://raw.githubusercontent.com/amdsubham/icons/main/night-club.png',
+    image:
+      'https://raw.githubusercontent.com/amdsubham/icons/main/night-club.png',
     cta: 'ClubHouse',
-
+  },
+  {
+    title: 'Complain',
+    image: 'https://raw.githubusercontent.com/amdsubham/icons/main/group.png',
+    cta: 'Complain',
   },
   {
     title: 'Notice Board',

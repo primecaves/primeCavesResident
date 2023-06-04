@@ -19,6 +19,7 @@ import {
 } from '../';
 import { EMPTY_ARRAY, argonTheme } from '../../constants';
 import Counter from './Counter';
+import ImagePickerPC from '../atoms/ImagePicker';
 // import InputWithTags from './inputWithTags/InputWithTags';
 const DIVIDER_COLOR = 'E5E7EB';
 const { width } = Dimensions.get('screen');
@@ -162,7 +163,8 @@ class Form extends Component {
           <Block width={width * 0.8} style={{ marginBottom: 5 }}>
             <Select
               {...item}
-              onSelect={handleChange(_get(item, 'key', ''))}
+              width={600}
+              onValueChange={val => setFieldValue(_get(item, 'key', ''), val)}
               value={values[item.key]}
             />
           </Block>
@@ -185,9 +187,8 @@ class Form extends Component {
               {_get(item, 'label', 'Default')}
             </Text>
             <Switch
-              {...item}
+              onValueChange={val => setFieldValue(_get(item, 'key', ''), val)}
               value={values[item.key]}
-              onValueChange={() => handleChange(_get(item, 'key', ''))}
             />
           </Block>
         );
@@ -217,11 +218,7 @@ class Form extends Component {
       case 'PRICE':
         return (
           <Block>
-            <PriceFooter
-              {...item}
-              values={values}
-              service={service}
-            />
+            <PriceFooter {...item} values={values} service={service} />
           </Block>
         );
       case 'SLIDER':
@@ -239,6 +236,12 @@ class Form extends Component {
               data={_get(values, 'members', EMPTY_ARRAY)}
               onChange={val => setFieldValue(_get(item, 'key', ''), val)}
             />
+          </Block>
+        );
+      case 'IMAGE':
+        return (
+          <Block style={{ marginBottom: 5 }}>
+            <ImagePickerPC />
           </Block>
         );
       default:

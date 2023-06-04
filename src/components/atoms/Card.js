@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Image,
-  TouchableWithoutFeedback
-} from "react-native";
-import { Block, Text, theme } from "galio-framework";
-import argonTheme from "../../constants/Theme";
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { Block, Text, theme } from 'galio-framework';
+import argonTheme from '../../constants/Theme';
 
 class Card extends React.Component {
   render() {
@@ -19,31 +19,31 @@ class Card extends React.Component {
       style,
       ctaColor,
       imageStyle,
-      ctaRight
+      ctaRight,
     } = this.props;
 
     const imageStyles = [
       full ? styles.fullImage : styles.horizontalImage,
-      imageStyle
+      imageStyle,
     ];
     const cardContainer = [styles.card, styles.shadow, style];
     const imgContainer = [
       styles.imageContainer,
       horizontal ? styles.horizontalStyles : styles.verticalStyles,
-      styles.shadow
+      styles.shadow,
     ];
 
     return (
       <Block row={horizontal} card flex style={cardContainer}>
         <TouchableWithoutFeedback
-          onPress={() => navigation.navigate("Product", { product: item })}
+          onPress={() => navigation.navigate('Product', { product: item })}
         >
           <Block flex style={imgContainer}>
             <Image source={{ uri: item.image }} style={imageStyles} />
           </Block>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
-          onPress={() => navigation.navigate("Product", { product: item })}
+          onPress={() => navigation.navigate('Product', { product: item })}
         >
           <Block flex space="between" style={styles.cardDescription}>
             <Block flex>
@@ -84,12 +84,12 @@ class Card extends React.Component {
 }
 
 Card.propTypes = {
-  item: PropTypes.object,
-  horizontal: PropTypes.bool,
-  full: PropTypes.bool,
   ctaColor: PropTypes.string,
+  ctaRight: PropTypes.bool,
+  full: PropTypes.bool,
+  horizontal: PropTypes.bool,
   imageStyle: PropTypes.any,
-  ctaRight: PropTypes.bool
+  item: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
@@ -103,41 +103,41 @@ const styles = StyleSheet.create({
   cardTitle: {
     // flex: 1,
     // flexWrap: "wrap",
-    paddingBottom: 6
+    paddingBottom: 6,
   },
   cardDescription: {
-    padding: theme.SIZES.BASE / 2
+    padding: theme.SIZES.BASE / 2,
   },
   imageContainer: {
     borderRadius: 3,
     elevation: 1,
-    overflow: "hidden"
+    overflow: 'hidden',
   },
   image: {
     // borderRadius: 3,
   },
   horizontalImage: {
     height: 122,
-    width: "auto"
+    width: 'auto',
   },
   horizontalStyles: {
     borderTopRightRadius: 0,
-    borderBottomRightRadius: 0
+    borderBottomRightRadius: 0,
   },
   verticalStyles: {
     borderBottomRightRadius: 0,
-    borderBottomLeftRadius: 0
+    borderBottomLeftRadius: 0,
   },
   fullImage: {
-    height: 215
+    height: 215,
   },
   shadow: {
-    shadowColor: "#8898AA",
+    shadowColor: '#8898AA',
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 6,
     shadowOpacity: 0.1,
-    elevation: 2
-  }
+    elevation: 2,
+  },
 });
 
 export default withNavigation(Card);
