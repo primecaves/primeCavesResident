@@ -7,7 +7,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import { Block, Text } from 'galio-framework';
-import { API_1, API_2 } from '../../constants/clubHouseResponse';
 import { DynamicKeyCard, Header, Button, Modal } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import Toast from 'react-native-toast-message';
@@ -101,16 +100,6 @@ class BookedClubHouse extends Component {
       initialValues: item,
     }));
   };
-
-  // renderSkeletonLoader = () => {
-  //   return (
-  //     <Block>
-  //       <SkeletionLoader button clubhouse />
-  //       <SkeletionLoader button clubhouse />
-  //       <SkeletionLoader button clubhouse />
-  //     </Block>
-  //   );
-  // };
 
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;

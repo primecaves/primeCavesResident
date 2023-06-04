@@ -65,7 +65,7 @@ class LoginScreen extends React.Component {
                 else {
                     Toast.show({
                         type: 'error',
-                        position: 'top',
+                        position: 'bottom',
                         text2: 'Please enter a valid OTP',
                     });
                 }
@@ -73,7 +73,7 @@ class LoginScreen extends React.Component {
         } catch (error) {
             Toast.show({
                 type: 'error',
-                position: 'top',
+                position: 'bottom',
                 text2: 'Please enter a valid OTP',
             });
         }
@@ -149,7 +149,13 @@ class LoginScreen extends React.Component {
                                             >
                                                 <Block
                                                     center>
-                                                    {renderIcon(MENU_SERVICES.PRIME_CAVES)}
+                                                    {renderIcon(
+                                                        MENU_SERVICES.PRIME_CAVES,
+                                                        {
+                                                            height: 150,
+                                                            width: 150,
+                                                        }
+                                                    )}
                                                 </Block>
                                                 <Text
                                                     style={{
@@ -196,7 +202,13 @@ class LoginScreen extends React.Component {
                                                             iconFamily="MaterialIcons"
                                                             iconSize={30}
                                                             iconColor={argonTheme.COLORS.WHITE}
-                                                            style={{ width: 45, height: 45 }}
+
+
+                                                            style={{
+                                                                ...styles.buttonNext,
+                                                                backgroundColor: (screenLoading || isLoading) ? argonTheme.COLORS.INPUT : argonTheme.COLORS.PRIMARY,
+
+                                                            }}
                                                             onPress={this.signInWithPhoneNumber}
                                                             disabled={screenLoading || isLoading}
                                                         />
@@ -210,7 +222,6 @@ class LoginScreen extends React.Component {
                                                             style={{ width: '70%' }}
                                                             codeInputFieldStyle={styles.underlineStyleBase}
                                                             codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                                                            placeholderTextColor={argonTheme.COLORS.BLACK}
                                                             keyboardAppearance="true"
                                                             code={code}
                                                             onCodeChanged={this.handleCodeChanged}
@@ -253,17 +264,20 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderBottomWidth: 1,
         paddingRight: 0.8,
-        borderColor: argonTheme.COLORS.TEXT_GREY,
-        color: argonTheme.COLORS.BLACK,
+        borderColor: argonTheme.COLORS.PRIMARY,
+        color: argonTheme.COLORS.PRIMARY,
     },
-
+    buttonNext: {
+        width: 45,
+        height: 45,
+    },
     underlineStyleHighLighted: {
-        borderColor: argonTheme.COLORS.TEXT_GREY,
+        borderColor: argonTheme.COLORS.WHITE,
     },
     registerContainer: {
         width: width * 0.9,
         height: height < 812 ? height * 0.10 : height * 0.8,
-        backgroundColor: '#F4F5F7',
+        backgroundColor: 'rgba(52, 52, 52, 0.9)',
         borderRadius: 4,
         shadowColor: argonTheme.COLORS.BLACK,
         shadowOffset: {

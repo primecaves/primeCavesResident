@@ -43,7 +43,7 @@ const Music = {
 const Products = {
   'View article': 'https://images.unsplash.com/photo-1501601983405-7c7cabaa1581?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=840&q=840',
 };
-const RegisterBackground = require('../assets/icons/register-bg.jpg');
+const RegisterBackground = require('../assets/icons/register-bg.png');
 export default {
   // Onboarding,
   // Logo,

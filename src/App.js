@@ -11,22 +11,14 @@ import 'react-native-gesture-handler';
 import './translations';
 import { NativeBaseProvider } from 'native-base';
 
-import FlashMessage from 'react-native-flash-message';
-
 const App = () => {
 
-  useEffect(() => {
-
-
-  });
   return (
     <NativeBaseProvider>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <AuthProvider>
-            <FlashMessage position="top" >
-              <RootContainer />
-            </FlashMessage>
+            <RootContainer />
           </AuthProvider>
           <Toast />
         </PersistGate>

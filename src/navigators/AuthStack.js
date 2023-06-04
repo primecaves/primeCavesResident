@@ -10,6 +10,9 @@ const AuthStack = (props) => {
   return (
     <Stack.Navigator
       initialRouteName="LoginScreen"
+      screenOptions={{
+        headerShown: false,
+      }}
     >
       <Stack.Screen name="LoginScreen"
         component={(prop) => componentWithProps(LoginScreen, { ...props, ...prop })} />
