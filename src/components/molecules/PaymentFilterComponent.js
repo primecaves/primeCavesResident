@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Block, Text, Button } from 'galio-framework';
+import { Block, Text } from 'galio-framework';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SelectMenu from '../atoms/SelectMenu';
 import { Pressable } from 'react-native';

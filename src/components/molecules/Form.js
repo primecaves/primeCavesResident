@@ -163,7 +163,7 @@ class Form extends Component {
           <Block width={width * 0.8} style={{ marginBottom: 5 }}>
             <Select
               {...item}
-              width={600}
+              width={width * 0.8}
               onValueChange={val => setFieldValue(_get(item, 'key', ''), val)}
               value={values[item.key]}
             />
@@ -218,7 +218,10 @@ class Form extends Component {
       case 'PRICE':
         return (
           <Block>
-            <PriceFooter {...item} values={values} service={service} />
+            <PriceFooter
+              {...item}
+              values={values}
+              service={service} />
           </Block>
         );
       case 'SLIDER':
@@ -241,7 +244,11 @@ class Form extends Component {
       case 'IMAGE':
         return (
           <Block style={{ marginBottom: 5 }}>
-            <ImagePickerPC />
+            <ImagePickerPC
+              onValueChange={val => setFieldValue(_get(item, 'key', ''), val)}
+              value={values[item.key]}
+              {...item}
+            />
           </Block>
         );
       default:
@@ -269,9 +276,6 @@ class Form extends Component {
 
   render() {
     const {
-      primaryIconName,
-      primaryIconFamily,
-      primaryIconAction = _noop,
       fields = [],
       onSubmit = _noop,
       isEdit = false,
@@ -297,21 +301,6 @@ class Form extends Component {
             setFieldValue,
           }) => (
             <Block>
-              {
-                <Block row>
-                  {/* <Block flex right>
-                                            <TouchableOpacity
-                                                onPress={primaryIconAction}
-                                            >
-                                                <Icon
-                                                    size={25}
-                                                    name={primaryIconName || "close"}
-                                                    family={primaryIconFamily || "AntDesign"}
-                                                />
-                                            </TouchableOpacity>
-                                        </Block> */}
-                </Block>
-              }
               <Block>
                 <ScrollView>
                   {this.renderFields({

@@ -14,8 +14,9 @@ import { Images, argonTheme } from '../constants';
 import { HeaderHeight } from '../constants/utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import _get from 'lodash/get';
+import withAuthProps from '../hoc/withAuthProps';
 const { width, height } = Dimensions.get('screen');
-
+import { AuthContext } from '../context/authContext';
 const thumbMeasure = (width - 48 - 32) / 3;
 
 class Profile extends React.Component {
@@ -27,12 +28,9 @@ class Profile extends React.Component {
     this.setState({ user: userDetails });
   }
 
-  handleRemoveDataFromAsyncStorage = () => {
-    AsyncStorage.removeItem('accessToken');
-  };
-
   render() {
     const { user } = this.state;
+    const { logout } = this.props;
     return (
       <Block flex style={styles.profile}>
         <Block flex>
@@ -60,8 +58,8 @@ class Profile extends React.Component {
                   >
                     <Button
                       small
-                      style={{ backgroundColor: argonTheme.COLORS.INFO }}
-                      onPress={this.handleRemoveDataFromAsyncStorage}
+                      style={{ backgroundColor: argonTheme.COLORS.PRIMARY }}
+                      onPress={logout}
                     >
                       LOGOUT
                     </Button>
@@ -132,34 +130,6 @@ class Profile extends React.Component {
                     >
                       Show more
                     </Button>
-                  </Block>
-                  <Block
-                    row
-                    style={{ paddingVertical: 14 }}
-                    space="between"
-                  >
-                    <Text bold size={16} color="#525F7F" style={{ marginTop: 3 }}>
-                      Album
-                    </Text>
-                    <Button
-                      small
-                      color="transparent"
-                      textStyle={{ color: '#5E72E4', fontSize: 14 }}
-                    >
-                      View all
-                    </Button>
-                  </Block>
-                  <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-                    <Block row space="between" style={{ flexWrap: 'wrap' }}>
-                      {Images.Viewed.map((img, imgIndex) => (
-                        <Image
-                          source={{ uri: img }}
-                          key={`viewed-${img}`}
-                          resizeMode="cover"
-                          style={styles.thumb}
-                        />
-                      ))}
-                    </Block>
                   </Block>
                 </Block>
               </Block>

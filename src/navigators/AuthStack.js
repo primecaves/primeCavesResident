@@ -1,14 +1,18 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { OtpScreen, LoginScreen } from '../screens/Authentication';
+import { LoginScreen } from '../screens/Authentication';
+import { componentWithProps } from '../constants/utils';
+
 const Stack = createStackNavigator();
 
 const AuthStack = (props) => {
 
   return (
-    <Stack.Navigator initialRouteName="LoginScreen">
-      <Stack.Screen name="OtpScreen" component={(prop) => <OtpScreen {...props} {...prop} />} />
-      <Stack.Screen name="LoginScreen" component={(prop) => <LoginScreen {...props} {...prop} />} />
+    <Stack.Navigator
+      initialRouteName="LoginScreen"
+    >
+      <Stack.Screen name="LoginScreen"
+        component={(prop) => componentWithProps(LoginScreen, { ...props, ...prop })} />
     </Stack.Navigator>
   );
 };

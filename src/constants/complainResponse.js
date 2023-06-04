@@ -13,6 +13,14 @@ const API_1 = {
   display_name_key: 'name',
   data: [
     {
+      image: [
+        'https://picsum.photos/100/100',
+        'https://picsum.photos/100/100',
+        'https://picsum.photos/100/100',
+        'https://picsum.photos/100/100',
+        'https://picsum.photos/100/100',
+        'https://picsum.photos/100/100',
+      ],
       name: 'Pipe problem',
       description: 'this is description',
       tag: 'Electrical',

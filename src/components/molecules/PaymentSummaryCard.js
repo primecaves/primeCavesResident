@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import Theme from '../../constants/Theme';
@@ -19,7 +19,7 @@ class PaymentSummaryCard extends React.Component {
           </>
         ) : (
           <>
-            <Icon name="check-circle" size={30} color={'white'}></Icon>
+            <Icon name="check-circle" size={30} color={'white'} />
             <Text style={styles.text}> All your dues are cleared.</Text>
           </>
         )}

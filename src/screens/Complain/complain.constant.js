@@ -1,9 +1,9 @@
 export const FIELDS = [
-  //   {
-  //     id: 'image',
-  //     key: 'image',
-  //     component: 'SLIDER',
-  //   },
+  {
+    id: 'image',
+    key: 'image',
+    component: 'IMAGE',
+  },
   {
     id: 'name',
     key: 'name',
@@ -39,9 +39,5 @@ export const FIELDS = [
     ],
   },
   { id: 'urgent', key: 'urgent', component: 'SWITCH', label: 'Urgent' },
-  {
-    id: 'image',
-    key: 'image',
-    component: 'IMAGE',
-  },
+
 ];

@@ -10,7 +10,7 @@
 // const androidLogo = require("../assets/imgs/android.png");
 // const ProfilePicture = require("../assets/imgs/profile-img.jpg")
 // internet imgs
-const ProfileChat = 'https://images.unsplash.com/photo-1500522144261-ea64433bbe27?fit=crop&w=1051&q=80'
+const ProfileChat = 'https://images.unsplash.com/photo-1500522144261-ea64433bbe27?fit=crop&w=1051&q=80';
 
 const Viewed = [
   'https://images.unsplash.com/photo-1501601983405-7c7cabaa1581?fit=crop&w=240&q=80',
@@ -22,7 +22,7 @@ const Viewed = [
 ];
 
 const Beauty = [
-  'https://images.unsplash.com/photo-1501601983405-7c7cabaa1581?fit=crop&w=240&q=80'
+  'https://images.unsplash.com/photo-1501601983405-7c7cabaa1581?fit=crop&w=240&q=80',
 ];
 
 const Music = {
@@ -37,20 +37,20 @@ const Music = {
   'Accessory': 'https://images.unsplash.com/photo-1542779632-539b861ee8f9?fit=crop&w=634&q=80',
   'Fashion': 'https://images.unsplash.com/photo-1479064555552-3ef4979f8908?fit=crop&w=1350&q=80',
   'Garage_sale': 'https://images.unsplash.com/photo-1484502249930-e1da807099a5?fit=crop&w=1267&q=80',
-  'Wedding_dress': 'https://images.unsplash.com/photo-1519657337289-077653f724ed?fit=crop&w=1350&q=80'
-}
+  'Wedding_dress': 'https://images.unsplash.com/photo-1519657337289-077653f724ed?fit=crop&w=1350&q=80',
+};
 
 const Products = {
   'View article': 'https://images.unsplash.com/photo-1501601983405-7c7cabaa1581?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=840&q=840',
 };
-
+const RegisterBackground = require('../assets/icons/register-bg.jpg');
 export default {
   // Onboarding,
   // Logo,
   // LogoOnboarding,
   // ProfileBackground,
   // ProfilePicture,
-  // RegisterBackground,
+  RegisterBackground,
   ProfileChat,
   Viewed,
   Beauty,

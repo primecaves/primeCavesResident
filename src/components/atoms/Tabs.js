@@ -4,24 +4,23 @@ import { Block, theme } from 'galio-framework';
 
 const { width } = Dimensions.get('screen');
 import argonTheme from '../../constants/Theme';
-import { EMPTY_STRING } from '../../constants';
 
 const defaultMenu = [
-  { id: 'music', title: 'Music', },
-  { id: 'beauty', title: 'Beauty', },
-  { id: 'fashion', title: 'Fashion', },
-  { id: 'motocycles', title: 'Motocycles', },
+  { id: 'music', title: 'Music' },
+  { id: 'beauty', title: 'Beauty' },
+  { id: 'fashion', title: 'Fashion' },
+  { id: 'motocycles', title: 'Motocycles' },
 ];
 
 export default class Tabs extends React.Component {
   static defaultProps = {
     data: defaultMenu,
     initialIndex: null,
-  }
+  };
 
   state = {
     active: null,
-  }
+  };
 
   componentDidMount() {
     const { initialIndex } = this.props;
@@ -37,7 +36,7 @@ export default class Tabs extends React.Component {
       toValue: 1,
       duration: 300,
       useNativeDriver: false, // color not supported
-    }).start()
+    }).start();
   }
 
   menuRef = React.createRef();
@@ -45,36 +44,36 @@ export default class Tabs extends React.Component {
   onScrollToIndexFailed = () => {
     this.menuRef.current.scrollToIndex({
       index: 0,
-      viewPosition: 0.5
+      viewPosition: 0.5,
     });
-  }
+  };
 
 
   selectMenu = (id) => {
-    const {active}=this.state
-    if(active === id){
+    const { active } = this.state;
+    if (active === id) {
       this.setState({ active: null });
 
       this.menuRef.current.scrollToIndex({
         index: 0,
-        viewPosition: 0.5
+        viewPosition: 0.5,
       });
-  
+
       this.animate();
       this.props.onChange && this.props.onChange({});
-      
-    }
-    else{
-    this.setState({ active: id });
-    this.menuRef.current.scrollToIndex({
-      index: this.props.data.findIndex(item => item.id === id),
-      viewPosition: 0.5
-    });
 
-    this.animate();
-    this.props.onChange && this.props.onChange(id);
-  }
-}
+    }
+    else {
+      this.setState({ active: id });
+      this.menuRef.current.scrollToIndex({
+        index: this.props.data.findIndex(item => item.id === id),
+        viewPosition: 0.5,
+      });
+
+      this.animate();
+      this.props.onChange && this.props.onChange(id);
+    }
+  };
 
   renderItem = (item) => {
     const isActive = this.state.active === item.id;
@@ -88,7 +87,7 @@ export default class Tabs extends React.Component {
     const containerStyles = [
       styles.titleContainer,
       !isActive && { backgroundColor: argonTheme.COLORS.SECONDARY },
-      isActive && styles.containerShadow
+      isActive && styles.containerShadow,
     ];
 
     return (
@@ -101,10 +100,11 @@ export default class Tabs extends React.Component {
           ]}
           onPress={() => this.selectMenu(item.id)}>
           {item.title}
+
         </Animated.Text>
       </Block>
-    )
-  }
+    );
+  };
 
   renderMenu = () => {
     const { data, ...props } = this.props;
@@ -122,15 +122,15 @@ export default class Tabs extends React.Component {
         renderItem={({ item }) => this.renderItem(item)}
         contentContainerStyle={styles.menu}
       />
-    )
-  }
+    );
+  };
 
   render() {
     return (
       <Block style={styles.container}>
         {this.renderMenu()}
       </Block>
-    )
+    );
   }
 }
 
@@ -173,6 +173,6 @@ const styles = StyleSheet.create({
     // lineHeight: 28,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    color: argonTheme.COLORS.MUTED
+    color: argonTheme.COLORS.MUTED,
   },
 });

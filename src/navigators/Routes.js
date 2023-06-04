@@ -5,12 +5,11 @@ import AppStack from './AppStack';
 import _isEmpty from 'lodash/isEmpty';
 import { connect } from 'react-redux';
 import { AuthContext } from '../context/authContext';
-import { CirclesLoader, PulseLoader, TextLoader, DotsLoader } from 'react-native-indicator';
-import { HStack, Spinner } from 'native-base';
-import { argonTheme } from '../constants';
-const Routes = (props) => {
+import { Spinner } from 'native-base';
+
+const Routes = () => {
   const {
-    isLoading,
+    isLoading = false,
     userInfo,
     splashLoading,
     error,
@@ -18,6 +17,7 @@ const Routes = (props) => {
     logout,
     token,
   } = useContext(AuthContext);
+
   if (splashLoading) {
     return <Spinner size="lg" />;
   }
@@ -32,7 +32,9 @@ const Routes = (props) => {
   };
   return (
     <NavigationContainer >
-      {_isEmpty(userInfo) ? <AuthStack {...authProps} /> : <AppStack {...authProps} />}
+      {_isEmpty(userInfo) ?
+        <AuthStack {...authProps} /> : <AppStack {...authProps} />}
+
     </NavigationContainer >
   );
 };

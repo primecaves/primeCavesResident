@@ -25,6 +25,21 @@ const SERVICES = {
   AMENITIES: 'amenities',
   CLUBHOUSE: 'clubhouse',
 };
+
+const MENU_SERVICES = {
+  MAINTENANCE: 'Payments',
+  AMENITIES: 'Amenities',
+  CLUBHOUSE: 'ClubHouse',
+  COMPLAIN: 'Complain',
+  NOTICEBOARD: 'NoticeBoard',
+  ROADMAP: 'Roadmap',
+  HELPDESK: 'HelpDesk',
+  PROFILE: 'Profile',
+  LOGOUT: 'Logout',
+  HOME: 'Home',
+  SERVICES: 'Services',
+  PRIME_CAVES: 'Prime Caves',
+};
 export {
   EMPTY_ARRAY,
   EMPTY_SET,
@@ -44,4 +59,5 @@ export {
   argonTheme,
   Images,
   SERVICES,
+  MENU_SERVICES,
 };

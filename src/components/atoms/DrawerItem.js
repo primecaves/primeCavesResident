@@ -1,79 +1,79 @@
-import React from "react";
-import { StyleSheet, TouchableOpacity, Linking } from "react-native";
-import { Block, Text, theme } from "galio-framework";
+import React from 'react';
+import { StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { Block, Text, theme } from 'galio-framework';
 
-import Icon from "../atoms/Icon";
-import argonTheme from "../../constants/Theme";
+import Icon from '../atoms/Icon';
+import argonTheme from '../../constants/Theme';
 
 class DrawerItem extends React.Component {
   renderIcon = () => {
     const { title, focused } = this.props;
 
     switch (title) {
-      case "Home":
+      case 'Home':
         return (
           <Icon
             name="shop"
             family="ArgonExtra"
             size={14}
-            color={focused ? "white" : argonTheme.COLORS.PRIMARY}
+            color={focused ? 'white' : argonTheme.COLORS.PRIMARY}
           />
         );
-      case "Elements":
+      case 'Elements':
         return (
           <Icon
             name="map-big"
             family="ArgonExtra"
             size={14}
-            color={focused ? "white" : argonTheme.COLORS.ERROR}
+            color={focused ? 'white' : argonTheme.COLORS.ERROR}
           />
         );
-      case "Articles":
+      case 'Articles':
         return (
           <Icon
             name="spaceship"
             family="ArgonExtra"
             size={14}
-            color={focused ? "white" : argonTheme.COLORS.PRIMARY}
+            color={focused ? 'white' : argonTheme.COLORS.PRIMARY}
           />
         );
-      case "Profile":
+      case 'Profile':
         return (
           <Icon
             name="chart-pie-35"
             family="ArgonExtra"
             size={14}
-            color={focused ? "white" : argonTheme.COLORS.WARNING}
+            color={focused ? 'white' : argonTheme.COLORS.WARNING}
           />
         );
-      case "Account":
+      case 'Account':
         return (
           <Icon
             name="calendar-date"
             family="ArgonExtra"
             size={14}
-            color={focused ? "white" : argonTheme.COLORS.INFO}
+            color={focused ? 'white' : argonTheme.COLORS.INFO}
           />
         );
-      case "Settings":
+      case 'Settings':
         return (
           <Icon
             name="calendar-date"
             family="ArgonExtra"
             size={14}
-            color={focused ? "white" : argonTheme.COLORS.DEFAULT}
+            color={focused ? 'white' : argonTheme.COLORS.DEFAULT}
           />
         );
-      case "Getting Started":
+      case 'Getting Started':
         return (
           <Icon
             name="spaceship"
             family="ArgonExtra"
             size={14}
-            color={focused ? "white" : "rgba(0,0,0,0.5)"}
+            color={focused ? 'white' : 'rgba(0,0,0,0.5)'}
           />
         );
-      case "Log out":
+      case 'Log out':
         return <Icon />;
       default:
         return null;
@@ -85,7 +85,7 @@ class DrawerItem extends React.Component {
 
     const containerStyles = [
       styles.defaultStyle,
-      focused ? [styles.activeStyle, styles.shadow] : null
+      focused ? [styles.activeStyle, styles.shadow] : null,
     ];
 
     return (
@@ -99,10 +99,10 @@ class DrawerItem extends React.Component {
           </Block>
           <Block row center flex={0.9}>
             <Text
-              style={{ fontFamily: "open-sans-regular" }}
+              style={{ fontFamily: 'open-sans-regular' }}
               size={15}
               bold={focused ? true : false}
-              color={focused ? "white" : "rgba(0,0,0,0.5)"}
+              color={focused ? 'white' : 'rgba(0,0,0,0.5)'}
             >
               {title}
             </Text>
@@ -117,21 +117,21 @@ const styles = StyleSheet.create({
   defaultStyle: {
     paddingVertical: 16,
     paddingHorizontal: 16,
-    marginBottom: 2
+    marginBottom: 2,
   },
   activeStyle: {
     backgroundColor: argonTheme.COLORS.ACTIVE,
-    borderRadius: 4
+    borderRadius: 4,
   },
   shadow: {
     shadowColor: theme.COLORS.BLACK,
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowRadius: 8,
-    shadowOpacity: 0.1
-  }
+    shadowOpacity: 0.1,
+  },
 });
 
 export default DrawerItem;

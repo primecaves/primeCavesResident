@@ -41,6 +41,7 @@ class DropDown extends React.Component {
       styles.qty,
       color && { backgroundColor: color },
       style,
+      width,
     ];
 
     const textStyles = [styles.text, textStyle];
@@ -58,7 +59,6 @@ class DropDown extends React.Component {
         )}
         <ModalDropdown
           style={modalStyles}
-          onSelect={this.handleOnSelect}
           dropdownStyle={styles.dropdown}
           dropdownTextStyle={{ paddingLeft: 16, fontSize: 12 }}
           {...props}
@@ -69,7 +69,7 @@ class DropDown extends React.Component {
             middle
             center
             style={{ ...styles.selectContainer, width }}
-            space="evenly"
+            space="between"
           >
             <Icon
               size={18}
@@ -85,6 +85,7 @@ class DropDown extends React.Component {
               family={iconFamily || 'AntDesign'}
               size={iconSize || 10}
               color={iconColor || argonTheme.COLORS.BLACK}
+              onSelect={this.handleOnSelect}
             />
           </Block>
         </ModalDropdown>

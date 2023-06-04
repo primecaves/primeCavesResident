@@ -15,7 +15,7 @@ class AlertModal extends Component {
         <View
           style={styles.horizontalLine}
         />
-        <Block flex row marginTop='20'>
+        <Block flex row marginTop="20">
           <Button
             shadowless
             color={argonTheme.COLORS.WHITE}
@@ -77,7 +77,7 @@ class AlertModal extends Component {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={{ fontFamily: 'open-sans-regular',marginTop:'70%'}}>{message}</Text>
+              <Text style={{ fontFamily: 'open-sans-regular', marginTop: '70%' }}>{message}</Text>
               {footer && this.renderFooter()}
             </View>
           </View>

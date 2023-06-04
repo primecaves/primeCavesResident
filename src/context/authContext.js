@@ -40,14 +40,13 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => {
+    const logout = async () => {
         setIsLoading(true);
         AsyncStorage.removeItem(
             'accessToken',
         );
         AsyncStorage.removeItem('userInfo');
         setUserInfo(EMPTY_OBJECT);
-        setUserInfo(EMPTY_STRING);
         setIsLoading(false);
         setError(null);
     };

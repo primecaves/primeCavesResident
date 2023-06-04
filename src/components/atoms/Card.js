@@ -48,7 +48,6 @@ class Card extends React.Component {
           <Block flex space="between" style={styles.cardDescription}>
             <Block flex>
               <Text
-                style={{ fontFamily: 'open-sans-regular' }}
                 size={14}
                 style={styles.cardTitle}
                 color={argonTheme.COLORS.TEXT}
@@ -104,6 +103,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     // flexWrap: "wrap",
     paddingBottom: 6,
+    fontFamily: 'open-sans-regular',
   },
   cardDescription: {
     padding: theme.SIZES.BASE / 2,

@@ -1,136 +1,286 @@
-import React, { Component } from 'react';
-import { Text, Button, Block } from 'galio-framework';
-import { ActionSheet, Input } from '../../components';
-import { StyleSheet, View } from 'react-native';
-import { EMPTY_STRING, argonTheme } from '../../constants';
-import { withNavigation } from '@react-navigation/compat';
-import { Formik } from 'formik';
-import auth from '@react-native-firebase/auth';
+import React from 'react';
+import {
+    StyleSheet,
+    ImageBackground,
+    Dimensions,
+
+    TouchableWithoutFeedback,
+    Keyboard,
+    Image,
+    View,
+} from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import { Block, Text } from 'galio-framework';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
+import { Button as GalioButton } from 'galio-framework';
+import { Button, Input } from '../../components';
+import { EMPTY_STRING, Images, MENU_SERVICES, argonTheme } from '../../constants';
+import { Spinner } from 'native-base';
+import { renderIcon } from '../../constants/utils';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { validateUserCredential } from './login.services';
+import auth from '@react-native-firebase/auth';
 import _isNull from 'lodash/isNull';
-import _isEmpty from 'lodash/isEmpty';
 
+const { width, height } = Dimensions.get('screen');
 const COUNTRY_CODE = '+91';
+const DismissKeyboard = ({ children }) => (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        {children}
+    </TouchableWithoutFeedback>
+);
 
-export class LoginScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      confirm: null,
-      code: null,
-      isLoading: false,
-      errorMessage: EMPTY_STRING,
+class LoginScreen extends React.Component {
+    state = {
+        phoneNo: undefined,
+        errorMessage: EMPTY_STRING,
+        confirm: null,
+        code: EMPTY_STRING,
+        screenLoading: false,
     };
-  }
 
-  signInWithPhoneNumber = async phoneNumber => {
-    this.setState({ isLoading: true, errorMessage: EMPTY_STRING });
-    const { navigation } = this.props;
-    const request = {
-      contact_number: phoneNumber,
+    handleCodeChanged = code => {
+        this.setState({ code });
     };
-    await validateUserCredential(request)
-      .then(response => {
-        if (response) {
-          auth()
-            .signInWithPhoneNumber(COUNTRY_CODE + phoneNumber)
-            .then(confirmation => {
-              this.setState({
-                confirm: confirmation,
-                isLoading: false,
-                errorMessage: EMPTY_STRING,
-              });
-              navigation.navigate('OtpScreen', {
-                number: phoneNumber,
-                confirm: confirmation,
-              });
+
+    handleChangePhoneNo = phoneNo => {
+        this.setState({ phoneNo });
+    };
+
+    handleChangeConfirm = confirm => {
+        this.setState({ confirm });
+    };
+
+    confirmCode = async () => {
+        const { login } = this.props;
+        const { phoneNo, code, confirm } = this.state;
+        const request = {
+            contact_number: `+91${phoneNo}`,
+        };
+        try {
+            await confirm.confirm(code).then(res => {
+                if (res) {
+                    login(request);
+                }
+                else {
+                    Toast.show({
+                        type: 'error',
+                        position: 'top',
+                        text2: 'Please enter a valid OTP',
+                    });
+                }
+            });
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                position: 'top',
+                text2: 'Please enter a valid OTP',
+            });
+        }
+    };
+
+    signInWithPhoneNumber = async () => {
+        const { phoneNo } = this.state;
+        this.setState({
+            screenLoading: true,
+            errorMessage: EMPTY_STRING,
+            phoneNo,
+        });
+        const request = {
+            contact_number: phoneNo,
+        };
+        await validateUserCredential(request)
+            .then(response => {
+                if (response) {
+                    auth()
+                        .signInWithPhoneNumber(COUNTRY_CODE + phoneNo)
+                        .then(confirmation => {
+                            this.setState({
+                                screenLoading: false,
+                                errorMessage: EMPTY_STRING,
+                                confirm: confirmation,
+                            });
+                        })
+                        .catch(() => {
+                            this.setState({
+                                screenLoading: false,
+                                errorMessage: 'Otp send failed',
+                            });
+                        });
+                } else {
+                    this.setState({
+                        screenLoading: false,
+                        errorMessage: 'Enter a Valid Number',
+                    });
+                }
             })
             .catch(() => {
-              this.setState({
-                isLoading: false,
-                errorMessage: 'Otp send failed',
-              });
+                this.setState({
+                    screenLoading: false,
+                    errorMessage: 'Number Invalid',
+                });
             });
-        } else {
-          this.setState({
-            isLoading: false,
-            errorMessage: 'Enter a Valid Number',
-          });
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          isLoading: false,
-          errorMessage: 'Number Invalid',
-        });
-        this.setState({ isLoading: false });
-      });
+    };
 
-  };
 
-  content = () => {
-    const { errorMessage, isLoading } = this.state;
-    return (
-      <Block>
-        <Text style={styles.text}>Sign In</Text>
-        <Formik
-          initialValues={{ phoneNo: '' }}
-          onSubmit={values => this.signInWithPhoneNumber(values.phoneNo)}
-        >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <View>
-              <Input
-                style={styles.input}
-                placeholder="Enter your number"
-                onChangeText={handleChange('phoneNo')}
-                onBlur={handleBlur('phoneNo')}
-                value={values.phoneNo}
-                type="phone-pad"
-                error={!_isEmpty(errorMessage)}
-                errorMessage={errorMessage}
-              />
-              <Text />
-              <Button
-                onPress={handleSubmit}
-                title="Submit"
-                style={styles.button}
-                loading={isLoading}
-              >
-                Enter
-              </Button>
-            </View>
-          )}
-        </Formik>
-      </Block>
-    );
-  };
+    render() {
+        const { phoneNo, code, confirm, screenLoading } = this.state;
+        const { isLoading } = this.props;
+        return (
+            <DismissKeyboard>
+                <Block flex middle>
+                    <ImageBackground
+                        source={Images.RegisterBackground}
+                        style={{ width, height, zIndex: 1 }}
+                    >
+                        <Block flex middle>
+                            <Block style={styles.registerContainer}>
+                                <Block flex space="between">
+                                    <Block flex={0.8} middle space="between">
 
-  render() {
-    const { confirm } = this.state;
-    return (
-      <View >
-        {_isNull(confirm) && <ActionSheet content={this.content} />}
-      </View>
-    );
-  }
+                                        <View style={{
+                                            flex: 1, justifyContent: 'center',
+                                            alignItems: 'center',
+
+                                        }}>
+                                            <Animatable.View
+                                                animation="zoomIn"
+                                                iterationCount={1}
+                                            >
+                                                <Block
+                                                    center>
+                                                    {renderIcon(MENU_SERVICES.PRIME_CAVES)}
+                                                </Block>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 26,
+                                                        color: argonTheme.COLORS.PRIMARY,
+                                                        fontFamily: 'open-sans-bold',
+                                                    }}>
+                                                    PRIME CAVES
+                                                </Text>
+                                            </Animatable.View>
+                                        </View>
+                                        <Block center flex={0.9}>
+                                            <Block flex space="between">
+                                                {(screenLoading || isLoading) && (
+                                                    <Spinner size="lg"
+                                                        color={argonTheme.COLORS.YELLOW} />
+                                                )}
+                                                <Block>
+                                                    <Block
+                                                        flex
+                                                        row
+                                                        width={width * 0.8}
+                                                        style={{ marginBottom: 5 }}
+                                                    >
+                                                        <Input
+                                                            style={{ width: width - 130 }}
+                                                            placeholder="Phone Number"
+                                                            keyboardType="number-pad"
+                                                            onChangeText={this.handleChangePhoneNo}
+                                                            value={phoneNo}
+                                                            iconContent={
+                                                                <Image
+                                                                    source={require('../../assets/icons/india.png')}
+                                                                    style={{
+                                                                        height: 24,
+                                                                        width: 24,
+                                                                        resizeMode: 'contain',
+                                                                    }}
+                                                                />
+                                                            }
+                                                        />
+                                                        <GalioButton
+                                                            onlyIcon icon="navigate-next"
+                                                            iconFamily="MaterialIcons"
+                                                            iconSize={30}
+                                                            iconColor={argonTheme.COLORS.WHITE}
+                                                            style={{ width: 45, height: 45 }}
+                                                            onPress={this.signInWithPhoneNumber}
+                                                            disabled={screenLoading || isLoading}
+                                                        />
+
+                                                    </Block>
+
+                                                    {!_isNull(confirm) && (<Block center>
+
+                                                        <OTPInputView
+                                                            pinCount={6}
+                                                            style={{ width: '70%' }}
+                                                            codeInputFieldStyle={styles.underlineStyleBase}
+                                                            codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                                                            placeholderTextColor={argonTheme.COLORS.BLACK}
+                                                            keyboardAppearance="true"
+                                                            code={code}
+                                                            onCodeChanged={this.handleCodeChanged}
+                                                        />
+                                                    </Block>)}
+                                                </Block>
+                                                {!_isNull(confirm) && (<Block center>
+                                                    <Button
+                                                        color="primary"
+                                                        style={styles.createButton}
+                                                        onPress={this.confirmCode}
+
+                                                    >
+                                                        <Text
+                                                            style={{ fontFamily: 'open-sans-bold' }}
+                                                            size={14}
+                                                            color={argonTheme.COLORS.WHITE}
+                                                        >
+                                                            LOGIN
+                                                        </Text>
+                                                    </Button>
+                                                </Block>)}
+                                            </Block>
+                                        </Block>
+                                    </Block>
+                                </Block>
+                            </Block>
+                        </Block>
+                    </ImageBackground>
+                </Block>
+            </DismissKeyboard>
+        );
+    }
 }
 
-export default withNavigation(LoginScreen);
-
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 25,
-    marginLeft: 25,
-  },
-  input: {
-    width: '90%',
-    marginLeft: 25,
-  },
-  button: {
-    width: '90%',
-    backgroundColor: argonTheme.COLORS.PRIMARY,
-    borderRadius: 10,
-    marginTop: 20,
-    marginLeft: 25,
-  },
+    underlineStyleBase: {
+        width: 50,
+        height: 45,
+        borderWidth: 0.5,
+        borderBottomWidth: 1,
+        paddingRight: 0.8,
+        borderColor: argonTheme.COLORS.TEXT_GREY,
+        color: argonTheme.COLORS.BLACK,
+    },
+
+    underlineStyleHighLighted: {
+        borderColor: argonTheme.COLORS.TEXT_GREY,
+    },
+    registerContainer: {
+        width: width * 0.9,
+        height: height < 812 ? height * 0.10 : height * 0.8,
+        backgroundColor: '#F4F5F7',
+        borderRadius: 4,
+        shadowColor: argonTheme.COLORS.BLACK,
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowRadius: 8,
+        shadowOpacity: 0.1,
+        elevation: 1,
+        overflow: 'hidden',
+
+    },
+    createButton: {
+        width: width * 0.5,
+        marginTop: 25,
+        marginBottom: 40,
+    },
 });
+
+export default LoginScreen;

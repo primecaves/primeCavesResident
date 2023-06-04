@@ -47,7 +47,7 @@ class MakePayment extends React.Component {
               color={Theme.COLORS.WHITE}
               style={styles.icon}
             />
-            {'Make Paymentsd'}
+            {'Make Payments'}
           </Text>
         </Button>
       </Block>

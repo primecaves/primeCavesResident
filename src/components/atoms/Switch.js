@@ -10,16 +10,15 @@ class MkSwitch extends React.Component {
       Platform.OS === 'ios'
         ? null
         : Platform.OS === 'android' && value
-        ? argonTheme.COLORS.PRIMARY
-        : argonTheme.COLORS.SWITCH_OFF;
-
+          ? argonTheme.COLORS.PRIMARY
+          : argonTheme.COLORS.BORDER;
     return (
       <Switch
         value={value}
         thumbColor={thumbColor}
-        ios_backgroundColor={argonTheme.COLORS.SWITCH_OFF}
+        ios_backgroundColor={argonTheme.COLORS.BORDER}
         trackColor={{
-          false: argonTheme.COLORS.SWITCH_ON,
+          false: argonTheme.COLORS.BORDER,
           true: argonTheme.COLORS.PRIMARY,
         }}
         {...props}

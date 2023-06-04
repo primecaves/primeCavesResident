@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Form } from '../../../components';
 import { SERVICES, argonTheme } from '../../../constants';
@@ -9,7 +10,6 @@ const ClubHouseForm = ({
   primaryButtonText = 'Pay Now',
 }) => {
   return (
-    // eslint-disable-next-line react/react-in-jsx-scope
     <Form
       isEdit
       fields={FIELDS}

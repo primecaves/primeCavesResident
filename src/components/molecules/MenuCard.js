@@ -1,14 +1,12 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
-import PropTypes from 'prop-types';
-
 import {
     StyleSheet,
-    Image,
     TouchableWithoutFeedback,
 } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import argonTheme from '../../constants/Theme';
+import { renderIcon } from '../../constants/utils';
 
 class MenuCard extends React.Component {
     render() {
@@ -16,16 +14,14 @@ class MenuCard extends React.Component {
             navigation,
             item,
             horizontal,
-            full,
             style,
             ctaColor,
-            imageStyle,
             ctaRight,
         } = this.props;
-        const imageStyles = [
-            full ? styles.fullImage : styles.horizontalImage,
-            imageStyle,
-        ];
+        // const imageStyles = [
+        //     full ? styles.fullImage : styles.horizontalImage,
+        //     imageStyle,
+        // ];
         const cardContainer = [styles.card, styles.shadow, style];
         const imgContainer = [
             styles.imageContainer,
@@ -39,14 +35,7 @@ class MenuCard extends React.Component {
                     onPress={() => navigation.navigate(item.cta, { selectedService: item })}
                 >
                     <Block flex style={imgContainer}>
-                        <Image source={{ uri: item.image }} style={imageStyles} />
-
-                        {/* <Icon
-                            name={"dropbox"}
-                            family="entypo"
-                            size={120}
-                            style={imageStyles}
-                        /> */}
+                        {renderIcon(item.cta)}
                     </Block>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
@@ -55,7 +44,7 @@ class MenuCard extends React.Component {
                     <Block flex space="between" style={styles.cardDescription}>
                         <Block right={ctaRight ? true : false}>
                             <Text
-                                style={{ fontFamily: 'open-sans-regular', textAlign: 'center' }}
+                                style={{ textAlign: 'center' }}//fontFamily: 'open-sans-regular',
                                 size={12}
                                 muted={!ctaColor}
                                 color={ctaColor || argonTheme.COLORS.TEXT_GREY}
@@ -69,15 +58,6 @@ class MenuCard extends React.Component {
         );
     }
 }
-
-MenuCard.propTypes = {
-    ctaColor: PropTypes.string,
-    ctaRight: PropTypes.bool,
-    full: PropTypes.bool,
-    horizontal: PropTypes.bool,
-    imageStyle: PropTypes.any,
-    item: PropTypes.object,
-};
 
 const styles = StyleSheet.create({
     card: {

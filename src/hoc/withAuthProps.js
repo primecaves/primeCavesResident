@@ -2,11 +2,11 @@ import React from 'react';
 import { AuthProvider } from '../context/authContext';
 
 export default (WrappedComponent) => {
-    const hocComponent = ({ ...props }) =>
+    const HocComponent = ({ ...props }) =>
     (
         <AuthProvider>
             <WrappedComponent {...props} />
         </AuthProvider>
     );
-    return hocComponent;
+    return HocComponent;
 };
