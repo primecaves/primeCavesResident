@@ -1,8 +1,7 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/lib/integration/react';
-import { store, persistor } from './store';
+import { store } from './states/store';
 import RootContainer from './navigators';
 import Toast from 'react-native-toast-message';
 import { AuthProvider } from './context/authContext';
@@ -17,13 +16,11 @@ const App = () => {
   return (
     <NativeBaseProvider>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <AuthProvider>
-            <RootContainer />
-          </AuthProvider>
-          <FlashMessage/>
-          <Toast />
-        </PersistGate>
+        <AuthProvider>
+          <RootContainer />
+        </AuthProvider>
+        <FlashMessage />
+        <Toast />
       </Provider>
     </NativeBaseProvider>
   );

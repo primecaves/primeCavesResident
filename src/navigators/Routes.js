@@ -33,15 +33,15 @@ const Routes = () => {
   return (
     <NavigationContainer >
       {_isEmpty(userInfo) ?
-        <AppStack {...authProps} /> : <AppStack {...authProps} />}
+        <AuthStack {...authProps} /> : <AppStack {...authProps} />}
     </NavigationContainer >
   );
 };
 
 
-const mapStateToProps = (state) => ({
-  userDetails: state.appReducer.userDetails,
-});
+// const mapStateToProps = (state) => ({
+//   userDetails: state.appReducer.userDetails,
+// });
 
 // const mapDispatchToProps = dispatch => {
 //   return {
@@ -54,4 +54,4 @@ const mapStateToProps = (state) => ({
 //     },
 //   };
 // };
-export default connect(mapStateToProps,)(Routes);
+export default Routes;

@@ -235,7 +235,6 @@ class LoginScreen extends React.Component {
                                                         }
                                                     )}
                                                 </Block>
-
                                             </Animatable.View>
                                         </View>
                                         <Block center flex={0.9}>
@@ -252,7 +251,10 @@ class LoginScreen extends React.Component {
                                                         style={{ marginBottom: 5 }}
                                                     >
                                                         <Input
-                                                            style={{ width: width - 130 }}
+                                                            style={{
+                                                                width: width - 130,
+                                                                borderColor: argonTheme.COLORS.WHITE,
+                                                            }}
                                                             placeholder="Phone Number"
                                                             keyboardType="number-pad"
                                                             onChangeText={this.handleChangePhoneNo}
@@ -273,8 +275,6 @@ class LoginScreen extends React.Component {
                                                             iconFamily="MaterialIcons"
                                                             iconSize={30}
                                                             iconColor={argonTheme.COLORS.WHITE}
-
-
                                                             style={{
                                                                 ...styles.buttonNext,
                                                                 backgroundColor: (screenLoading || isLoading) ? argonTheme.COLORS.INPUT : argonTheme.COLORS.PRIMARY,
@@ -374,7 +374,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         elevation: 1,
         overflow: 'hidden',
-
     },
     createButton: {
         width: width * 0.5,

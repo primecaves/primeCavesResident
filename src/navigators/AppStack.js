@@ -16,6 +16,16 @@ import { Button } from 'galio-framework';
 import Profile from '../screens/Profile';
 import { componentWithProps, renderIcon } from '../constants/utils';
 import _get from 'lodash/get';
+import { renderIcon } from '../constants/utils';
+import {
+  CartScreen,
+  CategoriesScreen,
+  CheckoutScreen,
+  ProductDetailScreen,
+  ViewOrderDetailScreen,
+  ViewOrdersScreen,
+} from '../screens/Services';
+import MyOrderScreen from '../screens/Services/MyOrderScreen';
 
 const renderHomeHeader = ({ navigation, scene, title }) => {
   return (
@@ -173,13 +183,35 @@ const HomeStack = (contextProps) => {
   );
 };
 
-const ServiceStack = () => {
+const ServiceStack = (contextProps) => {
+  const { Navigator, Screen } = createNativeStackNavigator();
+  const navProps = {
+    screenOptions: {
+      mode: 'card',
+      headerShown: 'screen',
+    },
+  };
+
   return (
-    <>
-      <View>
-        <Text>ServiceStack</Text>
-      </View>
-    </>
+    <Navigator
+      {...navProps}
+      initialRouteName="categories"
+      initialParams={{ itemId: 42 }}
+      screenOptions={{
+        header: ({ navigation, scene }) => renderHomeHeader({ navigation, scene }),
+      }}
+    >
+      <Screen name="cart" component={CartScreen} />
+      <Screen name="categories" component={CategoriesScreen} />
+      <Screen name="productdetail" component={ProductDetailScreen} />
+      <Screen name="checkout" component={() => <CheckoutScreen{...contextProps} />} />
+      <Screen
+        name="vieworderdetails"
+        component={ViewOrderDetailScreen}
+      />
+      <Screen name="myorder" component={MyOrderScreen} />
+      <Screen name="vieworder" component={ViewOrdersScreen} />
+    </Navigator>
   );
 };
 
@@ -204,4 +236,4 @@ const TabNavigator = (contextProps) => {
   );
 };
 
-export default (contextProps) => <TabNavigator {...contextProps} />;
+export default (contextProps) => <TabNavigator {...contextProps} />
