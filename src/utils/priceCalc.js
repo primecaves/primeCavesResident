@@ -1,11 +1,11 @@
 import { EMPTY_ARRAY, SERVICES } from '../constants';
 import _get from 'lodash/get';
 import _size from 'lodash/size';
-
+import _noop from 'lodash/noop';
 const calculateAmenitiesPrice = (price, quantity, days) =>
     price * quantity * days;
 
-const priceCalc = ({ service, values, keysToMultiply }) => {
+const priceCalc = ({ service, values, keysToMultiply}) => {
     switch (service) {
         case SERVICES.AMENITIES: {
             const result = calculateAmenitiesPrice(
@@ -15,8 +15,9 @@ const priceCalc = ({ service, values, keysToMultiply }) => {
             );
             return result;
         }
-        case SERVICES.CLUBHOUSE: {
-            return _size(_get(values, 'members', EMPTY_ARRAY)) * _get(values, 'price', 1);
+        case SERVICES.CLUBHOUSE: {    
+            const result= _size(_get(values, 'members', EMPTY_ARRAY)) * _get(values, 'price', 1);
+            return result;
         }
         default: {
             return 0;

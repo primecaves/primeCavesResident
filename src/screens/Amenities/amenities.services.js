@@ -10,9 +10,9 @@ export const fetchSingleAmenity = id => {
   return API.get(url);
 };
 
-export const addAmenityToResident = id => {
+export const addAmenityToResident = (id,req) => {
   const url = `/addAmenityToResident?id=${id}`;
-  return API.put(url);
+  return API.put(url,req);
 };
 
 export const getBookedAmenities = id => {

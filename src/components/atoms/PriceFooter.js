@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Text, Block } from 'galio-framework';
 import argonTheme from '../../constants/Theme';
 import { StyleSheet, View } from 'react-native';
@@ -6,8 +6,19 @@ import priceCalc from '../../utils/priceCalc';
 
 const DIVIDER_COLOR = 'E5E7EB';
 
-export const PriceFooter = ({ service, keysToMultiply, values }) => {
-  const price = priceCalc({ service, values, keysToMultiply });
+export default function PriceFooter (props) {
+  const { service, keysToMultiply, values, onValueChange }=props
+  const price = priceCalc({ service, values, keysToMultiply, onValueChange });
+  const prevProps = useRef(props);
+
+  useEffect(() => {
+    if (prevProps.current.values.price !== price) {
+      onValueChange(price)
+     }
+    prevProps.current = props;
+  }, [props]);
+
+  
   return (
     <>
       <View style={styles.horizontalLine} />
@@ -33,8 +44,6 @@ export const PriceFooter = ({ service, keysToMultiply, values }) => {
     </>
   );
 };
-
-export default PriceFooter;
 
 const styles = StyleSheet.create({
   horizontalLine: {
