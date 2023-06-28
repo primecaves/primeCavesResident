@@ -18,6 +18,8 @@ export const StatusHeight = StatusBar.currentHeight;
 export const HeaderHeight = (theme.SIZES.BASE * 3.5 + (StatusHeight || 0));
 
 export const componentWithProps = (Component, props) => < Component {...props} />;
+export const getOTPMessage = (otp, hash) => `Your OTP- One Time Password is ${otp} to authenticate your login with ${hash} Powered By mTalkz`;
+
 const DEFAULT_ICON_STYLE = {
     height: 100,
     width: 100,

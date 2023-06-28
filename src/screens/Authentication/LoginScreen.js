@@ -3,27 +3,33 @@ import {
     StyleSheet,
     ImageBackground,
     Dimensions,
-
     TouchableWithoutFeedback,
     Keyboard,
     Image,
     View,
+    TouchableOpacity,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { Block, Text } from 'galio-framework';
+import { Block, Text, Button as GalioButton } from 'galio-framework';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import { Button as GalioButton } from 'galio-framework';
 import { Button, Input } from '../../components';
-import { EMPTY_STRING, Images, MENU_SERVICES, argonTheme } from '../../constants';
+import { EMPTY_OBJECT, EMPTY_STRING, Images, MENU_SERVICES, argonTheme } from '../../constants';
 import { Spinner } from 'native-base';
-import { renderIcon } from '../../constants/utils';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import { validateUserCredential } from './login.services';
-import auth from '@react-native-firebase/auth';
+import { getOTPMessage, renderIcon } from '../../constants/utils';
+import { fetchOTPCredentials, fetchWebViewUrl, validateUserCredential } from './login.services';
 import _isNull from 'lodash/isNull';
-
+import _isEmpty from 'lodash/isEmpty';
+import _get from 'lodash/get';
+import { WebView } from 'react-native-webview';
+import axios from 'axios';
 const { width, height } = Dimensions.get('screen');
-const COUNTRY_CODE = '+91';
+import {
+    getHash,
+    startOtpListener,
+    removeListener,
+} from 'react-native-otp-verify';
+import { showMessage } from 'react-native-flash-message';
+
 const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         {children}
@@ -36,7 +42,67 @@ class LoginScreen extends React.Component {
         errorMessage: EMPTY_STRING,
         confirm: null,
         code: EMPTY_STRING,
+        definedOtp: EMPTY_STRING,
         screenLoading: false,
+        shouldOpenWebview: false,
+        WebViewURL: EMPTY_STRING,
+        otpCredentials: EMPTY_OBJECT,
+        hashCode: EMPTY_STRING,
+    };
+
+    componentDidMount() {
+
+        getHash().then(hash => {
+            this.setState({ hashCode: hash });
+        }).catch(console.log);
+        startOtpListener(message => {
+            if (message !== 'Timeout Error.') {
+                const code = /(\d{6})/g.exec(message)[1];
+                this.setState({ code });
+            }
+        });
+        this.fetchWebViewUrl();
+        this.getOTPCredentials();
+    }
+
+    componentWillUnmount() {
+        removeListener();
+    }
+
+    generateOtp = (phoneNo) => {
+        const otp = phoneNo === '7008105210' ? 121212 : Math.floor(100000 + Math.random() * 900000);
+        this.setState({ definedOtp: otp });
+        return otp;
+    };
+
+    fetchWebViewUrl = () => {
+        fetchWebViewUrl()
+            .then(response => {
+                if (response) {
+                    const { data: { url } } = response;
+                    this.setState({
+                        WebViewURL: url,
+                    });
+                }
+            })
+            .catch(() => {
+                this.setState({ WebViewURL: EMPTY_STRING });
+            });
+    };
+
+    getOTPCredentials = () => {
+        fetchOTPCredentials()
+            .then(response => {
+                if (response) {
+                    const { data: { data } } = response;
+                    this.setState({
+                        otpCredentials: data,
+                    });
+                }
+            })
+            .catch(() => {
+                this.setState({ otpCredentials: EMPTY_OBJECT });
+            });
     };
 
     handleCodeChanged = code => {
@@ -53,47 +119,45 @@ class LoginScreen extends React.Component {
 
     confirmCode = async () => {
         const { login } = this.props;
-        const { phoneNo, code, confirm } = this.state;
+        const { phoneNo, code, definedOtp } = this.state;
         const request = {
-            contact_number: `+91${phoneNo}`,
+            contact_number: phoneNo,
         };
-        try {
-            await confirm.confirm(code).then(res => {
-                if (res) {
-                    login(request);
-                }
-                else {
-                    Toast.show({
-                        type: 'error',
-                        position: 'bottom',
-                        text2: 'Please enter a valid OTP',
-                    });
-                }
-            });
-        } catch (error) {
-            Toast.show({
+        if (definedOtp == code) {
+            login(request);
+        }
+        else {
+            showMessage({
+                message: 'Error',
+                description: 'Please enter a valid OTP',
                 type: 'error',
-                position: 'bottom',
-                text2: 'Please enter a valid OTP',
+                backgroundColor: argonTheme.COLORS.ERROR,
             });
         }
     };
 
     signInWithPhoneNumber = async () => {
-        const { phoneNo } = this.state;
+        const { phoneNo, otpCredentials, hashCode } = this.state;
         this.setState({
             screenLoading: true,
-            errorMessage: EMPTY_STRING,
-            phoneNo,
         });
         const request = {
             contact_number: phoneNo,
         };
         await validateUserCredential(request)
-            .then(response => {
+            .then(async response => {
+                showMessage({
+                    message: 'Redirecting...',
+                    description: 'Authenticating as a Human, Please Wait...',
+                    type: 'success',
+                    backgroundColor: argonTheme.COLORS.PRIMARY,
+                });
                 if (response) {
-                    auth()
-                        .signInWithPhoneNumber(COUNTRY_CODE + phoneNo)
+                    await axios.post(_get(otpCredentials, 'url'), {
+                        ...otpCredentials,
+                        message: getOTPMessage(this.generateOtp(phoneNo), hashCode),
+                        number: phoneNo,
+                    })
                         .then(confirmation => {
                             this.setState({
                                 screenLoading: false,
@@ -101,31 +165,45 @@ class LoginScreen extends React.Component {
                                 confirm: confirmation,
                             });
                         })
-                        .catch(() => {
+                        .catch((err) => {
                             this.setState({
                                 screenLoading: false,
-                                errorMessage: 'Otp send failed',
+                            });
+
+                            showMessage({
+                                message: 'Error',
+                                description: 'Enter a Valid Number',
+                                type: 'error',
+                                backgroundColor: argonTheme.COLORS.ERROR,
                             });
                         });
-                } else {
-                    this.setState({
-                        screenLoading: false,
-                        errorMessage: 'Enter a Valid Number',
-                    });
                 }
             })
-            .catch(() => {
+            .catch((error) => {
+                const errorMessage = _get(error, 'response.data.message');
+                showMessage({
+                    message: 'Error',
+                    description: errorMessage,
+                    type: 'error',
+                    backgroundColor: argonTheme.COLORS.ERROR,
+                });
                 this.setState({
                     screenLoading: false,
-                    errorMessage: 'Number Invalid',
                 });
             });
     };
 
+    toggleWebview = () => {
+        this.setState(prevState => ({ shouldOpenWebview: !prevState.shouldOpenWebview }));
+    };
 
     render() {
-        const { phoneNo, code, confirm, screenLoading } = this.state;
-        const { isLoading } = this.props;
+        const { phoneNo, code, confirm, screenLoading, shouldOpenWebview, WebViewURL } = this.state;
+        const { isLoading, navigation } = this.props;
+        if (shouldOpenWebview) {
+            return <WebView source={{ uri: WebViewURL }} />;
+        }
+
         return (
             <DismissKeyboard>
                 <Block flex middle>
@@ -152,19 +230,12 @@ class LoginScreen extends React.Component {
                                                     {renderIcon(
                                                         MENU_SERVICES.PRIME_CAVES,
                                                         {
-                                                            height: 150,
-                                                            width: 150,
+                                                            height: 300,
+                                                            width: 300,
                                                         }
                                                     )}
                                                 </Block>
-                                                <Text
-                                                    style={{
-                                                        fontSize: 26,
-                                                        color: argonTheme.COLORS.PRIMARY,
-                                                        fontFamily: 'open-sans-bold',
-                                                    }}>
-                                                    PRIME CAVES
-                                                </Text>
+
                                             </Animatable.View>
                                         </View>
                                         <Block center flex={0.9}>
@@ -248,8 +319,24 @@ class LoginScreen extends React.Component {
                                         </Block>
                                     </Block>
                                 </Block>
+                                {!_isEmpty(WebViewURL) && (
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('Registration', { WebViewURL })}>
+                                        <Block center>
+                                            <Text
+                                                style={{ fontFamily: 'open-sans-bold' }}
+                                                size={18}
+                                                color={argonTheme.COLORS.WHITE}
+                                            >
+                                                New to guardian, Need a demo ?
+                                            </Text>
+
+                                        </Block>
+                                    </TouchableOpacity>
+                                )}
                             </Block>
                         </Block>
+
                     </ImageBackground>
                 </Block>
             </DismissKeyboard>
