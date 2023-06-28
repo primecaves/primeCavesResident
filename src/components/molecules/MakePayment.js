@@ -18,7 +18,7 @@ class MakePayment extends React.Component {
               description: 'Prime Caves',
               image: 'https://i.imgur.com/3g7nmJC.jpg',
               currency: 'INR',
-              key: '<YOUR_KEY_ID>',
+              key: 'rzp_test_DbO82CVo5dYODa',
               amount: '5000',
               name: 'Acme Corp',
               order_id: 'order_DslnoIgkIDL8Zt', //Replace this with an order_id created using Orders API.

@@ -220,6 +220,7 @@ class Form extends Component {
           <Block>
             <PriceFooter
               {...item}
+              onValueChange={val => setFieldValue(_get(item, 'key', ''), val)}
               values={values}
               service={service} />
           </Block>

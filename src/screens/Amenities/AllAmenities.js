@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import { ScrollView, View, StyleSheet, RefreshControl } from 'react-native';
 import { Block, Text } from 'galio-framework';
+import { razorPay } from '../../utils/razorPay';
+import { DynamicKeyCard, Form, Header, Modal } from '../../components';
+import { Button } from '../../components';
+import { getKeyValuePair } from '../../utils';
+import argonTheme from '../../constants/Theme';
+import { addAmenityToResident, fetchAllAmenities } from './amenities.services';
+import { EMPTY_ARRAY, EMPTY_STRING, SERVICES } from '../../constants';
+import { showMessage } from 'react-native-flash-message';
+import { FIELDS } from './amenities.constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import _map from 'lodash/map';
 import _get from 'lodash/get';
@@ -8,18 +17,7 @@ import _startCase from 'lodash/startCase';
 import _uniqBy from 'lodash/uniqBy';
 import _filter from 'lodash/filter';
 import _isEmpty from 'lodash/isEmpty';
-import {
-  DynamicKeyCard,
-  Form,
-  Header,
-  Modal,
-} from '../../components';
-import { Button } from '../../components';
-import { getKeyValuePair } from '../../utils';
-import argonTheme from '../../constants/Theme';
-import { FIELDS } from './amenities.constants';
-import { fetchAllAmenities } from './amenities.services';
-import { EMPTY_ARRAY, EMPTY_STRING, SERVICES } from '../../constants';
+import _toFinite from 'lodash/toFinite';
 
 class AllAmenities extends Component {
   state = {
@@ -30,11 +28,9 @@ class AllAmenities extends Component {
     displayNameKey: EMPTY_STRING,
     isFormModalVisible: false,
   };
-
   componentDidMount() {
     this.fetchAmenities();
   }
-
   fetchAmenities = () => {
     this.setState({ isLoading: true });
     fetchAllAmenities()
@@ -62,6 +58,18 @@ class AllAmenities extends Component {
       initialValues: item,
     }));
   };
+  handleChangeTab = id => {
+    const { intialAmenities } = this.state;
+    if (!_isEmpty(id)) {
+      this.setState({
+        amenities: _filter(intialAmenities, ['category', id]),
+      });
+    } else {
+      this.setState({
+        amenities: intialAmenities,
+      });
+    }
+  };
   renderFooter = item => {
     return (
       <>
@@ -87,22 +95,13 @@ class AllAmenities extends Component {
       </>
     );
   };
-
-  handleChangeTab = id => {
-    const { intialAmenities } = this.state;
-    if (!_isEmpty(id)) {
-      this.setState({
-        amenities: _filter(intialAmenities, ['category', id]),
-      });
-    } else {
-      this.setState({
-        amenities: intialAmenities,
-      });
-    }
-  };
-
   renderForm = () => {
     const { initialValues } = this.state;
+    let prefill = {
+      name: 'sksarfarazali',
+      contact: '9178727320',
+      email: 'abc@gmail.com',
+    };
     return (
       <Form
         isEdit
@@ -111,6 +110,15 @@ class AllAmenities extends Component {
         initialValues={initialValues}
         primaryButtonText="Pay Now"
         secondaryButtonText="Close"
+        onSubmit={values =>
+          razorPay({
+            prefill,
+            amount: _toFinite(_get(values, 'price', '2000')) * 100,
+            description: _get(values, 'description', EMPTY_STRING),
+            successCallback: this.handleSubmit,
+            values,
+          })
+        }
         primaryButtonProps={{
           style: styles.footerPrimaryButton,
         }}
@@ -121,7 +129,30 @@ class AllAmenities extends Component {
       />
     );
   };
-
+  handleSubmit = (razorPayDetails, values) => {
+    this.setState({ isLoading: true });
+    const request = {
+      amenity_id: _get(values, '_id'),
+      booked_price: _get(values, 'price'),
+      booked_quantity: _get(values, 'no_of_quantity', 1),
+      booked_days: _get(values, 'no_of_days', 1),
+      ...razorPayDetails,
+    };
+    console.log(request);
+    addAmenityToResident('644b68e005d65b3294c0771f', request)
+      .then(response => {
+        if (response) {
+          this.setState({
+            isLoading: false,
+          });
+          console.log('Successs');
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        this.setState({ isLoading: false });
+      });
+  };
   render() {
     const {
       amenities,

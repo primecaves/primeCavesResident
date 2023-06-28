@@ -9,6 +9,7 @@ import { AuthProvider } from './context/authContext';
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import './translations';
+import FlashMessage from 'react-native-flash-message';
 import { NativeBaseProvider } from 'native-base';
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
           <AuthProvider>
             <RootContainer />
           </AuthProvider>
+          <FlashMessage/>
           <Toast />
         </PersistGate>
       </Provider>
