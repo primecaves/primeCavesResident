@@ -266,7 +266,6 @@ class Header extends React.Component {
       navigation,
       ...props
     } = this.props;
-    // const {routeName} = navigation.state;
     const noShadow = [
       'Search',
       'Categories',

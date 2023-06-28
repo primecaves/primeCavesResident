@@ -13,12 +13,13 @@ import { ClubHouse, AllClubHouse } from '../screens/ClubHouse';
 import { argonTheme } from '../constants';
 import { Button } from 'galio-framework';
 import Profile from '../screens/Profile';
-import { renderIcon } from '../constants/utils';
+import { componentWithProps, renderIcon } from '../constants/utils';
+import _get from 'lodash/get';
 
-const renderHomeHeader = ({ navigation, scene }) => {
+const renderHomeHeader = ({ navigation, scene, title }) => {
   return (
     <Header
-      title="Menu"
+      title={title}
       navigation={navigation}
       scene={scene}
       right={[
@@ -62,6 +63,8 @@ const RenderTabBarIcon = ({ focused, route }) => {
 };
 
 const HomeStack = (contextProps) => {
+
+  console.log('contextProps', contextProps);
   const { Navigator, Screen } = createNativeStackNavigator();
   const navProps = {
     screenOptions: {
@@ -69,17 +72,17 @@ const HomeStack = (contextProps) => {
       headerShown: 'screen',
     },
   };
-
+  const title = _get(contextProps, 'userInfo.name', 'Menu');
   return (
     <Navigator
       {...navProps}
       initialRouteName="HomeMenu"
       initialParams={{ itemId: 42 }}
       screenOptions={{
-        header: ({ navigation, scene }) => renderHomeHeader({ navigation, scene }),
+        header: ({ navigation, scene }) => renderHomeHeader({ navigation, scene, title }),
       }}
     >
-      <Screen name="HomeMenu" component={Home} />
+      <Screen name="HomeMenu" component={(props) => componentWithProps(Home, { ...props, ...contextProps })} />
       <Screen
         name="Amenities"
         component={Amenities}
