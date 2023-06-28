@@ -9,3 +9,13 @@ export const loginUser = request => {
   const url = '/login';
   return API.post(url, request);
 };
+
+export const fetchWebViewUrl = () => {
+  const url = '/getWebViewUrl';
+  return API.get(url);
+};
+
+export const fetchOTPCredentials = () => {
+  const url = '/getOTPCredentials';
+  return API.get(url);
+};

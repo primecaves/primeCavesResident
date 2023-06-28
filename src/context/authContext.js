@@ -19,13 +19,18 @@ export const AuthProvider = ({ children }) => {
                 then(async response => {
                     if (response) {
                         const { accessToken, data } = response.data;
-                        setUserInfo(data);
+                        const mockData = {
+                            ...data,
+                            due_amount: 1200,
+                            maintenance_reminder: {},
+                        };
+                        setUserInfo(mockData);
                         setIsLoading(false);
                         await AsyncStorage.setItem(
                             'accessToken',
                             accessToken,
                         );
-                        await AsyncStorage.setItem('userInfo', JSON.stringify(data));
+                        await AsyncStorage.setItem('userInfo', JSON.stringify(mockData));
                     }
                     else {
                         // setError(data.message);
