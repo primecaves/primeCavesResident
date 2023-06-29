@@ -4,7 +4,7 @@ import { Block, Text } from 'galio-framework';
 import { Pressable, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { argonTheme } from '../../constants';
-
+import _noop from 'lodash/noop';
 
 const renderMenu = ({ triggerProps, width, height, menuText }) => {
   return (
@@ -18,9 +18,7 @@ const renderMenu = ({ triggerProps, width, height, menuText }) => {
         marginTop={7}
         space="between"
       >
-        <Text style={{ marginHorizontal: 10 }}>
-          {menuText}
-        </Text>
+        <Text style={{ marginHorizontal: 10 }}>{menuText}</Text>
         <Icon name="chevron-down" size={16} />
       </Block>
     </Pressable>
@@ -30,19 +28,22 @@ class SelectMenu extends React.Component {
   state = {
     menuText: this.props.text,
   };
-  handleChange =(value)=>{
-    const {onSelect} = this.props
-    this.setState({ ...this.state, menuText: value })
-    if(onSelect){
-      onSelect(value)
+  handleChange = (value) => {
+    const { onSelect, onChange = _noop } = this.props;
+    this.setState({ ...this.state, menuText: value });
+    if (onSelect) {
+      onSelect(value);
+      onChange(value);
     }
-  }
+  };
   render() {
-    const { optionValues, width, height, disabled=false } = this.props;
+    const { optionValues, width, height, disabled = false } = this.props;
     const { menuText } = this.state;
 
+
+
     return (
-      <Menu   
+      <Menu
         backgroundColor={argonTheme.COLORS.WHITE}
         placement="bottom"
         w={width ? width : 100}
@@ -53,7 +54,7 @@ class SelectMenu extends React.Component {
           <Menu.Item
             backgroundColor={argonTheme.COLORS.BORDER_COLOR}
             textValue={value}
-            onPress={()=>this.handleChange(value)}
+            onPress={() => this.handleChange(value)}
           >
             <Text color="black" size={14} bold={true}>
               {value}
