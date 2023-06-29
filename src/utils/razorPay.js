@@ -12,9 +12,9 @@ export const razorPay = ({
   description = 'Payment',
   successCallback = _noop,
   handleCallBack,
-  setLoading=_noop
+  setLoading = _noop,
 }) => {
-  setLoading(true)
+  setLoading(true);
   const url = 'https://api.razorpay.com/v1/orders';
   axios
     .post(
@@ -49,7 +49,7 @@ export const razorPay = ({
       };
       RazorpayCheckout.open(options)
         .then(data => {
-          setLoading(false)
+          setLoading(false);
           successCallback(data, values);
           handleCallBack(data);
           showMessage({
@@ -59,7 +59,7 @@ export const razorPay = ({
           });
         })
         .catch(error => {
-          setLoading(false)
+          setLoading(false);
           showMessage({
             message: 'Transaction Cancelled',
             type: 'error',
@@ -68,9 +68,9 @@ export const razorPay = ({
         });
     })
     .catch(err => {
-      setLoading(false)
+      setLoading(false);
       showMessage({
-        message: err ,
+        message: err,
         type: 'error',
         backgroundColor: argonTheme.COLORS.WARNING,
       });

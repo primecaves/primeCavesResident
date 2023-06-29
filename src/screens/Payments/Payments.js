@@ -75,6 +75,14 @@ const Payments = ({ userInfo }) => {
       transaction_details: {},
       payment_mode: '',
     },
+    {
+      id: '5',
+      title: 'Maintenance Charges',
+      status: 'OVERDUE',
+      payment_due: '24 Mar, 2023',
+      overdue: 2000,
+      amount: 1000,
+    },
   ];
 
   const [MaintenanceCardData, setMaintenanceCardData] = useState([]);
