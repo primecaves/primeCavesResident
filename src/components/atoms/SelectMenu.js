@@ -40,6 +40,8 @@ class SelectMenu extends React.Component {
     const { optionValues, width, height, disabled = false } = this.props;
     const { menuText } = this.state;
 
+
+
     return (
       <Menu
         backgroundColor={argonTheme.COLORS.WHITE}
