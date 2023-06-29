@@ -119,7 +119,7 @@ const HomeStack = (contextProps) => {
         }}
       />
 
-      <Screen name="Payments" component={Payments} />
+      <Screen name="Payments"  component={(props) => componentWithProps(Payments, { ...props, ...contextProps })} />
       <Screen
         name="Complain"
         component={Complain}

@@ -1,17 +1,23 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { Block, Text, Button } from 'galio-framework';
+import { Checkbox } from 'native-base';
 import TextLabel from '../atoms/TextLabel';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Theme from '../../constants/Theme';
 
-const MaintenanceChargesCard = ({ cardData, handleCardChange }) => {
+const MaintenanceChargesCard = ({
+  cardData,
+  handleCardChange,
+  cardSelect,
+  handleSelectedCard,
+}) => {
   const [maintenanceData, setMaintenanceData] = useState({});
 
   useEffect(() => {
     setMaintenanceData({
-      id:cardData.id,
+      id: cardData.id,
       status: cardData.status,
       paymentDone: false,
       title: cardData.title,
@@ -31,12 +37,21 @@ const MaintenanceChargesCard = ({ cardData, handleCardChange }) => {
 
     setMaintenanceData(updatedData);
   };
+
+  const handleSelected = (isChecked) => {
+    handleSelectedCard(maintenanceData, isChecked,maintenanceData.id);
+  };
   return (
     <Block style={styles.container}>
-      {console.log('Maintenance Card Data', cardData)}
-
       <Block row left center>
-        <Text size={16} bold flex={1}>
+        {cardSelect && maintenanceData.status !== 'PAID' && (
+          <Checkbox
+            accessibilityLabel="Payment Checkbox"
+            onChange={isChecked => handleSelected(isChecked)}
+          />
+        )}
+
+        <Text size={14} bold flex={1}>
           {maintenanceData.title}
         </Text>
         <TextLabel status={maintenanceData.status} />

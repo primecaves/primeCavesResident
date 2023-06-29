@@ -4,9 +4,13 @@ import MaintenanceChargesCard from '../../components/molecules/MaintenanceCharge
 import PaymentFilterComponent from '../../components/molecules/PaymentFilterComponent';
 import MakePayment from '../../components/molecules/MakePayment';
 import { ScrollView } from 'react-native';
-import { ImagePicker } from '../../components';
+import uniqBy from 'lodash/uniqBy';
+import remove from 'lodash/remove';
+import find from 'lodash/find';
+import cloneDeep from 'lodash/cloneDeep';
 
-const Payments = () => {
+const Payments = props => {
+  console.log(props);
   const Data = [
     {
       id: '1',
@@ -43,13 +47,18 @@ const Payments = () => {
   ];
 
   const [MaintenanceCardData, setMaintenanceCardData] = useState(Data);
+  const [cardSelect, setCardSelect] = useState(false);
+  const [selectedCards, setSelectedCards] = useState([]);
   const [filterdMainteneanceData, setFilterdMainteneanceData] = useState([]);
   const [filterStatus, setFilterStatus] = useState(null);
-  const handleCardChange = val => {
-    setFilterStatus(null);
-    let updatedData = [...MaintenanceCardData, val];
-    setMaintenanceCardData(updatedData);
-    console.log(updatedData);
+
+  const handleCardChange = (val, isChecked) => {
+    // setFilterStatus(null);
+    // let updatedData = [...MaintenanceCardData];
+    // let uniqueData = uniqBy(updatedData, obj => obj.id);
+    // console.log(uniqueData);
+    // setMaintenanceCardData(uniqueData);
+    // console.log(isChecked);
   };
 
   const handleFilter = val => {
@@ -65,6 +74,36 @@ const Payments = () => {
     }
   };
 
+  const handleSelectedCard = (maintenanceData, isChecked, key) => {
+    // console.log(maintenanceData, isChecked, key);
+    if (isChecked === true) {
+      console.log('initial', selectedCards);
+      let data = find(MaintenanceCardData, item => item.id === key);
+      console.log(data, key);
+      let updatedArr = cloneDeep([...selectedCards, maintenanceData]);
+      console.log('deepcc', updatedArr);
+
+      setSelectedCards(updatedArr);
+      console.log('setting state');
+    } else if (isChecked === false) {
+      const index = selectedCards.indexOf(maintenanceData);
+      console.log(selectedCards);
+      console.log(index);
+      if (index > -1) {
+        setSelectedCards(
+          selectedCards.filter(item => item.id !== maintenanceData.id),
+        );
+      }
+    }
+  };
+
+  const handlePayments = ({ sendPayments, selectingPayments }) => {
+    setCardSelect(selectingPayments);
+    if (sendPayments) {
+      console.log(selectedCards);
+    }
+  };
+
   return (
     <>
       <PaymentSummaryCard paymentStatus={false} paymentAmount={20000} />
@@ -77,8 +116,11 @@ const Payments = () => {
           <>
             {filterdMainteneanceData.map(item => (
               <MaintenanceChargesCard
+                key={item.id}
                 cardData={item}
                 handleCardChange={handleCardChange}
+                cardSelect={cardSelect}
+                handleSelectedCard={handleSelectedCard}
               />
             ))}
           </>
@@ -86,14 +128,17 @@ const Payments = () => {
           <>
             {MaintenanceCardData.map(item => (
               <MaintenanceChargesCard
+                key={item.id}
                 cardData={item}
                 handleCardChange={handleCardChange}
+                cardSelect={cardSelect}
+                handleSelectedCard={handleSelectedCard}
               />
             ))}
           </>
         )}
       </ScrollView>
-      <MakePayment />
+      <MakePayment handlePayments={handlePayments} />
       {/* <ImagePicker /> */}
     </>
   );
