@@ -13,7 +13,7 @@ const renderMenu = ({ triggerProps, width, height, menuText }) => {
         center={true}
         row={true}
         style={styles.block}
-        width={width ? width : 100}
+        width={width ? width : 130}
         height={height ? height : 50}
         marginTop={7}
         space="between"
@@ -46,9 +46,10 @@ class SelectMenu extends React.Component {
       <Menu
         backgroundColor={argonTheme.COLORS.WHITE}
         placement="bottom"
-        w={width ? width : 100}
-        h={height ? height : 90}
-        trigger={(triggerProps) => renderMenu({ triggerProps, width, height, menuText })}
+        w={width ? width : 130}
+        trigger={triggerProps =>
+          renderMenu({ triggerProps, width, height, menuText })
+        }
       >
         {optionValues.map(value => (
           <Menu.Item

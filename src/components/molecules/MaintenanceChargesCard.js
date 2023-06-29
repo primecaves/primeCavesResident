@@ -6,12 +6,15 @@ import TextLabel from '../atoms/TextLabel';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Theme from '../../constants/Theme';
+import { razorPay } from '../../utils/razorPay';
+import { argonTheme } from '../../constants';
 
 const MaintenanceChargesCard = ({
   cardData,
   handleCardChange,
   cardSelect,
   handleSelectedCard,
+  userInfo = { name: 'sagar', email: 'sdf@gmail.com', contact: 1343214 },
 }) => {
   const [maintenanceData, setMaintenanceData] = useState({});
 
@@ -27,19 +30,41 @@ const MaintenanceChargesCard = ({
     });
   }, [cardData]);
 
-  const handlePaid = () => {
+  const handlePaid = data => {
     const updatedData = {
       ...maintenanceData,
       paymentDone: true,
       status: 'PAID',
+      transaction_Details: data,
     };
     handleCardChange(updatedData);
 
     setMaintenanceData(updatedData);
   };
+  const handleCallBack = data => {
+    handlePaid(data);
+  };
 
-  const handleSelected = (isChecked) => {
-    handleSelectedCard(maintenanceData, isChecked,maintenanceData.id);
+  const handleSinglePayment = () => {
+    let total_amount = maintenanceData.amount + maintenanceData.overdue;
+
+    let prefill = {
+      name: userInfo.name,
+      email: userInfo.email,
+      contact: userInfo.contact,
+    };
+
+    razorPay({
+      prefill,
+      amount: total_amount * 100,
+      handleCallBack,
+    });
+
+    // console.log(re)
+  };
+
+  const handleSelected = isChecked => {
+    handleSelectedCard(maintenanceData, isChecked, maintenanceData.id);
   };
   return (
     <Block style={styles.container}>
@@ -60,7 +85,10 @@ const MaintenanceChargesCard = ({
         </Text>
       </Block>
       <Text size={12}>
-        Your charges are: <Text bold>₹ {cardData.amount}.00</Text>
+        Your charges are: <Text bold>₹ {cardData.amount}.00</Text>{' '}
+        {maintenanceData.status === 'OVERDUE' && (
+          <Text bold color={argonTheme.COLORS.RED}> + ₹ {cardData.overdue}.00</Text>
+        )}
       </Text>
       <Text size={12} muted style={styles.margin}>
         <Icon name="calendar" />
@@ -103,7 +131,12 @@ const MaintenanceChargesCard = ({
               <Icon name={'check'} size={14} /> I have paid
             </Text>
           </Button>
-          <Button color={Theme.COLORS.YELLOW} flex={1} size={'small'}>
+          <Button
+            color={Theme.COLORS.YELLOW}
+            flex={1}
+            size={'small'}
+            onPress={handleSinglePayment}
+          >
             <Text
               style={{ fontWeight: 600 }}
               size={14}

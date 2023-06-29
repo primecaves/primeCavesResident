@@ -38,7 +38,7 @@ const PaymentFilterComponent = ({ filterBy, handleFilter }) => {
         </Pressable>
 
         <SelectMenu
-          optionValues={['UNPAID', 'PAID','RESET']}
+          optionValues={['UNPAID', 'PAID','OVERDUE','UPCOMING','RESET']}
           text="status"
           onChange={handleStatusMenuChange}
         />
