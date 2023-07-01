@@ -22,7 +22,8 @@ import ActionSheet from './molecules/ActionSheet';
 import ImageSlider from './molecules/ImageSlider';
 import DynamicKeyPairs from './molecules/DynamicKeyPairs';
 import FooterButton from './molecules/FooterButton';
-
+import AlertModal from './molecules/AlertModal';
+import EmptyComponent from './molecules/EmptyComponent'
 export {
   Button,
   Card,
@@ -48,4 +49,6 @@ export {
   SelectMenu,
   FooterButton,
   ImagePicker,
+  AlertModal,
+  EmptyComponent
 };

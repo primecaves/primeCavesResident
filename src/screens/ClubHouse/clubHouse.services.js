@@ -10,9 +10,9 @@ export const fetchSingleClubHouse = id => {
   return API.get(url);
 };
 
-export const addClubHouseToResident = id => {
+export const addClubHouseToResident = (id,req) => {
   const url = `/addClubhouseToResident?id=${id}`;
-  return API.put(url);
+  return API.put(url,req);
 };
 
 export const getBookedClubHouse = id => {

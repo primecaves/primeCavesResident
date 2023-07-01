@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { ScrollView, View, StyleSheet, RefreshControl } from 'react-native';
 import { Block, Text } from 'galio-framework';
 import { razorPay } from '../../utils/razorPay';
-import { DynamicKeyCard, Form, Header, Modal } from '../../components';
+import { DynamicKeyCard, EmptyComponent, Form, Header, Modal } from '../../components';
 import { Button } from '../../components';
 import { getKeyValuePair } from '../../utils';
-import argonTheme from '../../constants/Theme';
 import { addAmenityToResident, fetchAllAmenities } from './amenities.services';
-import { EMPTY_ARRAY, EMPTY_STRING, SERVICES } from '../../constants';
+import { EMPTY_ARRAY, EMPTY_OBJECT, EMPTY_STRING, SERVICES } from '../../constants';
 import { showMessage } from 'react-native-flash-message';
 import { FIELDS } from './amenities.constants';
+import argonTheme from '../../constants/Theme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import _map from 'lodash/map';
 import _get from 'lodash/get';
@@ -96,27 +96,30 @@ class AllAmenities extends Component {
     );
   };
   renderForm = () => {
-    const { initialValues } = this.state;
+    const { initialValues,isPrimaryLoading } = this.state;
+    const { userInfo }=this.props
     let prefill = {
-      name: 'sksarfarazali',
-      contact: '9178727320',
-      email: 'abc@gmail.com',
+      name: userInfo.name,
+      contact: userInfo.contact_number,
+      email: userInfo.email_address,
     };
     return (
       <Form
         isEdit
         fields={FIELDS}
-        onClose={this.toggleFormModal}
         initialValues={initialValues}
         primaryButtonText="Pay Now"
         secondaryButtonText="Close"
+        onClose={()=>this.toggleFormModal(EMPTY_OBJECT)}
+        isPrimaryLoading = {isPrimaryLoading}
         onSubmit={values =>
           razorPay({
             prefill,
             amount: _toFinite(_get(values, 'price', '2000')) * 100,
             description: _get(values, 'description', EMPTY_STRING),
-            successCallback: this.handleSubmit,
+            successCallback:this.handleSubmit,
             values,
+            setLoading:(isPrimaryLoading)=>this.setState({ isPrimaryLoading })
           })
         }
         primaryButtonProps={{
@@ -130,27 +133,36 @@ class AllAmenities extends Component {
     );
   };
   handleSubmit = (razorPayDetails, values) => {
+    const { userInfo } = this.props
     this.setState({ isLoading: true });
     const request = {
       amenity_id: _get(values, '_id'),
       booked_price: _get(values, 'price'),
       booked_quantity: _get(values, 'no_of_quantity', 1),
       booked_days: _get(values, 'no_of_days', 1),
-      ...razorPayDetails,
+      transaction_detail:{ ...razorPayDetails },
     };
-    console.log(request);
-    addAmenityToResident('644b68e005d65b3294c0771f', request)
+    addAmenityToResident(userInfo._id, request)
       .then(response => {
         if (response) {
           this.setState({
             isLoading: false,
+            isFormModalVisible:false,
           });
-          console.log('Successs');
+          showMessage({
+            message: 'Amenity Booked Successfully',
+            type: 'success',
+            backgroundColor: argonTheme.COLORS.SUCCESS,
+          });
         }
       })
-      .catch(error => {
-        console.log(error);
-        this.setState({ isLoading: false });
+      .catch(() => {
+        this.setState({ isLoading: false,isFormModalVisible:false });
+        showMessage({
+          message: 'Amenity Booked Failed',
+          type: 'error',
+          backgroundColor: argonTheme.COLORS.WARNING,
+        });
       });
   };
   render() {
@@ -190,7 +202,8 @@ class AllAmenities extends Component {
             navigation={navigation}
             scene={scene}
           />
-          {_map(amenities, (item, key) => (
+          {!_isEmpty(amenities) ? (
+          _map(amenities, (item, key) => (
             <DynamicKeyCard
               key={key}
               isLoading={isLoading}
@@ -201,7 +214,10 @@ class AllAmenities extends Component {
               keyToRemove={keyToRemove}
               footer={this.renderFooter}
             />
-          ))}
+          ))
+          ) : (
+            <EmptyComponent />
+          )}
         </ScrollView>
       </Block>
     );

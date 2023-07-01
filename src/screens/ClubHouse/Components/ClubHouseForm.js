@@ -3,17 +3,19 @@ import { StyleSheet } from 'react-native';
 import { Form } from '../../../components';
 import { SERVICES, argonTheme } from '../../../constants';
 import { FIELDS } from '../clubHouse.constants';
-
 const ClubHouseForm = ({
   initialValues,
   onClose,
+  onSubmit,
   primaryButtonText = 'Pay Now',
+  isPrimaryLoading=false
 }) => {
   return (
     <Form
       isEdit
       fields={FIELDS}
       onClose={onClose}
+      onSubmit={onSubmit}
       initialValues={initialValues}
       primaryButtonText={primaryButtonText}
       secondaryButtonText="Close"
@@ -24,6 +26,7 @@ const ClubHouseForm = ({
         style: styles.footerSecondaryButton,
       }}
       service={SERVICES.CLUBHOUSE}
+      isPrimaryLoading={isPrimaryLoading}
     />
   );
 };

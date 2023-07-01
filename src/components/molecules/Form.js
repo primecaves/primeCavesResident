@@ -45,6 +45,7 @@ class Form extends Component {
       secondaryButtonText = 'Close',
       primaryButtonProps = {},
       secondaryButtonProps = {},
+      isPrimaryLoading=false
     } = this.props;
     return (
       <>
@@ -76,6 +77,7 @@ class Form extends Component {
           </Button>
           <View style={styles.verticleLine} />
           <Button
+          loading={isPrimaryLoading}
             shadowless
             style={{
               height: 25,

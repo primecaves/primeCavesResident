@@ -328,7 +328,7 @@ class LoginScreen extends React.Component {
                                                 size={18}
                                                 color={argonTheme.COLORS.WHITE}
                                             >
-                                                New to guardian, Need a demo ?
+                                                New to Resident, Need a demo ?
                                             </Text>
 
                                         </Block>

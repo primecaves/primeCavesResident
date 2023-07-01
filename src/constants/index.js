@@ -39,6 +39,7 @@ const MENU_SERVICES = {
   HOME: 'Home',
   SERVICES: 'Services',
   PRIME_CAVES: 'Prime Caves',
+  NO_DATA: 'NoData',
 };
 export {
   EMPTY_ARRAY,

@@ -7,33 +7,34 @@ import { Button } from '../../components';
 
 const DEFAULT_MESSAGE = 'Are you sure you want to delete ?';
 class AlertModal extends Component {
-
   renderFooter = () => {
-    const { onClose = _noop, primaryButtonText = 'Submit', secondaryButtonText = 'Close', primaryButtonProps = {}, secondaryButtonProps = {}, onSubmit = _noop } = this.props;
+    const {
+      onClose = _noop,
+      primaryButtonText = 'Submit',
+      secondaryButtonText = 'Close',
+      primaryButtonProps = {},
+      secondaryButtonProps = {},
+      onSubmit = _noop,
+    } = this.props;
     return (
       <>
-        <View
-          style={styles.horizontalLine}
-        />
+        <View style={styles.horizontalLine} />
         <Block flex row marginTop="20">
           <Button
             shadowless
             color={argonTheme.COLORS.WHITE}
-            style={{
-              borderColor: argonTheme.COLORS.BLACK,
-              borderWidth: 1,
-              height: 25,
-            }}
+            style={styles.secondaryButton}
             onPress={onClose}
             {...secondaryButtonProps}
           >
-            <Block row >
+            <Block row>
               <Text
                 style={{
                   fontFamily: 'open-sans-regular',
                   backgroundColor: argonTheme.COLORS.WHITE,
                 }}
-                size={16} >
+                size={16}
+              >
                 {secondaryButtonText}
               </Text>
             </Block>
@@ -49,20 +50,20 @@ class AlertModal extends Component {
             onPress={onSubmit}
             {...primaryButtonProps}
           >
-            <Block row >
+            <Block row>
               <Text
                 style={{
                   fontFamily: 'open-sans-regular',
                   color: argonTheme.COLORS.WHITE,
                 }}
-                size={16} >
+                size={16}
+              >
                 {primaryButtonText}
               </Text>
             </Block>
           </Button>
-        </Block >
+        </Block>
       </>
-
     );
   };
 
@@ -70,21 +71,20 @@ class AlertModal extends Component {
     const { visible, footer = _noop, message = DEFAULT_MESSAGE } = this.props;
     return (
       <Block>
-        <MyModal
-          animationType="slide"
-          transparent={true}
-          visible={visible}
-        >
+        <MyModal animationType="slide" transparent={true} visible={visible}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={{ fontFamily: 'open-sans-regular', marginTop: '70%' }}>{message}</Text>
+              <Text
+                style={{ fontFamily: 'open-sans-regular', marginTop: '70%' }}
+              >
+                {message}
+              </Text>
               {footer && this.renderFooter()}
             </View>
           </View>
         </MyModal>
       </Block>
     );
-
   }
 }
 
@@ -119,6 +119,15 @@ const styles = StyleSheet.create({
     height: '100%',
     width: 1,
     backgroundColor: argonTheme.COLORS.GREY,
+  },
+  secondaryButton: {
+    borderColor: argonTheme.COLORS.BLACK,
+    borderWidth: 1,
+    height: 25,
+    width: '50%',
+    borderRadius: 5,
+    backgroundColor: argonTheme.COLORS.WHITE,
+    marginRight: 26,
   },
 });
 

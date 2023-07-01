@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 import { Block, Text } from 'galio-framework';
-import { Select, Input } from '../';
+import { Select, Input, SelectMenu } from '../';
 import argonTheme from '../../constants/Theme';
 import _map from 'lodash/map';
 import { EMPTY_ARRAY, EMPTY_STRING } from '../../constants';
@@ -70,17 +70,18 @@ export class DynamicKeyPairs extends Component {
                 style={styles.input}
                 editable={showActions}
                 value={_get(item, 'member', EMPTY_STRING)}
-                onChange={val => this.handleChange(val, index, COMPONENT.INPUT)}
+                onChangeText ={(val) =>this.handleChange(val, index, COMPONENT.INPUT)}
               />
             </Block>
             <Block paddingLeft={10}>
-              <Select
+              <SelectMenu
                 disabled={!showActions}
-                options={['1am-2am', '10am-11pm']}
-                onSelect={val =>
-                  this.handleChange(val, index, COMPONENT.SELECT)
+                optionValues={['1am-2am', '10am-11pm']}
+                onSelect={val => this.handleChange(val, index, COMPONENT.SELECT)
                 }
                 value={_get(item, 'time_slot', EMPTY_STRING)}
+                text={_get(item, 'time_slot', EMPTY_STRING)}
+                height={45}
               />
             </Block>
             {showActions && field.length - 1 === index && field.length < 4 && (

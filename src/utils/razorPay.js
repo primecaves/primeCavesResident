@@ -4,17 +4,17 @@ import { Alert } from 'react-native';
 import { Buffer } from 'buffer';
 import { EMPTY_OBJECT, argonTheme } from '../constants';
 import _noop from 'lodash/noop';
+import { showMessage } from 'react-native-flash-message';
 export const razorPay = ({
   prefill = EMPTY_OBJECT,
   values = EMPTY_OBJECT,
   amount = 2000,
   description = 'Payment',
   successCallback = _noop,
+  setLoading=_noop
 }) => {
+  setLoading(true)
   const url = 'https://api.razorpay.com/v1/orders';
-  console.log(
-    `${process.env.RAZOR_PAY_API_KEY_ID}:${process.env.RAZOR_PAY_API_KEY_SECRET}`,
-  );
   axios
     .post(
       url,
@@ -48,14 +48,24 @@ export const razorPay = ({
       };
       RazorpayCheckout.open(options)
         .then(data => {
-          Alert.alert(`Success: ${data.razorpay_payment_id}`);
+          setLoading(false)
           successCallback(data, values);
         })
         .catch(error => {
-          Alert.alert(`Error: ${error.code} | ${error.description}`);
+          setLoading(false)
+          showMessage({
+            message: 'Transaction Cancelled',
+            type: 'error',
+            backgroundColor: argonTheme.COLORS.WARNING,
+          });
         });
     })
     .catch(err => {
-      console.log(err);
+      setLoading(false)
+      showMessage({
+        message: err ,
+        type: 'error',
+        backgroundColor: argonTheme.COLORS.WARNING,
+      });
     });
 };

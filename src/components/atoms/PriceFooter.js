@@ -3,14 +3,14 @@ import { Text, Block } from 'galio-framework';
 import argonTheme from '../../constants/Theme';
 import { StyleSheet, View } from 'react-native';
 import priceCalc from '../../utils/priceCalc';
+import { EMPTY_ARRAY } from '../../constants';
 
 const DIVIDER_COLOR = 'E5E7EB';
 
 export default function PriceFooter (props) {
-  const { service, keysToMultiply, values, onValueChange }=props
+  const { service, keysToMultiply=EMPTY_ARRAY, values, onValueChange }=props
   const price = priceCalc({ service, values, keysToMultiply, onValueChange });
   const prevProps = useRef(props);
-
   useEffect(() => {
     if (prevProps.current.values.price !== price) {
       onValueChange(price)
