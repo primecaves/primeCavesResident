@@ -1,32 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { Block, Text, Button } from 'galio-framework';
-import { Checkbox } from 'native-base';
+import { Checkbox, Spinner } from 'native-base';
 import TextLabel from '../atoms/TextLabel';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Theme from '../../constants/Theme';
 import { razorPay } from '../../utils/razorPay';
 import { argonTheme } from '../../constants';
+import { Pressable } from 'react-native';
+import { generateInvoiceData } from '../../utils/generateInvoiceData';
 
 const MaintenanceChargesCard = ({
   cardData,
   handleCardChange,
   cardSelect,
   handleSelectedCard,
-  userInfo = { name: 'sagar', email: 'sdf@gmail.com', contact: 1343214 },
+  userInfo,
 }) => {
   const [maintenanceData, setMaintenanceData] = useState({});
+  const [downloadingInvoice, setDownloadingInvoice] = useState(false);
 
   useEffect(() => {
     setMaintenanceData({
       id: cardData.id,
       status: cardData.status,
-      paymentDone: false,
+      paymentDone: cardData.paymentDone || false,
       title: cardData.title,
       payment_due: cardData.payment_due,
       overdue: cardData.overdue,
       amount: cardData.amount,
+      transaction_details: cardData.transaction_details,
+      payment_mode: cardData.payment_mode,
+      period: cardData.period,
     });
   }, [cardData]);
 
@@ -35,7 +41,11 @@ const MaintenanceChargesCard = ({
       ...maintenanceData,
       paymentDone: true,
       status: 'PAID',
-      transaction_Details: data,
+      payment_mode: 'online',
+      transaction_Details: {
+        ...data,
+        payment_date: new Date().toISOString().split('T')[0],
+      },
     };
     handleCardChange(updatedData);
 
@@ -49,9 +59,9 @@ const MaintenanceChargesCard = ({
     let total_amount = maintenanceData.amount + maintenanceData.overdue;
 
     let prefill = {
-      name: userInfo.name,
-      email: userInfo.email,
-      contact: userInfo.contact,
+      name: userInfo.name || 'sagar',
+      email: userInfo.email || 'devsd@gmail.com',
+      contact: userInfo.contact || '+916370890444',
     };
 
     razorPay({
@@ -59,12 +69,31 @@ const MaintenanceChargesCard = ({
       amount: total_amount * 100,
       handleCallBack,
     });
-
-    // console.log(re)
   };
 
   const handleSelected = isChecked => {
     handleSelectedCard(maintenanceData, isChecked, maintenanceData.id);
+  };
+
+  const DownloadInvoiceCallback = () => {
+    setDownloadingInvoice(false);
+  };
+
+  const handleDownloadInvoice = () => {
+    setDownloadingInvoice(true);
+    let userData = {
+      name: 'Mrunal Thakur',
+      email: 'mrunal@gmail.com',
+      contact: 1343214,
+      flat: 'A-404',
+      block: 'A',
+      apartment_name: 'Utkal Heights',
+    };
+    generateInvoiceData({
+      userInfo: userData,
+      maintenanceData,
+      DownloadInvoiceCallback,
+    });
   };
   return (
     <Block style={styles.container}>
@@ -87,7 +116,10 @@ const MaintenanceChargesCard = ({
       <Text size={12}>
         Your charges are: <Text bold>₹ {cardData.amount}.00</Text>{' '}
         {maintenanceData.status === 'OVERDUE' && (
-          <Text bold color={argonTheme.COLORS.RED}> + ₹ {cardData.overdue}.00</Text>
+          <Text bold color={argonTheme.COLORS.RED}>
+            {' '}
+            + ₹ {cardData.overdue}.00
+          </Text>
         )}
       </Text>
       <Text size={12} muted style={styles.margin}>
@@ -95,23 +127,36 @@ const MaintenanceChargesCard = ({
         <Text>Due date {cardData.payment_due}</Text>
       </Text>
       {maintenanceData.status === 'PAID' ? (
-        <>
+        <Pressable onPress={handleDownloadInvoice}>
           <Block row center style={[styles.paymentBlock, styles.center]}>
-            <Text
-              bold
-              size={18}
-              color={Theme.COLORS.YELLOW}
-              style={styles.margin}
-            >
-              <Icon
-                name="arrow-down-circle"
-                color={Theme.COLORS.YELLOW}
+            {downloadingInvoice ? (
+              <Spinner size={'sm'} color={argonTheme.COLORS.BLACK}>
+                <Text
+                  bold
+                  size={18}
+                  color={Theme.COLORS.YELLOW}
+                  style={styles.margin}
+                >
+                  Downloading
+                </Text>
+              </Spinner>
+            ) : (
+              <Text
+                bold
                 size={18}
-              />
-              Download Invoice
-            </Text>
+                color={Theme.COLORS.YELLOW}
+                style={styles.margin}
+              >
+                <Icon
+                  name="arrow-down-circle"
+                  color={Theme.COLORS.YELLOW}
+                  size={18}
+                />
+                Download Invoice
+              </Text>
+            )}
           </Block>
-        </>
+        </Pressable>
       ) : (
         <Block
           row

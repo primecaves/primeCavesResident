@@ -28,19 +28,17 @@ class SelectMenu extends React.Component {
   state = {
     menuText: this.props.text,
   };
-  handleChange = (value) => {
+  handleChange = value => {
     const { onSelect, onChange = _noop } = this.props;
     this.setState({ ...this.state, menuText: value });
+    onChange(value);
     if (onSelect) {
       onSelect(value);
-      onChange(value);
     }
   };
   render() {
     const { optionValues, width, height, disabled = false } = this.props;
     const { menuText } = this.state;
-
-
 
     return (
       <Menu
