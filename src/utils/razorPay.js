@@ -4,32 +4,17 @@ import { Alert } from 'react-native';
 import { Buffer } from 'buffer';
 import { EMPTY_OBJECT, argonTheme } from '../constants';
 import _noop from 'lodash/noop';
-<<<<<<< HEAD
 import { showMessage } from 'react-native-flash-message';
 export const razorPay = ({
-=======
-export const razorPay = async ({
->>>>>>> 3ac18cf (flow completed)
   prefill = EMPTY_OBJECT,
   values = EMPTY_OBJECT,
   amount = 2000,
   description = 'Payment',
   successCallback = _noop,
-<<<<<<< HEAD
   setLoading=_noop
-=======
-  handleCallBack,
->>>>>>> 3ac18cf (flow completed)
 }) => {
   setLoading(true)
   const url = 'https://api.razorpay.com/v1/orders';
-<<<<<<< HEAD
-=======
-  // console.log(
-  //   `${process.env.RAZOR_PAY_API_KEY_ID}:${process.env.RAZOR_PAY_API_KEY_SECRET}`,
-  // );
-
->>>>>>> 3ac18cf (flow completed)
   axios
     .post(
       url,
