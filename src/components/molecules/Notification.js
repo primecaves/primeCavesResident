@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Block, Text } from 'galio-framework';
 import Icon from '../atoms/Icon';
 import argonTheme from '../../constants/Theme';
+import RoundDate from './RoundDate';
 
 export default class Notification extends React.Component {
   render() {
@@ -42,14 +43,7 @@ export default class Notification extends React.Component {
           <Block row style={{ width: '95%' }}>
             <Block top flex={system ? 0.12 : 0.2} middle>
               <Block middle style={iconContainer}>
-                <Icon
-                  name={iconName}
-                  family={iconFamily}
-                  size={iconSize || system ? 16 : 22}
-                  color={
-                    iconColor || system ? argonTheme.COLORS.DEFAULT : argonTheme.COLORS.WHITE
-                  }
-                />
+                <RoundDate />
               </Block>
             </Block>
             <Block flex style={{ paddingRight: 3, paddingLeft: 12 }}>

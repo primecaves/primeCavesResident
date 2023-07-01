@@ -123,6 +123,7 @@ class LoginScreen extends React.Component {
         const request = {
             contact_number: phoneNo,
         };
+        console.log('definedOtp || code', definedOtp, code);
         if (definedOtp == code) {
             login(request);
         }
@@ -304,7 +305,6 @@ class LoginScreen extends React.Component {
                                                         color="primary"
                                                         style={styles.createButton}
                                                         onPress={this.confirmCode}
-
                                                     >
                                                         <Text
                                                             style={{ fontFamily: 'open-sans-bold' }}

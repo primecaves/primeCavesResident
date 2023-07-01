@@ -245,6 +245,7 @@ const Payments = ({ userInfo }) => {
         userInfo={userInfo}
         filterBy={filterStatus}
         handleFilter={handleFilter}
+        {...props}
       />
       <ScrollView>
         {filterStatus.status !== 'RESET' || filterStatus.filterByDate ? (

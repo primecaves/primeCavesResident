@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Amenities, AllAmenities } from '../screens/Amenities';
 import Payments from '../screens/Payments/Payments';
 import Home from '../screens/Home/Home';
+import PaymentHistory from '../screens/PaymentHistory';
 import { Header } from '../components';
 import NoticeBoard from '../screens/NoticeBoard/NoticeBoard';
 import SinglePageNotice from '../screens/NoticeBoard/SinglePageNotice';
@@ -63,8 +64,6 @@ const RenderTabBarIcon = ({ focused, route }) => {
 };
 
 const HomeStack = (contextProps) => {
-
-  console.log('contextProps', contextProps);
   const { Navigator, Screen } = createNativeStackNavigator();
   const navProps = {
     screenOptions: {
@@ -119,11 +118,28 @@ const HomeStack = (contextProps) => {
         }}
       />
 
-      <Screen name="Payments"  component={(props) => componentWithProps(Payments, { ...props, ...contextProps })} />
+      <Screen name="Payments"
+        component={(props) =>
+          componentWithProps(Payments, { ...props, ...contextProps })} />
       <Screen
         name="Complain"
         component={Complain}
         options={{
+          cardStyle: { backgroundColor: '#F8F9FE' },
+        }}
+      />
+      <Screen
+        name="PaymentHistory"
+        component={(props) => componentWithProps(PaymentHistory, { ...props, ...contextProps })}
+        options={{
+          header: ({ navigation, scene }) =>
+            renderHomeHeader({
+              navigation,
+              scene,
+              back: true,
+              search: true,
+              title: 'Payment History',
+            }),
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
@@ -151,6 +167,8 @@ const HomeStack = (contextProps) => {
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
+
+
     </Navigator >
   );
 };
