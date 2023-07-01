@@ -73,7 +73,7 @@ class DynamicKeyCard extends React.Component {
               family="Feather"
               size={14}
               style={{ padding: 5 }}
-              onPress={() => editAction(item)}
+              onPress={() => editAction(item,'Save')}
             />
           </TouchableOpacity>
           {/* <Icon

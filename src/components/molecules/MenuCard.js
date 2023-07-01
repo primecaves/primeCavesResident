@@ -39,7 +39,7 @@ class MenuCard extends React.Component {
                     </Block>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
-                    onPress={() => navigation.navigate('Service', { selectedService: item })}
+                    onPress={() => navigation.navigate(item.cta, { selectedService: item })}
                 >
                     <Block flex space="between" style={styles.cardDescription}>
                         <Block right={ctaRight ? true : false}>

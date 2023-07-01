@@ -85,35 +85,35 @@ const HomeStack = (contextProps) => {
       <Screen name="HomeMenu" component={(props) => componentWithProps(Home, { ...props, ...contextProps })} />
       <Screen
         name="Amenities"
-        component={Amenities}
+        component={(props) => componentWithProps(Amenities, { ...props, ...contextProps })}
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
       <Screen
         name="AllAmenities"
-        component={AllAmenities}
+        component={(props) => componentWithProps(AllAmenities, { ...props, ...contextProps })}
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
       <Screen
         name="ClubHouse"
-        component={ClubHouse}
+        component={(props) => componentWithProps(ClubHouse, { ...props, ...contextProps })}
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
       <Screen
         name="AllClubHouse"
-        component={AllClubHouse}
+        component={(props) => componentWithProps(AllClubHouse, { ...props, ...contextProps })}
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
       <Screen
         name="Profile"
-        component={() => <Profile {...contextProps} />}
+        component={(props) => componentWithProps(Profile, { ...props, ...contextProps })}
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}

@@ -5,30 +5,34 @@ import {
   Dimensions,
   ScrollView,
   RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
-import { Block, Text } from 'galio-framework';
 import {
   DynamicKeyCard,
   Header,
   Button,
   Modal,
   Form,
-  SkeletionLoader,
+  FooterButton,
+  AlertModal,
+  EmptyComponent
 } from '../../components';
-import { getKeyValuePair } from '../../utils';
-import argonTheme from '../../constants/Theme';
-import _map from 'lodash/map';
-import _get from 'lodash/get';
-import AlertModal from '../../components/molecules/AlertModal';
-import Toast from 'react-native-toast-message';
 import {
   getBookedAmenities,
   deleteAmenitiesFromResident,
+  addAmenityToResident,
 } from './amenities.services';
+import { Block, Text } from 'galio-framework';
+import { getKeyValuePair } from '../../utils';
 import { FIELDS } from './amenities.constants';
-import FooterButton from '../../components/molecules/FooterButton';
-import { SERVICES } from '../../constants';
-
+import { EMPTY_OBJECT, EMPTY_STRING, SERVICES } from '../../constants';
+import { showMessage } from 'react-native-flash-message';
+import { razorPay } from '../../utils/razorPay';
+import argonTheme from '../../constants/Theme';
+import _map from 'lodash/map';
+import _get from 'lodash/get';
+import _isEmpty from 'lodash/isEmpty';
+import _toFinite from 'lodash/toFinite';
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
@@ -42,14 +46,13 @@ class Amenities extends Component {
     isAlertModalVisible: false,
     isFormModalVisible: false,
   };
-
   componentDidMount() {
     this.fetchAmenities();
   }
-
   fetchAmenities = () => {
+    const { userInfo }=this.props
     this.setState({ isLoading: true });
-    getBookedAmenities('644b68e005d65b3294c0771f')
+    getBookedAmenities(userInfo._id)
       .then(response => {
         if (response) {
           const {
@@ -68,67 +71,51 @@ class Amenities extends Component {
         this.setState({ isLoading: false });
       });
   };
-  toggleAlertModal = () => {
+  toggleAlertModal = selectedItem => {
     this.setState(prevState => ({
+      selectedItem,
       isAlertModalVisible: !prevState.isAlertModalVisible,
     }));
   };
-
   toggleFormModal = item => {
     this.setState(prevState => ({
       isFormModalVisible: !prevState.isFormModalVisible,
       initialValues: item,
     }));
   };
-  handleDeleteAmenity = item => {
+  handleDeleteAmenity = () => {
+    const { userInfo }=this.props
+    const { selectedItem } = this.state;
     const request = {
-      amenity_id: item.amenity_id,
+      amenity_id: selectedItem._id,
     };
-    deleteAmenitiesFromResident('644b68e005d65b3294c0771f', request)
-      .then(response => {
-        if (response) {
-          this.setState({ isAlertModalVisible: false });
-          Toast.show({
-            type: 'success',
-            text1: 'Amenity Deleted Successfully',
-          });
-          this.fetchAmenities();
-        } else {
-          Toast.show({
-            type: 'error',
-            text1: 'Amenity Deletion Failed',
-          });
-        }
-      })
-      .catch(() => {
-        Toast.show({
-          type: 'error',
-          text1: 'Amenity Deletion Failed',
+    deleteAmenitiesFromResident(userInfo._id, request)
+    .then(response => {
+      if (response) {
+        this.setState({
+          isAlertModalVisible: false,
+          selectedItem: EMPTY_OBJECT,
         });
-        this.setState({ isAlertModalVisible: false });
+        showMessage({
+          message: 'Amenity Deleted Successfully',
+          type: 'success',
+          backgroundColor: argonTheme.COLORS.SUCCESS,
+        });
+        this.fetchAmenities();
+      }
+    })
+    .catch(() => {
+      this.setState({
+        isAlertModalVisible: false,
+        selectedItem: EMPTY_OBJECT,
       });
+      showMessage({
+        message: 'Amenity Deletion Failed',
+        type: 'error',
+        backgroundColor: argonTheme.COLORS.WARNING,
+      });
+    });
   };
-  renderForm = () => {
-    const { initialValues } = this.state;
-    return (
-      <Form
-        isEdit
-        fields={FIELDS}
-        onClose={this.toggleFormModal}
-        initialValues={initialValues}
-        primaryButtonText="Pay Now"
-        secondaryButtonText="Close"
-        primaryButtonProps={{
-          style: styles.footerPrimaryButton,
-        }}
-        secondaryButtonProps={{
-          style: styles.footerSecondaryButton,
-        }}
-        service={SERVICES.AMENITIES}
-      />
-    );
-  };
-
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;
     return (
@@ -137,19 +124,18 @@ class Amenities extends Component {
         <Block flex row>
           <AlertModal
             visible={isAlertModalVisible}
-            onClose={this.toggleAlertModal}
-            onSubmit={() => this.handleDeleteAmenity(item)}
+            onClose={() => this.toggleAlertModal(EMPTY_OBJECT)}
+            onSubmit={this.handleDeleteAmenity}
           />
-
           <Button
             shadowless
             style={styles.secondaryButton}
-            onPress={this.toggleAlertModal}
-          >
+            onPress={() => this.toggleAlertModal(item)}
+          >    
             <Block row>
               <Text size={14}>Cancel</Text>
             </Block>
-          </Button>
+          </Button>   
           <View style={styles.verticleLine} />
           <Button
             shadowless
@@ -167,10 +153,83 @@ class Amenities extends Component {
             </Block>
           </Button>
         </Block>
-      </>
+        
+        </>
     );
   };
-
+  renderForm = () => {
+    const { initialValues,isPrimaryLoading } = this.state;
+    const { userInfo }=this.props
+    let prefill = {
+      name: userInfo.name,
+      contact: userInfo.contact_number,
+      email: userInfo.email_address,
+    };
+    return (
+      <Form
+        isEdit
+        fields={FIELDS}
+        initialValues={initialValues}
+        primaryButtonText="Pay Now"
+        secondaryButtonText="Close"
+        onClose={()=>this.toggleFormModal(EMPTY_OBJECT)}
+        isPrimaryLoading = {isPrimaryLoading}
+        onSubmit={values =>
+          razorPay({
+            prefill,
+            amount: _toFinite(_get(values, 'price', '2000')) * 100,
+            description: _get(values, 'description', EMPTY_STRING),
+            successCallback: this.handleSubmit,
+            values,
+            setLoading:(isPrimaryLoading)=>this.setState({ isPrimaryLoading })
+          })
+        }
+        primaryButtonProps={{
+          style: styles.footerPrimaryButton,
+        }}
+        secondaryButtonProps={{
+          style: styles.footerSecondaryButton,
+        }}
+        service={SERVICES.AMENITIES}
+      />
+    );
+  };
+  handleSubmit = (razorPayDetails, values) => {
+    const { userInfo } = this.props;
+    const { initialValues } = this.state;
+    this.setState({ isLoading: true });
+    const request = {
+      amenity_id: _get(initialValues, '_id'),
+      booked_price: _get(values, 'price'),
+      booked_quantity: _get(values, 'no_of_quantity', 1),
+      booked_days: _get(values, 'no_of_days', 1),
+      transaction_detail:{ ...razorPayDetails },
+    };
+    addAmenityToResident(userInfo._id, request)
+      .then(response => {
+        if (response) {
+          this.setState({
+            isLoading: false,
+            isFormModalVisible: false,
+            initialValues:EMPTY_OBJECT,
+          });
+        }
+        showMessage({
+          message: 'Amenity Paid Successfully',
+          type: 'success',
+          backgroundColor: argonTheme.COLORS.SUCCESS,
+        });
+        this.fetchAmenities();
+      })
+      .catch(() => {
+        this.setState({ isLoading: false ,isFormModalVisible: false, });
+        showMessage({
+          message: 'Amenity Payment Failed',
+          type: 'error',
+          backgroundColor: argonTheme.COLORS.WARNING,
+        });
+      });
+  };
   render() {
     const {
       amenities,
@@ -202,7 +261,8 @@ class Amenities extends Component {
             navigation={navigation}
             scene={scene}
           />
-          {_map(amenities, (item, index) => (
+          {!_isEmpty(amenities) ? (
+          _map(amenities, (item, index) => (
             <DynamicKeyCard
               key={index}
               isLoading={isLoading}
@@ -214,7 +274,10 @@ class Amenities extends Component {
               footer={this.renderFooter}
               loaderProps={{ button: true }}
             />
-          ))}
+          ))
+            ) : (
+              <EmptyComponent />
+            )}
         </ScrollView>
         <FooterButton
           buttonText="Book Amenities"
@@ -269,7 +332,7 @@ const styles = StyleSheet.create({
     borderColor: argonTheme.COLORS.WHITE,
     borderWidth: 1,
     height: 26,
-    width: '43%',
+    width: '40%',
     borderRadius: 5,
     backgroundColor: argonTheme.COLORS.PRIMARY,
   },

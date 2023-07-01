@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
-
 import { ScrollView, View, StyleSheet, RefreshControl } from 'react-native';
 import { Block, Text } from 'galio-framework';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import _map from 'lodash/map';
-import _get from 'lodash/get';
-import _startCase from 'lodash/startCase';
-import _uniqBy from 'lodash/uniqBy';
-import _filter from 'lodash/filter';
-import _isEmpty from 'lodash/isEmpty';
 import {
   DynamicKeyCard,
+  EmptyComponent,
   Header,
   Modal,
 } from '../../components';
@@ -18,8 +11,18 @@ import { Button } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
 import ClubHouseForm from './Components/ClubHouseForm';
-import { fetchAllClubHouse } from './clubHouse.services';
-
+import { addClubHouseToResident, fetchAllClubHouse } from './clubHouse.services';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import _map from 'lodash/map';
+import _get from 'lodash/get';
+import _startCase from 'lodash/startCase';
+import _uniqBy from 'lodash/uniqBy';
+import _filter from 'lodash/filter';
+import _isEmpty from 'lodash/isEmpty';
+import _toFinite from 'lodash/toFinite';
+import { EMPTY_ARRAY, EMPTY_OBJECT, EMPTY_STRING } from '../../constants';
+import { razorPay } from '../../utils/razorPay';
+import { showMessage } from 'react-native-flash-message';
 class AllClubHouse extends Component {
   state = {
     isLoading: true,
@@ -29,11 +32,9 @@ class AllClubHouse extends Component {
     displayNameKey: '',
     isFormModalVisible: false,
   };
-
   componentDidMount() {
     this.fetchClubHouse();
   }
-
   fetchClubHouse = () => {
     this.setState({ isLoading: true });
     fetchAllClubHouse()
@@ -61,6 +62,18 @@ class AllClubHouse extends Component {
       initialValues: item,
     }));
   };
+  handleChangeTab = id => {
+    const { intialClubHouse } = this.state;
+    if (!_isEmpty(id)) {
+      this.setState({
+        clubHouse: _filter(intialClubHouse, ['category', id]),
+      });
+    } else {
+      this.setState({
+        clubHouse: intialClubHouse,
+      });
+    }
+  };
   renderFooter = item => {
     return (
       <>
@@ -86,29 +99,40 @@ class AllClubHouse extends Component {
       </>
     );
   };
-  // renderSkeletonLoader = () => {
-  //   return (
-  //     <Block>
-  //       <SkeletionLoader />
-  //       <SkeletionLoader />
-  //       <SkeletionLoader />
-  //     </Block>
-  //   );
-  // };
-
-  handleChangeTab = id => {
-    const { intialClubHouse } = this.state;
-    if (!_isEmpty(id)) {
-      this.setState({
-        clubHouse: _filter(intialClubHouse, ['category', id]),
+  handleSubmit = (razorPayDetails, values) => {
+    const { userInfo }=this.props
+    this.setState({ isLoading: true });
+    const request = {
+      clubhouse_id: _get(values, '_id'),
+      booked_price: _get(values, 'price'),
+      booked_quantity: _get(values, 'no_of_quantity', 1),
+      booked_days: _get(values, 'no_of_days', 1),
+      members:_get(values,'members',EMPTY_ARRAY),
+      transaction_detail:{ ...razorPayDetails },
+    };
+    addClubHouseToResident(userInfo._id, request)
+      .then(response => {
+        if (response) {
+          this.setState({
+            isLoading: false,
+            isFormModalVisible:false,
+          });
+          showMessage({
+            message: 'Clubhouse Booked Successfully',
+            type: 'success',
+            backgroundColor: argonTheme.COLORS.SUCCESS,
+          });
+        }
+      })
+      .catch(() => {
+        this.setState({ isLoading: false,isFormModalVisible:false });
+        showMessage({
+          message: 'Clubhouse Booked Failed',
+          type: 'error',
+          backgroundColor: argonTheme.COLORS.WARNING,
+        });
       });
-    } else {
-      this.setState({
-        clubHouse: intialClubHouse,
-      });
-    }
   };
-
   render() {
     const {
       clubHouse,
@@ -118,11 +142,14 @@ class AllClubHouse extends Component {
       intialClubHouse,
       isFormModalVisible,
       initialValues,
+      isPrimaryLoading
     } = this.state;
-    const { navigation, scene } = this.props;
-    // if (isLoading) {
-    //   return this.renderSkeletonLoader();
-    // }
+    const { navigation, scene,userInfo } = this.props;
+    let prefill = {
+      name: userInfo.name,
+      contact: userInfo.contact_number,
+      email: userInfo.email_address,
+    };
     return (
       <Block>
         <Modal
@@ -131,7 +158,18 @@ class AllClubHouse extends Component {
           content={() => (
             <ClubHouseForm
               initialValues={initialValues}
-              onClose={this.toggleFormModal}
+              onClose={()=>this.toggleFormModal(EMPTY_OBJECT)}
+              isPrimaryLoading = {isPrimaryLoading}
+              onSubmit={values =>
+                razorPay({
+                  prefill,
+                  amount: _toFinite(_get(values, 'price', '2000')) * 100,
+                  description: _get(values, 'description', EMPTY_STRING),
+                  successCallback: this.handleSubmit,
+                  values,
+                  setLoading:(isPrimaryLoading)=>this.setState({ isPrimaryLoading })
+                })
+              }
             />
           )}
         />
@@ -159,7 +197,8 @@ class AllClubHouse extends Component {
             navigation={navigation}
             scene={scene}
           />
-          {_map(clubHouse, (item, key) => (
+           {!_isEmpty(clubHouse) ? (
+          _map(clubHouse, (item, key) => (
             <DynamicKeyCard
               key={key}
               isLoading={isLoading}
@@ -170,7 +209,9 @@ class AllClubHouse extends Component {
               keyToRemove={keyToRemove}
               footer={this.renderFooter}
             />
-          ))}
+          ))) : (
+            <EmptyComponent />
+          )}
         </ScrollView>
       </Block>
     );
