@@ -4,10 +4,6 @@ import MaintenanceChargesCard from '../../components/molecules/MaintenanceCharge
 import PaymentFilterComponent from '../../components/molecules/PaymentFilterComponent';
 import MakePayment from '../../components/molecules/MakePayment';
 import { ScrollView } from 'react-native';
-import uniqBy from 'lodash/uniqBy';
-import remove from 'lodash/remove';
-import find from 'lodash/find';
-import cloneDeep from 'lodash/cloneDeep';
 import { razorPay } from '../../utils/razorPay';
 
 const Payments = props => {
@@ -19,6 +15,9 @@ const Payments = props => {
       payment_due: '21 Mar, 2023',
       overdue: 2000,
       amount: 1000,
+      period: 'March 2023',
+      transaction_details: {},
+      payment_mode: ''
     },
     {
       id: '2',
@@ -27,14 +26,23 @@ const Payments = props => {
       payment_due: '22 Mar, 2023',
       overdue: 2000,
       amount: 1000,
+      period: 'March 2023',
+      transaction_details: {},
+      payment_mode: ''
     },
     {
       id: '3',
       title: 'Maintenance Charges',
       status: 'PAID',
       payment_due: '23 Mar, 2023',
+      payment_mode: 'online',
       overdue: 2000,
       amount: 3000,
+      period: 'March 2023',
+      transaction_details: {
+        razorpay_payment_id: 'exc_123razorpay',
+        payment_date: '23 March 2023',
+      },
     },
     {
       id: '4',
@@ -43,6 +51,9 @@ const Payments = props => {
       payment_due: '24 Mar, 2023',
       overdue: 2000,
       amount: 1000,
+      period: 'March 2023',
+      transaction_details: {},
+      payment_mode: ''
     },
     {
       id: '5',
@@ -51,6 +62,9 @@ const Payments = props => {
       payment_due: '24 Mar, 2023',
       overdue: 2000,
       amount: 1000,
+      period: 'March 2023',
+      transaction_details: {},
+      payment_mode: ''
     },
   ];
 
@@ -82,7 +96,6 @@ const Payments = props => {
     }
   };
 
-  
   let checkedCards = [];
   const handleSelectedCard = (maintenanceData, isChecked, key) => {
     console.log(maintenanceData, isChecked, key);
@@ -97,7 +110,6 @@ const Payments = props => {
     setSelectedCards(checkedCards);
   };
 
-
   const handleMultiplePayments = ({ sendPayments, selectingPayments }) => {
     let total_amount = 0;
     let cardIds = [];
@@ -108,15 +120,18 @@ const Payments = props => {
           ...item,
           paymentDone: true,
           status: 'PAID',
-          transaction_Details: data,
+          payment_mode: 'online',
+          transaction_details: {
+            ...data,
+            payment_date: new Date().toISOString().split('T')[0],
+          },
         };
 
         //removing old details
-         localMaintenanceCardData = localMaintenanceCardData.filter(
+        localMaintenanceCardData = localMaintenanceCardData.filter(
           item => updatedCard.id !== item.id,
         );
         localMaintenanceCardData.push(updatedCard);
-        console.log('removedArray', localMaintenanceCardData);
         setMaintenanceCardData(localMaintenanceCardData);
       });
     };
