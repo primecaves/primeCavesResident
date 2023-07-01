@@ -22,7 +22,8 @@ export const AuthProvider = ({ children }) => {
                         const mockData = {
                             ...data,
                             due_amount: 1200,
-                            maintenance_reminder: {},
+                            maintenance_reminder: {daysRemaining:5,due_date:'23 Mar,2023',amount:1200},
+                            // maintenance_reminder:{}
                         };
                         setUserInfo(mockData);
                         setIsLoading(false);

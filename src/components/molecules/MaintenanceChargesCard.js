@@ -1,89 +1,155 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { Block, Text, Button } from 'galio-framework';
+import { Checkbox } from 'native-base';
 import TextLabel from '../atoms/TextLabel';
 import { Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Theme from '../../constants/Theme';
+import { razorPay } from '../../utils/razorPay';
+import { argonTheme } from '../../constants';
 
-class MaintenanceChargesCard extends React.Component {
-  state = {
-    status: 'UNPAID',
-    paymentDone: false,
+const MaintenanceChargesCard = ({
+  cardData,
+  handleCardChange,
+  cardSelect,
+  handleSelectedCard,
+  userInfo = { name: 'sagar', email: 'sdf@gmail.com', contact: 1343214 },
+}) => {
+  const [maintenanceData, setMaintenanceData] = useState({});
+
+  useEffect(() => {
+    setMaintenanceData({
+      id: cardData.id,
+      status: cardData.status,
+      paymentDone: false,
+      title: cardData.title,
+      payment_due: cardData.payment_due,
+      overdue: cardData.overdue,
+      amount: cardData.amount,
+    });
+  }, [cardData]);
+
+  const handlePaid = data => {
+    const updatedData = {
+      ...maintenanceData,
+      paymentDone: true,
+      status: 'PAID',
+      transaction_Details: data,
+    };
+    handleCardChange(updatedData);
+
+    setMaintenanceData(updatedData);
   };
-  render() {
-    const handlePaid = () =>
-      this.setState({ ...this.state, paymentDone: true, status: 'PAID' });
-    return (
-      <Block style={styles.container}>
-        <Block row left center>
-          <Text size={16} bold flex={1}>
-            Maintenance Charges
-          </Text>
-          <TextLabel status={this.state.status} />
-          <Text size={12} muted style={styles.center}>
-            1 Mar 2023
-          </Text>
-        </Block>
-        <Text size={12}>
-          Your charges are: <Text bold>₹ 1000.00</Text>
-        </Text>
-        <Text size={12} muted style={styles.margin}>
-          <Icon name="calendar" />
-          <Text>Due date 23 Mar 2023</Text>
-        </Text>
-        {this.state.status === 'PAID' ? (
-          <>
-            <Block row center style={[styles.paymentBlock, styles.center]}>
-              <Text
-                bold
-                size={18}
-                color={Theme.COLORS.YELLOW}
-                style={styles.margin}
-              >
-                <Icon
-                  name="arrow-down-circle"
-                  color={Theme.COLORS.YELLOW}
-                  size={18}
-                />
-                Download Invoice
-              </Text>
-            </Block>
-          </>
-        ) : (
-          <Block
-            row
-            left
-            center
-            style={styles.paymentBlock}
-            space="between"
-            shadow
-          >
-            <Button
-              flex={1}
-              size={'small'}
-              style={styles.button}
-              onPress={handlePaid}
-            >
-              <Text style={{ fontWeight: 600 }} size={14}>
-                <Icon name={'check'} size={14} /> I have paid
-              </Text>
-            </Button>
-            <Button color={Theme.COLORS.YELLOW} flex={1} size={'small'}>
-              <Text
-                style={{ fontWeight: 600 }}
-                size={14}
-                color={Theme.COLORS.WHITE}
-              >
-                Pay Now
-              </Text>
-            </Button>
-          </Block>
+  const handleCallBack = data => {
+    handlePaid(data);
+  };
+
+  const handleSinglePayment = () => {
+    let total_amount = maintenanceData.amount + maintenanceData.overdue;
+
+    let prefill = {
+      name: userInfo.name,
+      email: userInfo.email,
+      contact: userInfo.contact,
+    };
+
+    razorPay({
+      prefill,
+      amount: total_amount * 100,
+      handleCallBack,
+    });
+
+    // console.log(re)
+  };
+
+  const handleSelected = isChecked => {
+    handleSelectedCard(maintenanceData, isChecked, maintenanceData.id);
+  };
+  return (
+    <Block style={styles.container}>
+      <Block row left center>
+        {cardSelect && maintenanceData.status !== 'PAID' && (
+          <Checkbox
+            accessibilityLabel="Payment Checkbox"
+            onChange={isChecked => handleSelected(isChecked)}
+          />
         )}
+
+        <Text size={14} bold flex={1}>
+          {maintenanceData.title}
+        </Text>
+        <TextLabel status={maintenanceData.status} />
+        <Text size={12} muted style={styles.center}>
+          1 Mar 2023
+        </Text>
       </Block>
-    );
-  }
-}
+      <Text size={12}>
+        Your charges are: <Text bold>₹ {cardData.amount}.00</Text>{' '}
+        {maintenanceData.status === 'OVERDUE' && (
+          <Text bold color={argonTheme.COLORS.RED}> + ₹ {cardData.overdue}.00</Text>
+        )}
+      </Text>
+      <Text size={12} muted style={styles.margin}>
+        <Icon name="calendar" />
+        <Text>Due date {cardData.payment_due}</Text>
+      </Text>
+      {maintenanceData.status === 'PAID' ? (
+        <>
+          <Block row center style={[styles.paymentBlock, styles.center]}>
+            <Text
+              bold
+              size={18}
+              color={Theme.COLORS.YELLOW}
+              style={styles.margin}
+            >
+              <Icon
+                name="arrow-down-circle"
+                color={Theme.COLORS.YELLOW}
+                size={18}
+              />
+              Download Invoice
+            </Text>
+          </Block>
+        </>
+      ) : (
+        <Block
+          row
+          left
+          center
+          style={styles.paymentBlock}
+          space="between"
+          shadow
+        >
+          <Button
+            flex={1}
+            size={'small'}
+            style={styles.button}
+            onPress={handlePaid}
+          >
+            <Text style={{ fontWeight: 600 }} size={14}>
+              <Icon name={'check'} size={14} /> I have paid
+            </Text>
+          </Button>
+          <Button
+            color={Theme.COLORS.YELLOW}
+            flex={1}
+            size={'small'}
+            onPress={handleSinglePayment}
+          >
+            <Text
+              style={{ fontWeight: 600 }}
+              size={14}
+              color={Theme.COLORS.WHITE}
+            >
+              Pay Now
+            </Text>
+          </Button>
+        </Block>
+      )}
+    </Block>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
