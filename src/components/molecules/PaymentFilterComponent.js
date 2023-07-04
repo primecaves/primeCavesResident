@@ -6,7 +6,7 @@ import SelectMenu from '../atoms/SelectMenu';
 import { Pressable } from 'react-native';
 import Theme from '../../constants/Theme';
 
-const PaymentFilterComponent = ({ filterBy, handleFilter }) => {
+const PaymentFilterComponent = ({ filterBy, handleFilter, userInfo }) => {
   const [filterStatus, setFilterStatus] = useState({
     status: filterBy,
     filterByDate: false,
@@ -21,12 +21,23 @@ const PaymentFilterComponent = ({ filterBy, handleFilter }) => {
   };
 
   return (
-    <Block style={styles.container}>
-      <Block row={true}>
+    <Block style={styles.container} space="around">
+      <Block row={true} space="around">
+        {filterStatus.filterByDate && (
+          <Icon
+            name="filter-remove"
+            size={24}
+            color={'black'}
+            style={{ marginVertical: 18 }}
+            onPress={() =>
+              setFilterStatus({ ...filterStatus, filterByDate: false })
+            }
+          />
+        )}
         <Pressable
-          style={{ marginHorizontal: 10 }}
+          style={{ marginVertical: 8 }}
           onPress={() =>
-            setFilterStatus({ ...filterStatus, filterByDate: 'true' })
+            setFilterStatus({ ...filterStatus, filterByDate: true })
           }
         >
           <Block center={true} row={true} style={styles.block}>
@@ -38,8 +49,8 @@ const PaymentFilterComponent = ({ filterBy, handleFilter }) => {
         </Pressable>
 
         <SelectMenu
-          optionValues={['UNPAID', 'PAID','OVERDUE','UPCOMING','RESET']}
-          text="status"
+          optionValues={['UNPAID', 'PAID', 'OVERDUE', 'UPCOMING', 'RESET']}
+          text={filterStatus.status}
           onChange={handleStatusMenuChange}
         />
       </Block>
@@ -82,6 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     marginHorizontal: 10,
+    height: 50,
   },
   bottomBlock: {
     marginVertical: 10,

@@ -51,6 +51,7 @@ class SelectMenu extends React.Component {
       >
         {optionValues.map(value => (
           <Menu.Item
+            key={value}
             backgroundColor={argonTheme.COLORS.BORDER_COLOR}
             textValue={value}
             onPress={() => this.handleChange(value)}

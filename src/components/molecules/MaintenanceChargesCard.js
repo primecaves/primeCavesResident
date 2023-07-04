@@ -10,6 +10,7 @@ import { razorPay } from '../../utils/razorPay';
 import { argonTheme } from '../../constants';
 import { Pressable } from 'react-native';
 import { generateInvoiceData } from '../../utils/generateInvoiceData';
+import AlertModal from './AlertModal';
 
 const MaintenanceChargesCard = ({
   cardData,
@@ -20,6 +21,7 @@ const MaintenanceChargesCard = ({
 }) => {
   const [maintenanceData, setMaintenanceData] = useState({});
   const [downloadingInvoice, setDownloadingInvoice] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
 
   useEffect(() => {
     setMaintenanceData({
@@ -39,7 +41,6 @@ const MaintenanceChargesCard = ({
   const handlePaid = data => {
     const updatedData = {
       ...maintenanceData,
-      paymentDone: true,
       status: 'PAID',
       payment_mode: 'online',
       transaction_Details: {
@@ -48,6 +49,23 @@ const MaintenanceChargesCard = ({
       },
     };
     handleCardChange(updatedData);
+
+    setMaintenanceData(updatedData);
+  };
+
+  const toogleAlertModal = () => {
+    setShowAlertModal(true);
+  };
+
+  const handleAlreadyPaid = () => {
+    setShowAlertModal(false);
+    const updatedData = {
+      ...maintenanceData,
+      payment_mode: 'offline',
+    };
+
+    //TODO: send approval req to admin and then pass data to parent
+    // handleCardChange(updatedData);
 
     setMaintenanceData(updatedData);
   };
@@ -60,8 +78,8 @@ const MaintenanceChargesCard = ({
 
     let prefill = {
       name: userInfo.name || 'sagar',
-      email: userInfo.email || 'devsd@gmail.com',
-      contact: userInfo.contact || '+916370890444',
+      email: userInfo.email_address || 'devsd@gmail.com',
+      contact: userInfo.contact_number || '+916370890444',
     };
 
     razorPay({
@@ -81,14 +99,26 @@ const MaintenanceChargesCard = ({
 
   const handleDownloadInvoice = () => {
     setDownloadingInvoice(true);
-    let userData = {
-      name: 'Mrunal Thakur',
-      email: 'mrunal@gmail.com',
-      contact: 1343214,
-      flat: 'A-404',
-      block: 'A',
-      apartment_name: 'Utkal Heights',
-    };
+    let userData;
+    if (userInfo) {
+      userData = {
+        name: userInfo.name,
+        email: userInfo.email_address,
+        contact: userInfo.contact_number,
+        flat: userInfo.flat,
+        block: userInfo.block,
+        apartment_name: userInfo.apartment_name,
+      };
+    } else {
+      userData = {
+        name: 'Mrunal Thakur',
+        email: 'mrunal@gmail.com',
+        contact: 1343214,
+        flat: 'A-404',
+        block: 'A',
+        apartment_name: 'Utkal Heights',
+      };
+    }
     generateInvoiceData({
       userInfo: userData,
       maintenanceData,
@@ -97,6 +127,17 @@ const MaintenanceChargesCard = ({
   };
   return (
     <Block style={styles.container}>
+      <AlertModal
+        visible={showAlertModal}
+        onClose={() => setShowAlertModal(false)}
+        onSubmit={handleAlreadyPaid}
+        message={
+          'Are you sure you want to submit a request for payment approval?'
+        }
+        primaryButtonText={'Yes'}
+        secondaryButtonText={'No'}
+      ></AlertModal>
+
       <Block row left center>
         {cardSelect && maintenanceData.status !== 'PAID' && (
           <Checkbox
@@ -168,13 +209,24 @@ const MaintenanceChargesCard = ({
         >
           <Button
             flex={1}
-            size={'small'}
+            size={'medium'}
             style={styles.button}
-            onPress={handlePaid}
+            onPress={toogleAlertModal}
+            disabled={
+              maintenanceData.status === 'UNPAID' &&
+              maintenanceData.payment_mode === 'offline'
+            }
           >
-            <Text style={{ fontWeight: 600 }} size={14}>
-              <Icon name={'check'} size={14} /> I have paid
-            </Text>
+            {maintenanceData.status === 'UNPAID' &&
+            maintenanceData.payment_mode === 'offline' ? (
+              <Text style={{ fontWeight: 600 }} size={14} muted color="grey">
+                <Icon name={'block-helper'} size={14} /> Approval Pending
+              </Text>
+            ) : (
+              <Text style={{ fontWeight: 600 }} size={14}>
+                <Icon name={'check'} size={14} /> I have paid
+              </Text>
+            )}
           </Button>
           <Button
             color={Theme.COLORS.YELLOW}

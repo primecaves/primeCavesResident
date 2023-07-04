@@ -16,7 +16,7 @@ export const generateInvoiceData = async ({
   let invoiceData = {
     payment_date: maintenanceData.transaction_details.payment_date,
     name: userInfo.name,
-    email: userInfo.email,
+    email: userInfo.email_address,
     flat: userInfo.flat,
     block: userInfo.block,
     apartment_name: userInfo.apartment_name,
