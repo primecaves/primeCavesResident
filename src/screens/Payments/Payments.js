@@ -81,9 +81,9 @@ const Payments = props => {
       let monthFilteredData = localMaintenanceData.filter(
         item =>
           moment(item.period).month() >=
-            MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
+          MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
           moment(item.period).month() <=
-            MONTHS_DICTIONARY[updatedFilter.endingMonth],
+          MONTHS_DICTIONARY[updatedFilter.endingMonth],
       );
       if (updatedFilter.status !== 'RESET') {
         let filterData = monthFilteredData.filter(

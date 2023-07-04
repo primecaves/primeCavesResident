@@ -49,7 +49,7 @@ class MenuCard extends React.Component {
                                 muted={!ctaColor}
                                 color={ctaColor || argonTheme.COLORS.TEXT_GREY}
                             >
-                                {item.cta}
+                                {item.title}
                             </Text>
                         </Block>
                     </Block>

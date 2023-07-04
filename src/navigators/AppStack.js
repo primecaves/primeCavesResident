@@ -16,6 +16,7 @@ import { Button } from 'galio-framework';
 import Profile from '../screens/Profile';
 import { componentWithProps, renderIcon } from '../constants/utils';
 import _get from 'lodash/get';
+<<<<<<< HEAD
 import {
   CartScreen,
   CategoriesScreen,
@@ -26,6 +27,12 @@ import {
   MyOrderScreen,
   OrderConfirmScreen,
 } from '../screens/Services';
+=======
+import AddExpectedVisitors from '../screens/AddExpectedVisitors/AddExpectedVisitors';
+import Search from '../screens/Search/Search';
+import { combineContextAndProps } from 'native-base';
+//import ExpectedVisitor from '../screens/ExpectedVisitors/ExpectedVisitor';
+>>>>>>> 3c0d3cb (Navigation Context error)
 
 const renderHomeHeader = ({ navigation, scene, title }) => {
   return (
@@ -67,7 +74,11 @@ const RenderTabBarIcon = ({ focused, route }) => {
   return renderIcon(name, styles);
 };
 
+<<<<<<< HEAD
 const HomeStack = contextProps => {
+=======
+const HomeStack = (contextProps) => {
+>>>>>>> 3c0d3cb (Navigation Context error)
   const { Navigator, Screen } = createNativeStackNavigator();
   const navProps = {
     screenOptions: {
@@ -123,6 +134,13 @@ const HomeStack = contextProps => {
         }}
       />
       <Screen
+        name="AddExpectedVisitors"
+        component={(props) => componentWithProps(AddExpectedVisitors, { ...props, ...contextProps })}
+        options={{
+          cardStyle: { backgroundColor: '#F8F9FE' },
+        }}
+      />
+      <Screen
         name="AllClubHouse"
         component={props =>
           componentWithProps(AllClubHouse, { ...props, ...contextProps })
@@ -160,7 +178,7 @@ const HomeStack = contextProps => {
       />
       <Screen
         name="Complain"
-        component={Complain}
+        component={(props) => componentWithProps(Complain, { ...props, ...contextProps })}
         options={{
           header: ({ navigation, scene }) =>
             renderBasicHeader({
@@ -190,6 +208,7 @@ const HomeStack = contextProps => {
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
+
       <Screen
         name="NoticeBoard"
         component={NoticeBoard}
@@ -220,7 +239,14 @@ const HomeStack = contextProps => {
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
-    </Navigator>
+      <Screen
+        name="Search"
+        component={Search}
+        options={{
+          cardStyle: { backgroundColor: '#F8F9FE' },
+        }}
+      />
+    </Navigator >
   );
 };
 
@@ -315,6 +341,7 @@ const TabNavigator = contextProps => {
 
   return (
     <Navigator {...tabNavProps}>
+<<<<<<< HEAD
       <Screen
         name="Home"
         component={() => componentWithProps(HomeStack, contextProps)}
@@ -323,7 +350,11 @@ const TabNavigator = contextProps => {
         name="Service"
         component={() => componentWithProps(ServiceStack, contextProps)}
       />
-    </Navigator>
+=======
+      <Screen name="Home" component={(props) => componentWithProps(HomeStack, { ...contextProps, ...props })} />
+      <Screen name="Service" component={(props) => componentWithProps(ServiceStack, { ...contextProps, ...props })} />
+>>>>>>> 3c0d3cb (Navigation Context error)
+    </Navigator >
   );
 };
 

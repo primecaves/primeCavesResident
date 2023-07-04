@@ -13,6 +13,7 @@ import {
     Home,
     PrimeCavesLogo,
     NoData,
+    AddExpectedVisitors,
 } from '../assets';
 
 export const StatusHeight = StatusBar.currentHeight;
@@ -68,13 +69,18 @@ export const renderIcon = (requestIcon, styles = DEFAULT_ICON_STYLE) => {
                 <Home
                     {...styles}
                 />);
+        case MENU_SERVICES.ADD_EXPECTED_VISITOR:
+            return (
+                <AddExpectedVisitors
+                    {...styles}
+                />);
         case MENU_SERVICES.PRIME_CAVES:
             return (
                 <PrimeCavesLogo
                     {...styles}
                 />);
-            case MENU_SERVICES.NO_DATA:
-                    return <NoData {...styles} />;
+        case MENU_SERVICES.NO_DATA:
+            return <NoData {...styles} />;
         default:
             return (
                 <User

@@ -104,7 +104,6 @@ export class Complain extends Component {
         isEdit
         fields={FIELDS}
         onClose={this.toggleFormModal}
-        //onSubmit={(vall) => console.log('dkjdbfdskj', vall)}
         initialValues={initialValues}
         primaryButtonText="Register"
         secondaryButtonText="Close"
@@ -151,19 +150,6 @@ export class Complain extends Component {
             />
           ))}
         </ScrollView>
-        <Block style={styles.buttonContainer} middle>
-          <Button
-            shadowless
-            style={styles.bookButton}
-            onPress={this.toggleFormModal}
-          >
-            <Block row>
-              <Text style={styles.text} size={15}>
-                Book Complain
-              </Text>
-            </Block>
-          </Button>
-        </Block>
       </Block>
 
     );

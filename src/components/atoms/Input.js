@@ -5,7 +5,7 @@ import { Input, Text } from 'galio-framework';
 import Icon from '../atoms/Icon';
 import argonTheme from '../../constants/Theme';
 import _isEmpty from 'lodash/isEmpty';
-const { width } = Dimensions.get('screen');
+
 class ArInput extends React.Component {
   render() {
     const { shadowless, success, error, errorMessage } = this.props;

@@ -6,6 +6,7 @@ import NoticeBoard from './icons/board.svg';
 import User from './icons/user.svg';
 import Home from './icons/home.svg';
 import Services from './icons/digital-marketing.svg';
+import AddExpectedVisitors from './icons/addExpectedVisitor.svg';
 import PrimeCavesLogo from './icons/primecavesLogo.svg';
 import NoData from './icons/no_folder.svg';
 
@@ -20,4 +21,5 @@ export {
     Services,
     PrimeCavesLogo,
     NoData,
+    AddExpectedVisitors,
 };

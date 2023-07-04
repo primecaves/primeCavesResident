@@ -12,6 +12,9 @@ import menu from '../../constants/menu';
 import argonTheme from '../../constants/Theme';
 import RemainderCard from '../../components/molecules/RemainderCard';
 import withAuthProps from '../../hoc/withAuthProps';
+import { EMPTY_ARRAY } from '../../constants';
+import _isEmpty from 'lodash/isEmpty';
+import _head from 'lodash/head';
 const { width } = Dimensions.get('screen');
 
 class Home extends React.Component {
@@ -45,14 +48,14 @@ class Home extends React.Component {
   }
 
   renderMenus = () => {
+    const { userInfo: { maintenance_reminder = EMPTY_ARRAY } } = this.props;
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.menu}
       >
-        {this.props.userInfo.maintenance_reminder && (
-          <RemainderCard propData={this.props} />
-        )}
+        {!_isEmpty(maintenance_reminder) &&
+          <RemainderCard maintenanceReminder={_head(maintenance_reminder)} />}
         <Block flex>
           <Text size={16} bold>
             Categories

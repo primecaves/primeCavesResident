@@ -62,6 +62,7 @@ const MENU_SERVICES = {
   HOME: 'Home',
   SERVICES: 'Services',
   PRIME_CAVES: 'Prime Caves',
+  ADD_EXPECTED_VISITOR: 'AddExpectedVisitors',
   NO_DATA: 'NoData',
 };
 
