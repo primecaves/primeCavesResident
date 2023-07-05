@@ -62,6 +62,14 @@ const PaymentFilterComponent = ({ filterBy, handleFilter, userInfo }) => {
           text={filterStatus.status}
           onChange={handleStatusMenuChange}
         />
+        <Pressable
+          onPress={() => navigation.navigate('PaymentHistory', { service: 'maintenance' })}
+        >
+          <Block center={true} row={true} style={styles.block}>
+
+            <Icon name="history" size={35} color={'grey'} />
+          </Block>
+        </Pressable>
       </Block>
       {filterStatus.filterByDate && (
         <Block row={true} space="around" style={styles.bottomBlock}>

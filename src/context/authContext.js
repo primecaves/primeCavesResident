@@ -13,12 +13,14 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(EMPTY_STRING);
 
     const login = async (request) => {
+        console.log('here we arerequest', request);
         setIsLoading(true);
         try {
             loginUser(request).
                 then(async response => {
                     if (response) {
                         const { accessToken, data } = response.data;
+                        console.log('data', data);
                         const mockData = {
                             ...data,
                             due_amount: 1200,
@@ -31,6 +33,7 @@ export const AuthProvider = ({ children }) => {
                             'accessToken',
                             accessToken,
                         );
+                        console.log('mockData', mockData);
                         await AsyncStorage.setItem('userInfo', JSON.stringify(mockData));
                     }
                     else {

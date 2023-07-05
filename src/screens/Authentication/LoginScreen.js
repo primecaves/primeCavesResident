@@ -304,7 +304,6 @@ class LoginScreen extends React.Component {
                                                         color="primary"
                                                         style={styles.createButton}
                                                         onPress={this.confirmCode}
-
                                                     >
                                                         <Text
                                                             style={{ fontFamily: 'open-sans-bold' }}

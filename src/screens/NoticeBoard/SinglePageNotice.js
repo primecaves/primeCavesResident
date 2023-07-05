@@ -55,19 +55,6 @@ export default class SinglePageNotice extends React.Component {
         'id',
       ),
     });
-    //Yet to build API
-    // this.setState({ isLoading: true })
-    // fetchMenuDetailService().then(response => {
-    //     if (response) {
-    //         const { data } = response;
-    //         this.setState({
-    //             isLoading: false,
-    //             menu: _get(data, 'data', []),
-    //         })
-    //     }
-    // }).catch(() => {
-    //     this.setState({ isLoading: false })
-    // });
   };
 
   renderModal = () => {
