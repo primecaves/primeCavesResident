@@ -5,14 +5,17 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SelectMenu from '../atoms/SelectMenu';
 import { Pressable } from 'react-native';
 import Theme from '../../constants/Theme';
+import { MONTHS } from '../../constants';
 
-const PaymentFilterComponent = ({ filterBy, handleFilter }) => {
-  const [filterStatus, setFilterStatus] = useState({
-    status: filterBy,
-    filterByDate: false,
-    startingMonth: '',
-    endingMonth: '',
-  });
+const PaymentFilterComponent = ({ filterBy, handleFilter, userInfo }) => {
+  const [filterStatus, setFilterStatus] = useState(filterBy);
+
+  const handleStartMonthChange = val => {
+    handleMonthMenuChange({ startingMonth: val });
+  };
+  const handleEndMonthChange = val => {
+    handleMonthMenuChange({ endingMonth: val });
+  };
 
   const handleStatusMenuChange = val => {
     let updatedData = { ...filterStatus, status: val };
@@ -20,13 +23,30 @@ const PaymentFilterComponent = ({ filterBy, handleFilter }) => {
     handleFilter(updatedData);
   };
 
+  const handleMonthMenuChange = val => {
+    let updatedData = { ...filterStatus, ...val };
+    setFilterStatus(updatedData);
+    handleFilter(updatedData);
+  };
+
   return (
-    <Block style={styles.container}>
-      <Block row={true}>
+    <Block style={styles.container} space="around">
+      <Block row={true} space="around">
+        {filterStatus.filterByDate && (
+          <Icon
+            name="filter-remove"
+            size={24}
+            color={'black'}
+            style={{ marginVertical: 18 }}
+            onPress={() =>
+              setFilterStatus({ ...filterStatus, filterByDate: false })
+            }
+          />
+        )}
         <Pressable
-          style={{ marginHorizontal: 10 }}
+          style={{ marginVertical: 8 }}
           onPress={() =>
-            setFilterStatus({ ...filterStatus, filterByDate: 'true' })
+            setFilterStatus({ ...filterStatus, filterByDate: true })
           }
         >
           <Block center={true} row={true} style={styles.block}>
@@ -38,8 +58,8 @@ const PaymentFilterComponent = ({ filterBy, handleFilter }) => {
         </Pressable>
 
         <SelectMenu
-          optionValues={['UNPAID', 'PAID','OVERDUE','UPCOMING','RESET']}
-          text="status"
+          optionValues={['UNPAID', 'PAID', 'OVERDUE', 'UPCOMING', 'RESET']}
+          text={filterStatus.status}
           onChange={handleStatusMenuChange}
         />
       </Block>
@@ -50,9 +70,10 @@ const PaymentFilterComponent = ({ filterBy, handleFilter }) => {
               From
             </Text>
             <SelectMenu
-              optionValues={['March 2023', 'February 2023']}
+              optionValues={MONTHS}
               text="Start Month"
               width={150}
+              onChange={handleStartMonthChange}
             />
           </Block>
           <Block>
@@ -60,9 +81,10 @@ const PaymentFilterComponent = ({ filterBy, handleFilter }) => {
               To
             </Text>
             <SelectMenu
-              optionValues={['March 2023', 'February 2023']}
+              optionValues={MONTHS}
               text="End Month"
               width={150}
+              onChange={handleEndMonthChange}
             />
           </Block>
         </Block>
@@ -82,6 +104,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     marginHorizontal: 10,
+    height: 50,
   },
   bottomBlock: {
     marginVertical: 10,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu } from 'native-base';
 import { Block, Text } from 'galio-framework';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { argonTheme } from '../../constants';
 import _noop from 'lodash/noop';
@@ -49,17 +49,20 @@ class SelectMenu extends React.Component {
           renderMenu({ triggerProps, width, height, menuText })
         }
       >
-        {optionValues.map(value => (
-          <Menu.Item
-            backgroundColor={argonTheme.COLORS.BORDER_COLOR}
-            textValue={value}
-            onPress={() => this.handleChange(value)}
-          >
-            <Text color="black" size={14} bold={true}>
-              {value}
-            </Text>
-          </Menu.Item>
-        ))}
+        <ScrollView style={{ maxHeight: 200 }}>
+          {optionValues.map(value => (
+            <Menu.Item
+              key={value}
+              backgroundColor={argonTheme.COLORS.BORDER_COLOR}
+              textValue={value}
+              onPress={() => this.handleChange(value)}
+            >
+              <Text color="black" size={14} bold={true}>
+                {value}
+              </Text>
+            </Menu.Item>
+          ))}
+        </ScrollView>
       </Menu>
     );
   }
