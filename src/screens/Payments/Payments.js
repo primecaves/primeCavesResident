@@ -15,76 +15,8 @@ import { argonTheme } from '../../constants';
 import { MONTHS_DICTIONARY } from '../../constants';
 import moment from 'moment';
 
-const Payments = ({ userInfo }) => {
-  const Data = [
-    {
-      id: '1',
-      title: 'Maintenance Charges',
-      status: 'UNPAID',
-      payment_due: '21 Mar, 2023',
-      overdue: 2000,
-      amount: 1000,
-      period: '2023-03',
-      transaction_details: {},
-      payment_mode: '',
-    },
-    {
-      id: '2',
-      title: 'Maintenance Charges',
-      status: 'UNPAID',
-      payment_due: '22 Mar, 2023',
-      overdue: 2000,
-      amount: 1000,
-      period: '2023-03',
-      transaction_details: {},
-      payment_mode: '',
-    },
-    {
-      id: '3',
-      title: 'Maintenance Charges',
-      status: 'PAID',
-      payment_due: '23 Mar, 2023',
-      payment_mode: 'online',
-      overdue: 2000,
-      amount: 3000,
-      period: '2023-03',
-      transaction_details: {
-        razorpay_payment_id: 'exc_123razorpay',
-        payment_date: '23 March 2023',
-      },
-    },
-    {
-      id: '4',
-      title: 'Maintenance Charges',
-      status: 'UNPAID',
-      payment_due: '24 Mar, 2023',
-      overdue: 2000,
-      amount: 1000,
-      period: '2023-03',
-      transaction_details: {},
-      payment_mode: '',
-    },
-    {
-      id: '5',
-      title: 'Maintenance Charges',
-      status: 'OVERDUE',
-      payment_due: '24 Mar, 2023',
-      overdue: 2000,
-      amount: 1000,
-      period: '2023-03',
-      transaction_details: {},
-      payment_mode: '',
-    },
-    {
-      id: '5',
-      title: 'Maintenance Charges',
-      status: 'OVERDUE',
-      payment_due: '24 Mar, 2023',
-      overdue: 2000,
-      amount: 1000,
-    },
-  ];
-
+const Payments = (props) => {
+  const { userInfo } = props;
   const [MaintenanceCardData, setMaintenanceCardData] = useState([]);
   const [cardSelect, setCardSelect] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
@@ -143,9 +75,9 @@ const Payments = ({ userInfo }) => {
       let monthFilteredData = localMaintenanceData.filter(
         item =>
           moment(item.period).month() >=
-            MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
+          MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
           moment(item.period).month() <=
-            MONTHS_DICTIONARY[updatedFilter.endingMonth],
+          MONTHS_DICTIONARY[updatedFilter.endingMonth],
       );
       if (updatedFilter.status !== 'RESET') {
         let filterData = monthFilteredData.filter(
