@@ -5,7 +5,6 @@ import { Block, Text } from 'galio-framework';
 import Icon from '../atoms/Icon';
 import argonTheme from '../../constants/Theme';
 import RoundDate from './RoundDate';
-
 export default class Notification extends React.Component {
   render() {
     const {
@@ -21,6 +20,7 @@ export default class Notification extends React.Component {
       time,
       title,
       transparent,
+      period,
     } = this.props;
 
     const iconContainer = [
@@ -37,13 +37,14 @@ export default class Notification extends React.Component {
       system && { height: 78 },
       style,
     ];
+
     return (
       <Block style={container} middle>
         <TouchableWithoutFeedback onPress={onPress}>
           <Block row style={{ width: '95%' }}>
             <Block top flex={system ? 0.12 : 0.2} middle>
               <Block middle style={iconContainer}>
-                <RoundDate />
+                <RoundDate period={period} />
               </Block>
             </Block>
             <Block flex style={{ paddingRight: 3, paddingLeft: 12 }}>
@@ -79,7 +80,7 @@ export default class Notification extends React.Component {
                 {body}
               </Text>
             </Block>
-            {!system && (
+            {/* {!system && (
               <Block row flex={0.2} style={{ marginTop: 3 }}>
                 <Icon
                   family="material-community"
@@ -99,7 +100,7 @@ export default class Notification extends React.Component {
                   {time}
                 </Text>
               </Block>
-            )}
+            )} */}
           </Block>
         </TouchableWithoutFeedback>
       </Block>

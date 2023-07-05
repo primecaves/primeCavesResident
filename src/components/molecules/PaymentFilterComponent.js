@@ -63,7 +63,7 @@ const PaymentFilterComponent = ({ filterBy, handleFilter, userInfo }) => {
           onChange={handleStatusMenuChange}
         />
         <Pressable
-          onPress={() => navigation.navigate('PaymentHistory')}
+          onPress={() => navigation.navigate('PaymentHistory', { service: 'maintenance' })}
         >
           <Block center={true} row={true} style={styles.block}>
 

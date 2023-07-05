@@ -2,12 +2,12 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { Svg, Circle } from 'react-native-svg';
 import { argonTheme } from '../../constants';
+import _split from 'lodash/split';
+import _head from 'lodash/head';
+import _last from 'lodash/last';
 
-const RoundDate = ({ month, year }) => {
-    // Convert the month number to its corresponding abbreviation
-    const monthAbbreviation = new Date(year, month - 1, 1)
-        .toLocaleString('default', { month: 'short' })
-        .toUpperCase();
+const RoundDate = ({ period }) => {
+    const splitPeriod = _split(period, ' ');
 
     return (
         <View>
@@ -15,8 +15,8 @@ const RoundDate = ({ month, year }) => {
                 <Circle cx={32} cy={32} r={30} fill={argonTheme.COLORS.SUCCESS} />
             </Svg>
             <View style={styles.dateContainer}>
-                <Text style={styles.month}>{'MAR'}</Text>
-                <Text style={styles.year}>{'2012'}</Text>
+                <Text style={styles.month}>{_head(splitPeriod)}</Text>
+                <Text style={styles.year}>{_last(splitPeriod)}</Text>
             </View>
         </View>
     );

@@ -123,7 +123,6 @@ class LoginScreen extends React.Component {
         const request = {
             contact_number: phoneNo,
         };
-        console.log('definedOtp || code', definedOtp, code);
         if (definedOtp == code) {
             login(request);
         }
