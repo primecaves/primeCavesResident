@@ -12,6 +12,8 @@ import {
 } from './payment.services';
 import { Spinner } from 'native-base';
 import { argonTheme } from '../../constants';
+import { MONTHS_DICTIONARY } from '../../constants';
+import moment from 'moment';
 
 const Payments = ({ userInfo }) => {
   const Data = [
@@ -22,7 +24,7 @@ const Payments = ({ userInfo }) => {
       payment_due: '21 Mar, 2023',
       overdue: 2000,
       amount: 1000,
-      period: 'March 2023',
+      period: '2023-03',
       transaction_details: {},
       payment_mode: '',
     },
@@ -33,7 +35,7 @@ const Payments = ({ userInfo }) => {
       payment_due: '22 Mar, 2023',
       overdue: 2000,
       amount: 1000,
-      period: 'March 2023',
+      period: '2023-03',
       transaction_details: {},
       payment_mode: '',
     },
@@ -45,7 +47,7 @@ const Payments = ({ userInfo }) => {
       payment_mode: 'online',
       overdue: 2000,
       amount: 3000,
-      period: 'March 2023',
+      period: '2023-03',
       transaction_details: {
         razorpay_payment_id: 'exc_123razorpay',
         payment_date: '23 March 2023',
@@ -58,7 +60,7 @@ const Payments = ({ userInfo }) => {
       payment_due: '24 Mar, 2023',
       overdue: 2000,
       amount: 1000,
-      period: 'March 2023',
+      period: '2023-03',
       transaction_details: {},
       payment_mode: '',
     },
@@ -69,7 +71,7 @@ const Payments = ({ userInfo }) => {
       payment_due: '24 Mar, 2023',
       overdue: 2000,
       amount: 1000,
-      period: 'March 2023',
+      period: '2023-03',
       transaction_details: {},
       payment_mode: '',
     },
@@ -79,13 +81,18 @@ const Payments = ({ userInfo }) => {
   const [cardSelect, setCardSelect] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
   const [filteredMainteneanceData, setFilteredMainteneanceData] = useState([]);
-  const [filterStatus, setFilterStatus] = useState(null);
+  const [filterStatus, setFilterStatus] = useState({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     let status = userInfo.due_amount === 0 ? 'UPCOMING' : 'UNPAID';
-    setFilterStatus(status);
+    setFilterStatus({
+      status: status,
+      filterByDate: false,
+      startingMonth: 'January',
+      endingMonth: 'December',
+    });
 
     getUserMaintenanceDetails(userInfo._id || '64a40451a357a26a7aafc6e9')
       .then(response => {
@@ -119,16 +126,36 @@ const Payments = ({ userInfo }) => {
       });
   };
 
-  const handleFilter = val => {
-    setFilterStatus(val);
+  const handleFilter = updatedFilter => {
+    setFilterStatus(updatedFilter);
+    console.log(updatedFilter);
+    if (updatedFilter.filterByDate) {
+      let localMaintenanceData = MaintenanceCardData;
 
-    if (val.status !== 'RESET') {
-      let filterData = MaintenanceCardData.filter(
-        item => item.status === val.status,
+      let monthFilteredData = localMaintenanceData.filter(
+        item =>
+          moment(item.period).month() >=
+            MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
+          moment(item.period).month() <=
+            MONTHS_DICTIONARY[updatedFilter.endingMonth],
       );
-      setFilteredMainteneanceData(filterData);
+      if (updatedFilter.status !== 'RESET') {
+        let filterData = monthFilteredData.filter(
+          item => item.status === updatedFilter.status,
+        );
+        setFilteredMainteneanceData(filterData);
+      } else {
+        setFilteredMainteneanceData(monthFilteredData);
+      }
     } else {
-      setFilterStatus(null);
+      if (updatedFilter.status !== 'RESET') {
+        let filterData = MaintenanceCardData.filter(
+          item => item.status === updatedFilter.status,
+        );
+        setFilteredMainteneanceData(filterData);
+      } else {
+        setFilteredMainteneanceData(MaintenanceCardData);
+      }
     }
   };
 
@@ -212,7 +239,7 @@ const Payments = ({ userInfo }) => {
         handleFilter={handleFilter}
       />
       <ScrollView>
-        {filterStatus ? (
+        {filterStatus.status !== 'RESET' || filterStatus.filterByDate ? (
           <>
             {filteredMainteneanceData.map(item => (
               <MaintenanceChargesCard

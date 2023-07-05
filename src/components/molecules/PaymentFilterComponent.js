@@ -5,17 +5,26 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import SelectMenu from '../atoms/SelectMenu';
 import { Pressable } from 'react-native';
 import Theme from '../../constants/Theme';
+import { MONTHS } from '../../constants';
 
 const PaymentFilterComponent = ({ filterBy, handleFilter, userInfo }) => {
-  const [filterStatus, setFilterStatus] = useState({
-    status: filterBy,
-    filterByDate: false,
-    startingMonth: '',
-    endingMonth: '',
-  });
+  const [filterStatus, setFilterStatus] = useState(filterBy);
+
+  const handleStartMonthChange = val => {
+    handleMonthMenuChange({ startingMonth: val });
+  };
+  const handleEndMonthChange = val => {
+    handleMonthMenuChange({ endingMonth: val });
+  };
 
   const handleStatusMenuChange = val => {
     let updatedData = { ...filterStatus, status: val };
+    setFilterStatus(updatedData);
+    handleFilter(updatedData);
+  };
+
+  const handleMonthMenuChange = val => {
+    let updatedData = { ...filterStatus, ...val };
     setFilterStatus(updatedData);
     handleFilter(updatedData);
   };
@@ -61,9 +70,10 @@ const PaymentFilterComponent = ({ filterBy, handleFilter, userInfo }) => {
               From
             </Text>
             <SelectMenu
-              optionValues={['March 2023', 'February 2023']}
+              optionValues={MONTHS}
               text="Start Month"
               width={150}
+              onChange={handleStartMonthChange}
             />
           </Block>
           <Block>
@@ -71,9 +81,10 @@ const PaymentFilterComponent = ({ filterBy, handleFilter, userInfo }) => {
               To
             </Text>
             <SelectMenu
-              optionValues={['March 2023', 'February 2023']}
+              optionValues={MONTHS}
               text="End Month"
               width={150}
+              onChange={handleEndMonthChange}
             />
           </Block>
         </Block>
