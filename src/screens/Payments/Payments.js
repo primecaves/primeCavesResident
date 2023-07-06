@@ -14,6 +14,7 @@ import { Spinner } from 'native-base';
 import { argonTheme } from '../../constants';
 import { MONTHS_DICTIONARY } from '../../constants';
 import moment from 'moment';
+import { showMessage } from 'react-native-flash-message';
 
 const Payments = props => {
   const [MaintenanceCardData, setMaintenanceCardData] = useState([]);
@@ -137,27 +138,47 @@ const Payments = props => {
         localMaintenanceCardData.push(updatedCard);
         setMaintenanceCardData(localMaintenanceCardData);
       });
+      let postData = {
+        id: userInfo.id || '64a40451a357a26a7aafc6e9',
+        maintenanceData: localMaintenanceCardData,
+      };
+      updateUserMaintenanceDetails(postData)
+        .then(resp => setMaintenanceCardData(resp.data.data))
+        .catch(err => {
+          console.log('error', err);
+        });
+
+      console.log(localMaintenanceCardData);
     };
 
     //---------
     setCardSelect(selectingPayments);
     if (sendPayments) {
-      selectedCards.forEach(element => {
-        let payable_amount = element.amount + element.overdue;
-        total_amount += payable_amount;
-        cardIds.push(element.id);
-      });
-      let prefill = {
-        name: userInfo.name || 'anounls',
-        email: userInfo.email_address || 'slkdfjl@gmail.com',
-        contact: userInfo.contact_number || '+919864453232',
-      };
+      console.log('selectedCards', selectedCards);
+      if (selectedCards) {
+        selectedCards.forEach(element => {
+          let payable_amount = element.amount + element.overdue;
+          total_amount += payable_amount;
+          cardIds.push(element.id);
+        });
+        let prefill = {
+          name: userInfo.name || 'anounls',
+          email: userInfo.email_address || 'slkdfjl@gmail.com',
+          contact: userInfo.contact_number || '+919864453232',
+        };
 
-      razorPay({
-        prefill,
-        amount: total_amount * 100,
-        handleCallBack,
-      });
+        razorPay({
+          prefill,
+          amount: total_amount * 100,
+          handleCallBack,
+        });
+      } else {
+        showMessage({
+          message: 'Please pick a maintenance card',
+          type: 'warning',
+          backgroundColor: argonTheme.COLORS.WARNING,
+        });
+      }
     }
   };
 
