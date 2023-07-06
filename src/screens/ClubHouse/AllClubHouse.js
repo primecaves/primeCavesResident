@@ -182,7 +182,7 @@ class AllClubHouse extends Component {
           }
         >
           <Header
-            showNavbar={false}
+            showNavbar={true}
             title="ClubHouse"
             back
             search

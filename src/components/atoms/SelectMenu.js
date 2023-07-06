@@ -15,7 +15,6 @@ const renderMenu = ({ triggerProps, width, height, menuText }) => {
         style={styles.block}
         width={width ? width : 130}
         height={height ? height : 50}
-        marginTop={7}
         space="between"
       >
         <Text style={{ marginHorizontal: 10 }}>{menuText}</Text>
@@ -74,6 +73,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 5,
     padding: 5,
+    marginHorizontal: 10,
+    height: 50,
+    margin:0
   },
   selectContainer: {
     borderRadius: 4,

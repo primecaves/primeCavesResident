@@ -32,19 +32,7 @@ const PaymentFilterComponent = ({ filterBy, handleFilter, navigation }) => {
   return (
     <Block style={styles.container} space="around">
       <Block row={true} space="around">
-        {filterStatus.filterByDate && (
-          <Icon
-            name="filter-remove"
-            size={24}
-            color={'black'}
-            style={{ marginVertical: 18 }}
-            onPress={() =>
-              setFilterStatus({ ...filterStatus, filterByDate: false })
-            }
-          />
-        )}
         <Pressable
-          style={{ marginVertical: 8 }}
           onPress={() =>
             setFilterStatus({ ...filterStatus, filterByDate: true })
           }
@@ -63,18 +51,19 @@ const PaymentFilterComponent = ({ filterBy, handleFilter, navigation }) => {
           onChange={handleStatusMenuChange}
         />
         <Pressable
-          onPress={() => navigation.navigate('PaymentHistory', { service: 'maintenance' })}
+          onPress={() =>
+            navigation.navigate('PaymentHistory', { service: 'maintenance' })
+          }
         >
           <Block center={true} row={true} style={styles.block}>
-
             <Icon name="history" size={35} color={'grey'} />
           </Block>
         </Pressable>
       </Block>
       {filterStatus.filterByDate && (
         <Block row={true} space="around" style={styles.bottomBlock}>
-          <Block>
-            <Text bold color={Theme.COLORS.BLACK}>
+          <Block >
+            <Text bold color={Theme.COLORS.BLACK} size={16} style={{ marginBottom: 7 }}>
               From
             </Text>
             <SelectMenu
@@ -85,9 +74,23 @@ const PaymentFilterComponent = ({ filterBy, handleFilter, navigation }) => {
             />
           </Block>
           <Block>
-            <Text bold color={Theme.COLORS.BLACK}>
-              To
-            </Text>
+            <Block row style={{ marginBottom: 7 }}>
+              <Text bold color={Theme.COLORS.BLACK} size={16}>
+                To
+              </Text>
+              {filterStatus.filterByDate && (
+                <Icon
+                  name="filter-remove"
+                  size={20}
+                  style={{ marginLeft: 120 }}
+                  color={'black'}
+                  onPress={() =>
+                    setFilterStatus({ ...filterStatus, filterByDate: false })
+                  }
+                />
+              )}
+            </Block>
+
             <SelectMenu
               optionValues={MONTHS}
               text="End Month"

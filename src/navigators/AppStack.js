@@ -28,7 +28,6 @@ import {
 } from '../screens/Services';
 
 const renderHomeHeader = ({ navigation, scene, title }) => {
-  console.log(title);
   return (
     <Header
       title={title}
@@ -225,7 +224,7 @@ const HomeStack = contextProps => {
   );
 };
 
-const ServiceStack = (contextProps) => {
+const ServiceStack = contextProps => {
   const { Navigator, Screen } = createNativeStackNavigator();
   const navProps = {
     screenOptions: {
@@ -234,26 +233,69 @@ const ServiceStack = (contextProps) => {
     },
   };
 
+  const title = _get(contextProps, 'userInfo.name', 'Menu');
+
   return (
     <Navigator
       {...navProps}
       initialRouteName="categories"
       initialParams={{ itemId: 42 }}
       screenOptions={{
-        header: ({ navigation, scene }) => renderHomeHeader({ navigation, scene }),
+        header: ({ navigation, scene }) =>
+          renderHomeHeader({ navigation, scene, title }),
       }}
     >
-      <Screen name="cart" component={(props) => componentWithProps(CartScreen, { ...contextProps, ...props })} />
-      <Screen name="categories" component={(props) => componentWithProps(CategoriesScreen, { ...contextProps, ...props })} />
-      <Screen name="productdetail" component={(props) => componentWithProps(ProductDetailScreen, { ...contextProps, ...props })} />
-      <Screen name="checkout" component={(props) => componentWithProps(CheckoutScreen, { ...contextProps, ...props })} />
+      <Screen
+        name="cart"
+        component={props =>
+          componentWithProps(CartScreen, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="categories"
+        component={props =>
+          componentWithProps(CategoriesScreen, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="productdetail"
+        component={props =>
+          componentWithProps(ProductDetailScreen, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="checkout"
+        component={props =>
+          componentWithProps(CheckoutScreen, { ...contextProps, ...props })
+        }
+      />
       <Screen
         name="vieworderdetails"
-        component={(props) => componentWithProps(ViewOrderDetailScreen, { ...contextProps, ...props })}
+        component={props =>
+          componentWithProps(ViewOrderDetailScreen, {
+            ...contextProps,
+            ...props,
+          })
+        }
       />
-      <Screen name="myorder" component={(props) => componentWithProps(MyOrderScreen, { ...contextProps, ...props })} />
-      <Screen name="vieworder" component={(props) => componentWithProps(ViewOrdersScreen, { ...contextProps, ...props })} />
-      <Screen name="orderconfirm" component={(props) => componentWithProps(OrderConfirmScreen, { ...contextProps, ...props })} />
+      <Screen
+        name="myorder"
+        component={props =>
+          componentWithProps(MyOrderScreen, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="vieworder"
+        component={props =>
+          componentWithProps(ViewOrdersScreen, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="orderconfirm"
+        component={props =>
+          componentWithProps(OrderConfirmScreen, { ...contextProps, ...props })
+        }
+      />
     </Navigator>
   );
 };
@@ -273,8 +315,14 @@ const TabNavigator = contextProps => {
 
   return (
     <Navigator {...tabNavProps}>
-      <Screen name="Home" component={() => componentWithProps(HomeStack, contextProps)} />
-      <Screen name="Service" component={() => componentWithProps(ServiceStack, contextProps)} />
+      <Screen
+        name="Home"
+        component={() => componentWithProps(HomeStack, contextProps)}
+      />
+      <Screen
+        name="Service"
+        component={() => componentWithProps(ServiceStack, contextProps)}
+      />
     </Navigator>
   );
 };
