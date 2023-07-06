@@ -16,6 +16,16 @@ import { Button } from 'galio-framework';
 import Profile from '../screens/Profile';
 import { componentWithProps, renderIcon } from '../constants/utils';
 import _get from 'lodash/get';
+import {
+  CartScreen,
+  CategoriesScreen,
+  CheckoutScreen,
+  ProductDetailScreen,
+  ViewOrderDetailScreen,
+  ViewOrdersScreen,
+  MyOrderScreen,
+  OrderConfirmScreen,
+} from '../screens/Services';
 
 const renderHomeHeader = ({ navigation, scene, title }) => {
   return (
@@ -173,13 +183,36 @@ const HomeStack = (contextProps) => {
   );
 };
 
-const ServiceStack = () => {
+const ServiceStack = (contextProps) => {
+  const { Navigator, Screen } = createNativeStackNavigator();
+  const navProps = {
+    screenOptions: {
+      mode: 'card',
+      headerShown: 'screen',
+    },
+  };
+
   return (
-    <>
-      <View>
-        <Text>ServiceStack</Text>
-      </View>
-    </>
+    <Navigator
+      {...navProps}
+      initialRouteName="categories"
+      initialParams={{ itemId: 42 }}
+      screenOptions={{
+        header: ({ navigation, scene }) => renderHomeHeader({ navigation, scene }),
+      }}
+    >
+      <Screen name="cart" component={(props) => componentWithProps(CartScreen, { ...contextProps, ...props })} />
+      <Screen name="categories" component={(props) => componentWithProps(CategoriesScreen, { ...contextProps, ...props })} />
+      <Screen name="productdetail" component={(props) => componentWithProps(ProductDetailScreen, { ...contextProps, ...props })} />
+      <Screen name="checkout" component={(props) => componentWithProps(CheckoutScreen, { ...contextProps, ...props })} />
+      <Screen
+        name="vieworderdetails"
+        component={(props) => componentWithProps(ViewOrderDetailScreen, { ...contextProps, ...props })}
+      />
+      <Screen name="myorder" component={(props) => componentWithProps(MyOrderScreen, { ...contextProps, ...props })} />
+      <Screen name="vieworder" component={(props) => componentWithProps(ViewOrdersScreen, { ...contextProps, ...props })} />
+      <Screen name="orderconfirm" component={(props) => componentWithProps(OrderConfirmScreen, { ...contextProps, ...props })} />
+    </Navigator>
   );
 };
 
@@ -198,8 +231,8 @@ const TabNavigator = (contextProps) => {
 
   return (
     <Navigator {...tabNavProps}>
-      <Screen name="Home" component={() => <HomeStack {...contextProps} />} />
-      <Screen name="Service" component={() => <ServiceStack {...contextProps} />} />
+      <Screen name="Home" component={() => componentWithProps(HomeStack, contextProps)} />
+      <Screen name="Service" component={() => componentWithProps(ServiceStack, contextProps)} />
     </Navigator>
   );
 };

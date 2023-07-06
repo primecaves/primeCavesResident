@@ -1,6 +1,5 @@
 import axios from 'axios';
 import RazorpayCheckout from 'react-native-razorpay';
-import { Alert } from 'react-native';
 import { Buffer } from 'buffer';
 import { EMPTY_OBJECT, argonTheme } from '../constants';
 import _noop from 'lodash/noop';

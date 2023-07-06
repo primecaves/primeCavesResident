@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
 import _isEmpty from 'lodash/isEmpty';
-import { connect } from 'react-redux';
 import { AuthContext } from '../context/authContext';
 import { Spinner } from 'native-base';
 
@@ -16,6 +15,9 @@ const Routes = () => {
     login,
     logout,
     token,
+    serviceToken,
+    loginServices,
+    registerServices,
   } = useContext(AuthContext);
 
   if (splashLoading) {
@@ -29,29 +31,16 @@ const Routes = () => {
     login,
     logout,
     token,
+    serviceToken,
+    loginServices,
+    registerServices,
   };
   return (
     <NavigationContainer >
       {_isEmpty(userInfo) ?
-        <AppStack {...authProps} /> : <AppStack {...authProps} />}
+        <AuthStack {...authProps} /> : <AppStack {...authProps} />}
     </NavigationContainer >
   );
 };
 
-
-const mapStateToProps = (state) => ({
-  userDetails: state.appReducer.userDetails,
-});
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     increaseTheValue: () => {
-//       dispatch(increase());
-//     },
-
-//     decreaseTheValue: () => {
-//       dispatch(decrease());
-//     },
-//   };
-// };
-export default connect(mapStateToProps,)(Routes);
+export default Routes;

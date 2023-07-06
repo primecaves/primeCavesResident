@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, Alert } from 'react-native';
+import { ScrollView, Alert, ActivityIndicator, View, StyleSheet } from 'react-native';
 import { Block } from 'galio-framework';
 import { Notification } from '../../components';
 import { EMPTY_ARRAY, EMPTY_OBJECT, EMPTY_STRING, argonTheme } from '../../constants';
@@ -88,7 +88,14 @@ export default class PaymentHistory extends React.Component {
         });
     };
     render() {
-        const { serviceData } = this.state;
+        const { serviceData, isLoading } = this.state;
+        if (isLoading) {
+            return (
+                <View style={[styles.container, styles.horizontal]}>
+                    <ActivityIndicator size="large" color={argonTheme.COLORS.PRIMARY} />
+                </View>
+            );
+        }
         return (
             <Block middle flex>
                 <Block flex style={{ width: '90%' }}>
@@ -126,3 +133,16 @@ export default class PaymentHistory extends React.Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10,
+    },
+});
+

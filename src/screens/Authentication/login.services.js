@@ -10,6 +10,11 @@ export const loginUser = request => {
   return API.post(url, request);
 };
 
+export const updateResident = request => {
+  const url = '/updateResident';
+  return API.post(url, request);
+};
+
 export const fetchWebViewUrl = () => {
   const url = '/getWebViewUrl';
   return API.get(url);

@@ -96,8 +96,8 @@ class AllAmenities extends Component {
     );
   };
   renderForm = () => {
-    const { initialValues,isPrimaryLoading } = this.state;
-    const { userInfo }=this.props
+    const { initialValues, isPrimaryLoading } = this.state;
+    const { userInfo } = this.props;
     let prefill = {
       name: userInfo.name,
       contact: userInfo.contact_number,
@@ -110,16 +110,16 @@ class AllAmenities extends Component {
         initialValues={initialValues}
         primaryButtonText="Pay Now"
         secondaryButtonText="Close"
-        onClose={()=>this.toggleFormModal(EMPTY_OBJECT)}
-        isPrimaryLoading = {isPrimaryLoading}
+        onClose={() => this.toggleFormModal(EMPTY_OBJECT)}
+        isPrimaryLoading={isPrimaryLoading}
         onSubmit={values =>
           razorPay({
             prefill,
             amount: _toFinite(_get(values, 'price', '2000')) * 100,
             description: _get(values, 'description', EMPTY_STRING),
-            successCallback:this.handleSubmit,
+            successCallback: this.handleSubmit,
             values,
-            setLoading:(isPrimaryLoading)=>this.setState({ isPrimaryLoading })
+            setLoading: (isPrimaryLoading) => this.setState({ isPrimaryLoading }),
           })
         }
         primaryButtonProps={{
@@ -133,21 +133,21 @@ class AllAmenities extends Component {
     );
   };
   handleSubmit = (razorPayDetails, values) => {
-    const { userInfo } = this.props
+    const { userInfo } = this.props;
     this.setState({ isLoading: true });
     const request = {
       amenity_id: _get(values, '_id'),
       booked_price: _get(values, 'price'),
       booked_quantity: _get(values, 'no_of_quantity', 1),
       booked_days: _get(values, 'no_of_days', 1),
-      transaction_detail:{ ...razorPayDetails },
+      transaction_detail: { ...razorPayDetails },
     };
     addAmenityToResident(userInfo._id, request)
       .then(response => {
         if (response) {
           this.setState({
             isLoading: false,
-            isFormModalVisible:false,
+            isFormModalVisible: false,
           });
           showMessage({
             message: 'Amenity Booked Successfully',
@@ -157,7 +157,7 @@ class AllAmenities extends Component {
         }
       })
       .catch(() => {
-        this.setState({ isLoading: false,isFormModalVisible:false });
+        this.setState({ isLoading: false, isFormModalVisible: false });
         showMessage({
           message: 'Amenity Booked Failed',
           type: 'error',
@@ -187,6 +187,7 @@ class AllAmenities extends Component {
           }
         >
           <Header
+            showNavbar={false}
             title="Amenities"
             back
             search
@@ -203,18 +204,18 @@ class AllAmenities extends Component {
             scene={scene}
           />
           {!_isEmpty(amenities) ? (
-          _map(amenities, (item, key) => (
-            <DynamicKeyCard
-              key={key}
-              isLoading={isLoading}
-              item={item}
-              values={getKeyValuePair(item)}
-              displayNameKey={displayNameKey}
-              image={_get(item, 'image', '')}
-              keyToRemove={keyToRemove}
-              footer={this.renderFooter}
-            />
-          ))
+            _map(amenities, (item, key) => (
+              <DynamicKeyCard
+                key={key}
+                isLoading={isLoading}
+                item={item}
+                values={getKeyValuePair(item)}
+                displayNameKey={displayNameKey}
+                image={_get(item, 'image', '')}
+                keyToRemove={keyToRemove}
+                footer={this.renderFooter}
+              />
+            ))
           ) : (
             <EmptyComponent />
           )}

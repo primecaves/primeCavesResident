@@ -50,7 +50,7 @@ class Home extends React.Component {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.menu}
       >
-        {this.props.userInfo?.maintenamaintenance_reminder&&<RemainderCard props={this.props} />}
+        {this.props.userInfo?.maintenamaintenance_reminder && <RemainderCard props={this.props} />}
         <Block flex>
           <Text size={16} bold>
             Categories
@@ -74,14 +74,7 @@ class Home extends React.Component {
               item={menu[4]}
               style={{ marginRight: theme.SIZES.BASE }}
             />
-            <MenuCard item={menu[5]} />
-          </Block>
-          <Block flex row>
-            <MenuCard
-              item={menu[6]}
-              style={{ marginRight: theme.SIZES.BASE }}
-            />
-            <MenuCard item={menu[6]} />
+            <MenuCard item={menu[4]} />
           </Block>
         </Block>
       </ScrollView>
