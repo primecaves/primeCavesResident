@@ -13,7 +13,7 @@ import * as Animatable from 'react-native-animatable';
 import { Block, Text, Button as GalioButton } from 'galio-framework';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { Button, Input } from '../../components';
-import { EMPTY_OBJECT, EMPTY_STRING, Images, MENU_SERVICES, argonTheme } from '../../constants';
+import { EMPTY_OBJECT, EMPTY_STRING, Images, MENU_SCREENS, argonTheme } from '../../constants';
 import { Spinner } from 'native-base';
 import { getOTPMessage, renderIcon } from '../../constants/utils';
 import { fetchOTPCredentials, fetchWebViewUrl, validateUserCredential } from './login.services';
@@ -29,7 +29,6 @@ import {
     removeListener,
 } from 'react-native-otp-verify';
 import { showMessage } from 'react-native-flash-message';
-
 const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         {children}
@@ -48,17 +47,21 @@ class LoginScreen extends React.Component {
         WebViewURL: EMPTY_STRING,
         otpCredentials: EMPTY_OBJECT,
         hashCode: EMPTY_STRING,
+        timer: null, // Timer state
+        timerDuration: 120, // Timer duration in seconds
     };
 
     componentDidMount() {
-
-        getHash().then(hash => {
-            this.setState({ hashCode: hash });
-        }).catch(console.log);
-        startOtpListener(message => {
+        getHash()
+            .then((hash) => {
+                this.setState({ hashCode: hash });
+            })
+            .catch(console.log);
+        startOtpListener((message) => {
             if (message !== 'Timeout Error.') {
                 const code = /(\d{6})/g.exec(message)[1];
-                this.setState({ code });
+                this.setState({ code }, this.confirmCode);
+                this.stopTimer(); // Stop the timer when OTP is found
             }
         });
         this.fetchWebViewUrl();
@@ -67,6 +70,7 @@ class LoginScreen extends React.Component {
 
     componentWillUnmount() {
         removeListener();
+        this.stopTimer(); // Stop the timer when the component is unmounted
     }
 
     generateOtp = (phoneNo) => {
@@ -77,9 +81,11 @@ class LoginScreen extends React.Component {
 
     fetchWebViewUrl = () => {
         fetchWebViewUrl()
-            .then(response => {
+            .then((response) => {
                 if (response) {
-                    const { data: { url } } = response;
+                    const {
+                        data: { url },
+                    } = response;
                     this.setState({
                         WebViewURL: url,
                     });
@@ -92,9 +98,11 @@ class LoginScreen extends React.Component {
 
     getOTPCredentials = () => {
         fetchOTPCredentials()
-            .then(response => {
+            .then((response) => {
                 if (response) {
-                    const { data: { data } } = response;
+                    const {
+                        data: { data },
+                    } = response;
                     this.setState({
                         otpCredentials: data,
                     });
@@ -105,15 +113,15 @@ class LoginScreen extends React.Component {
             });
     };
 
-    handleCodeChanged = code => {
+    handleCodeChanged = (code) => {
         this.setState({ code });
     };
 
-    handleChangePhoneNo = phoneNo => {
+    handleChangePhoneNo = (phoneNo) => {
         this.setState({ phoneNo });
     };
 
-    handleChangeConfirm = confirm => {
+    handleChangeConfirm = (confirm) => {
         this.setState({ confirm });
     };
 
@@ -123,10 +131,10 @@ class LoginScreen extends React.Component {
         const request = {
             contact_number: phoneNo,
         };
+        // eslint-disable-next-line eqeqeq
         if (definedOtp == code) {
             login(request);
-        }
-        else {
+        } else {
             showMessage({
                 message: 'Error',
                 description: 'Please enter a valid OTP',
@@ -145,7 +153,7 @@ class LoginScreen extends React.Component {
             contact_number: phoneNo,
         };
         await validateUserCredential(request)
-            .then(async response => {
+            .then(async (response) => {
                 showMessage({
                     message: 'Redirecting...',
                     description: 'Authenticating as a Human, Please Wait...',
@@ -153,19 +161,22 @@ class LoginScreen extends React.Component {
                     backgroundColor: argonTheme.COLORS.PRIMARY,
                 });
                 if (response) {
-                    await axios.post(_get(otpCredentials, 'url'), {
-                        ...otpCredentials,
-                        message: getOTPMessage(this.generateOtp(phoneNo), hashCode),
-                        number: phoneNo,
-                    })
-                        .then(confirmation => {
+                    await axios
+                        .post(_get(otpCredentials, 'url'), {
+                            ...otpCredentials,
+                            message: getOTPMessage(this.generateOtp(phoneNo), hashCode),
+                            number: phoneNo,
+                        })
+                        .then((confirmation) => {
                             this.setState({
                                 screenLoading: false,
                                 errorMessage: EMPTY_STRING,
                                 confirm: confirmation,
                             });
+                            this.startTimer(); // Start the timer when OTP is sent
                         })
                         .catch((err) => {
+                            console.log('err', err.response);
                             this.setState({
                                 screenLoading: false,
                             });
@@ -194,41 +205,64 @@ class LoginScreen extends React.Component {
     };
 
     toggleWebview = () => {
-        this.setState(prevState => ({ shouldOpenWebview: !prevState.shouldOpenWebview }));
+        this.setState((prevState) => ({ shouldOpenWebview: !prevState.shouldOpenWebview }));
+    };
+
+    startTimer = () => {
+        const timer = setInterval(() => {
+            this.setState((prevState) => {
+                const { timerDuration } = prevState;
+                if (timerDuration <= 0) {
+                    clearInterval(timer);
+                }
+                return { timerDuration: timerDuration - 1 };
+            });
+        }, 1000);
+        this.setState({ timer });
+    };
+
+    stopTimer = () => {
+        const { timer } = this.state;
+        if (timer) {
+            clearInterval(timer);
+        }
     };
 
     render() {
-        const { phoneNo, code, confirm, screenLoading, shouldOpenWebview, WebViewURL } = this.state;
+        const {
+            phoneNo,
+            code,
+            confirm,
+            screenLoading,
+            shouldOpenWebview,
+            WebViewURL,
+            timerDuration,
+        } = this.state;
         const { isLoading, navigation } = this.props;
         if (shouldOpenWebview) {
             return <WebView source={{ uri: WebViewURL }} />;
         }
-
         return (
             <DismissKeyboard>
                 <Block flex middle>
-                    <ImageBackground
-                        source={Images.RegisterBackground}
-                        style={{ width, height, zIndex: 1 }}
-                    >
+                    <ImageBackground source={Images.RegisterBackground} style={{ width, height, zIndex: 1 }}>
                         <Block flex middle>
                             <Block style={styles.registerContainer}>
                                 <Block flex space="between">
                                     <Block flex={0.8} middle space="between">
-
                                         <View style={{
                                             flex: 1, justifyContent: 'center',
                                             alignItems: 'center',
-
                                         }}>
                                             <Animatable.View
                                                 animation="zoomIn"
                                                 iterationCount={1}
                                             >
                                                 <Block
-                                                    center>
+                                                    center
+                                                >
                                                     {renderIcon(
-                                                        MENU_SERVICES.PRIME_CAVES,
+                                                        MENU_SCREENS.PRIME_CAVES,
                                                         {
                                                             height: 300,
                                                             width: 300,
@@ -240,8 +274,7 @@ class LoginScreen extends React.Component {
                                         <Block center flex={0.9}>
                                             <Block flex space="between">
                                                 {(screenLoading || isLoading) && (
-                                                    <Spinner size="lg"
-                                                        color={argonTheme.COLORS.YELLOW} />
+                                                    <Spinner size="lg" color={argonTheme.COLORS.YELLOW} />
                                                 )}
                                                 <Block>
                                                     <Block
@@ -251,10 +284,7 @@ class LoginScreen extends React.Component {
                                                         style={{ marginBottom: 5 }}
                                                     >
                                                         <Input
-                                                            style={{
-                                                                width: width - 130,
-                                                                borderColor: argonTheme.COLORS.WHITE,
-                                                            }}
+                                                            style={{ width: width - 130 }}
                                                             placeholder="Phone Number"
                                                             keyboardType="number-pad"
                                                             onChangeText={this.handleChangePhoneNo}
@@ -271,71 +301,80 @@ class LoginScreen extends React.Component {
                                                             }
                                                         />
                                                         <GalioButton
-                                                            onlyIcon icon="navigate-next"
+                                                            onlyIcon
+                                                            icon="navigate-next"
                                                             iconFamily="MaterialIcons"
                                                             iconSize={30}
                                                             iconColor={argonTheme.COLORS.WHITE}
                                                             style={{
                                                                 ...styles.buttonNext,
-                                                                backgroundColor: (screenLoading || isLoading) ? argonTheme.COLORS.INPUT : argonTheme.COLORS.PRIMARY,
-
+                                                                backgroundColor: (screenLoading || isLoading)
+                                                                    ? argonTheme.COLORS.INPUT
+                                                                    : argonTheme.COLORS.PRIMARY,
                                                             }}
                                                             onPress={this.signInWithPhoneNumber}
                                                             disabled={screenLoading || isLoading}
                                                         />
-
                                                     </Block>
 
-                                                    {!_isNull(confirm) && (<Block center>
-
-                                                        <OTPInputView
-                                                            pinCount={6}
-                                                            style={{ width: '70%' }}
-                                                            codeInputFieldStyle={styles.underlineStyleBase}
-                                                            codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                                                            keyboardAppearance="true"
-                                                            code={code}
-                                                            onCodeChanged={this.handleCodeChanged}
-                                                        />
-                                                    </Block>)}
+                                                    {!_isNull(confirm) && (
+                                                        <Block center>
+                                                            <OTPInputView
+                                                                pinCount={6}
+                                                                style={{ width: '70%' }}
+                                                                codeInputFieldStyle={styles.underlineStyleBase}
+                                                                codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                                                                keyboardAppearance="true"
+                                                                code={code}
+                                                                onCodeChanged={this.handleCodeChanged}
+                                                            />
+                                                        </Block>
+                                                    )}
                                                 </Block>
-                                                {!_isNull(confirm) && (<Block center>
-                                                    <Button
-                                                        color="primary"
-                                                        style={styles.createButton}
-                                                        onPress={this.confirmCode}
-                                                    >
-                                                        <Text
-                                                            style={{ fontFamily: 'open-sans-bold' }}
-                                                            size={14}
-                                                            color={argonTheme.COLORS.WHITE}
+                                                {!_isNull(confirm) && (
+                                                    <Block center>
+                                                        {(timerDuration > 0) && ( // Display the timer if the duration is greater than 0
+                                                            <Block style={{ paddingTop: 10 }}>
+                                                                <Text style={{ fontFamily: 'open-sans-bold' }} color={argonTheme.COLORS.WHITE}>
+                                                                    {`OTP will expire in ${timerDuration} seconds`}
+                                                                </Text>
+                                                            </Block>
+                                                        )}
+                                                        <Button
+                                                            color="primary"
+                                                            style={styles.createButton}
+                                                            onPress={this.confirmCode}
                                                         >
-                                                            LOGIN
-                                                        </Text>
-                                                    </Button>
-                                                </Block>)}
+                                                            <Text
+                                                                style={{ fontFamily: 'open-sans-bold' }}
+                                                                size={14}
+                                                                color={argonTheme.COLORS.WHITE}
+                                                            >
+                                                                LOGIN
+                                                            </Text>
+                                                        </Button>
+                                                    </Block>
+                                                )}
                                             </Block>
                                         </Block>
                                     </Block>
                                 </Block>
                                 {!_isEmpty(WebViewURL) && (
-                                    <TouchableOpacity
-                                        onPress={() => navigation.navigate('Registration', { WebViewURL })}>
+                                    <TouchableOpacity onPress={() => navigation.navigate('Registration', { WebViewURL })}>
                                         <Block center>
                                             <Text
                                                 style={{ fontFamily: 'open-sans-bold' }}
                                                 size={18}
                                                 color={argonTheme.COLORS.WHITE}
                                             >
-                                                New to Resident, Need a demo ?
+                                                New to guardian, Need a demo ?
                                             </Text>
-
                                         </Block>
                                     </TouchableOpacity>
                                 )}
+
                             </Block>
                         </Block>
-
                     </ImageBackground>
                 </Block>
             </DismissKeyboard>
@@ -362,7 +401,7 @@ const styles = StyleSheet.create({
     },
     registerContainer: {
         width: width * 0.9,
-        height: height < 812 ? height * 0.10 : height * 0.8,
+        height: height * 0.8,
         backgroundColor: 'rgba(52, 52, 52, 0.9)',
         borderRadius: 4,
         shadowColor: argonTheme.COLORS.BLACK,
