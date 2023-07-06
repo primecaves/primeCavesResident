@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { CustomAlert, CustomInput, OrderList } from '../../components';
 import ProgressDialog from 'react-native-progress-dialog';
 
-const ViewOrdersScreen = ({ navigation, route }) => {
+const ViewOrdersScreen = ({ navigation, route, serviceToken }) => {
   const { authUser } = route.params;
   const [user, setUser] = useState({});
   const [isloading, setIsloading] = useState(false);
@@ -24,17 +24,6 @@ const ViewOrdersScreen = ({ navigation, route }) => {
   const [orders, setOrders] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
   const [filterItem, setFilterItem] = useState('');
-
-  //method to convert the authUser to json object
-  const getToken = (obj) => {
-    try {
-      setUser(JSON.parse(obj));
-    } catch (e) {
-      setUser(obj);
-      return obj.token;
-    }
-    return JSON.parse(obj).token;
-  };
 
   //method call on pull refresh
   const handleOnRefresh = () => {
@@ -47,14 +36,14 @@ const ViewOrdersScreen = ({ navigation, route }) => {
   const handleOrderDetail = (item) => {
     navigation.navigate('vieworderdetails', {
       orderDetail: item,
-      Token: getToken(authUser),
+      Token: serviceToken,
     });
   };
 
   //method the fetch the order data from server using API call
   const fetchOrders = () => {
     var myHeaders = new Headers();
-    myHeaders.append('x-auth-token', getToken(authUser));
+    myHeaders.append('x-auth-token', serviceToken);
 
     var requestOptions = {
       method: 'GET',

@@ -14,8 +14,8 @@ import { CustomAlert, OrderList } from '../../components';
 import ProgressDialog from 'react-native-progress-dialog';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const MyOrderScreen = ({ navigation, route }) => {
-  const { user } = route.params;
+const MyOrderScreen = ({ navigation, route, serviceToken, userInfo }) => {
+
   const [isloading, setIsloading] = useState(false);
   const [label, setLabel] = useState('Please wait...');
   const [refeshing, setRefreshing] = useState(false);
@@ -39,17 +39,6 @@ const MyOrderScreen = ({ navigation, route }) => {
     }
   };
 
-  //method to convert the authUser to json object and return token
-  const getToken = (obj) => {
-    try {
-      setUserInfo(JSON.parse(obj));
-    } catch (e) {
-      setUserInfo(obj);
-      return user.token;
-    }
-    return UserInfo.token;
-  };
-
   //method call on pull refresh
   const handleOnRefresh = () => {
     setRefreshing(true);
@@ -61,15 +50,14 @@ const MyOrderScreen = ({ navigation, route }) => {
   const handleOrderDetail = (item) => {
     navigation.navigate('myorderdetail', {
       orderDetail: item,
-      Token: UserInfo.token,
+      Token: serviceToken,
     });
   };
 
   //fetch order from server using API call
   const fetchOrders = () => {
     var myHeaders = new Headers();
-    let token = getToken(user);
-    myHeaders.append('x-auth-token', token);
+    myHeaders.append('x-auth-token', serviceToken);
 
     var requestOptions = {
       method: 'GET',
@@ -98,7 +86,7 @@ const MyOrderScreen = ({ navigation, route }) => {
 
   //convert authUser to Json object and fetch orders on initial render
   useEffect(() => {
-    convertToJSON(user);
+    convertToJSON(UserInfo);
     fetchOrders();
   }, []);
 

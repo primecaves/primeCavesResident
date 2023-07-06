@@ -1,23 +1,10 @@
 import { StyleSheet, Image, Text, View, StatusBar } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import SuccessImage from '../../assets/image/success.png';
 import { CustomButton } from '../../components';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { COLORS } from '../../constants';
 
 const OrderConfirmScreen = ({ navigation }) => {
-  const [user, setUser] = useState({});
-
-  //method to get authUser from async storage
-  const getUserData = async () => {
-    const value = await AsyncStorage.getItem('authUser');
-    setUser(JSON.parse(value));
-  };
-
-  //fetch user data on initial render
-  useEffect(() => {
-    getUserData();
-  }, []);
-
   return (
     <View style={styles.container}>
       <StatusBar />
@@ -27,8 +14,8 @@ const OrderConfirmScreen = ({ navigation }) => {
       <Text style={styles.secondaryText}>Order has be confirmed</Text>
       <View>
         <CustomButton
-          text={'Back to Home'}
-          onPress={() => navigation.replace('tab', { user: user })}
+          text={'Back to Categories'}
+          onPress={() => navigation.replace('categories')}
         />
       </View>
     </View>
@@ -41,7 +28,7 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     flexDirecion: 'row',
-    backgroundColor: colors.light,
+    backgroundColor: COLORS.light,
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingBottom: 40,

@@ -20,7 +20,8 @@ import _isEmpty from 'lodash/isEmpty';
 import _get from 'lodash/get';
 
 const CheckoutScreen = (props) => {
-  const { navigation, userInfo } = props;
+  ``;
+  const { navigation, userInfo, serviceToken } = props;
   const [modalVisible, setModalVisible] = useState(false);
   const [isloading, setIsloading] = useState(false);
   const cartproduct = useSelector((state) => state.product);
@@ -53,11 +54,7 @@ const CheckoutScreen = (props) => {
   const handleCheckout = async () => {
     setIsloading(true);
     var myHeaders = new Headers();
-    const value = await AsyncStorage.getItem('authUser');
-    let user = JSON.parse(value);
-    console.log('Checkout:', user.token);
-
-    myHeaders.append('x-auth-token', user.token);
+    myHeaders.append('x-auth-token', serviceToken);
     myHeaders.append('Content-Type', 'application/json');
 
     var payload = [];

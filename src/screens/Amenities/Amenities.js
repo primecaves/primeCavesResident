@@ -15,7 +15,7 @@ import {
   Form,
   FooterButton,
   AlertModal,
-  EmptyComponent
+  EmptyComponent,
 } from '../../components';
 import {
   getBookedAmenities,
@@ -50,7 +50,7 @@ class Amenities extends Component {
     this.fetchAmenities();
   }
   fetchAmenities = () => {
-    const { userInfo }=this.props
+    const { userInfo } = this.props;
     this.setState({ isLoading: true });
     getBookedAmenities(userInfo._id)
       .then(response => {
@@ -84,37 +84,37 @@ class Amenities extends Component {
     }));
   };
   handleDeleteAmenity = () => {
-    const { userInfo }=this.props
+    const { userInfo } = this.props;
     const { selectedItem } = this.state;
     const request = {
       amenity_id: selectedItem._id,
     };
     deleteAmenitiesFromResident(userInfo._id, request)
-    .then(response => {
-      if (response) {
+      .then(response => {
+        if (response) {
+          this.setState({
+            isAlertModalVisible: false,
+            selectedItem: EMPTY_OBJECT,
+          });
+          showMessage({
+            message: 'Amenity Deleted Successfully',
+            type: 'success',
+            backgroundColor: argonTheme.COLORS.SUCCESS,
+          });
+          this.fetchAmenities();
+        }
+      })
+      .catch(() => {
         this.setState({
           isAlertModalVisible: false,
           selectedItem: EMPTY_OBJECT,
         });
         showMessage({
-          message: 'Amenity Deleted Successfully',
-          type: 'success',
-          backgroundColor: argonTheme.COLORS.SUCCESS,
+          message: 'Amenity Deletion Failed',
+          type: 'error',
+          backgroundColor: argonTheme.COLORS.WARNING,
         });
-        this.fetchAmenities();
-      }
-    })
-    .catch(() => {
-      this.setState({
-        isAlertModalVisible: false,
-        selectedItem: EMPTY_OBJECT,
       });
-      showMessage({
-        message: 'Amenity Deletion Failed',
-        type: 'error',
-        backgroundColor: argonTheme.COLORS.WARNING,
-      });
-    });
   };
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;
@@ -131,11 +131,11 @@ class Amenities extends Component {
             shadowless
             style={styles.secondaryButton}
             onPress={() => this.toggleAlertModal(item)}
-          >    
+          >
             <Block row>
               <Text size={14}>Cancel</Text>
             </Block>
-          </Button>   
+          </Button>
           <View style={styles.verticleLine} />
           <Button
             shadowless
@@ -153,13 +153,13 @@ class Amenities extends Component {
             </Block>
           </Button>
         </Block>
-        
-        </>
+
+      </>
     );
   };
   renderForm = () => {
-    const { initialValues,isPrimaryLoading } = this.state;
-    const { userInfo }=this.props
+    const { initialValues, isPrimaryLoading } = this.state;
+    const { userInfo } = this.props;
     let prefill = {
       name: userInfo.name,
       contact: userInfo.contact_number,
@@ -172,8 +172,8 @@ class Amenities extends Component {
         initialValues={initialValues}
         primaryButtonText="Pay Now"
         secondaryButtonText="Close"
-        onClose={()=>this.toggleFormModal(EMPTY_OBJECT)}
-        isPrimaryLoading = {isPrimaryLoading}
+        onClose={() => this.toggleFormModal(EMPTY_OBJECT)}
+        isPrimaryLoading={isPrimaryLoading}
         onSubmit={values =>
           razorPay({
             prefill,
@@ -181,7 +181,7 @@ class Amenities extends Component {
             description: _get(values, 'description', EMPTY_STRING),
             successCallback: this.handleSubmit,
             values,
-            setLoading:(isPrimaryLoading)=>this.setState({ isPrimaryLoading })
+            setLoading: (isPrimaryLoading) => this.setState({ isPrimaryLoading }),
           })
         }
         primaryButtonProps={{
@@ -203,7 +203,7 @@ class Amenities extends Component {
       booked_price: _get(values, 'price'),
       booked_quantity: _get(values, 'no_of_quantity', 1),
       booked_days: _get(values, 'no_of_days', 1),
-      transaction_detail:{ ...razorPayDetails },
+      transaction_detail: { ...razorPayDetails },
     };
     addAmenityToResident(userInfo._id, request)
       .then(response => {
@@ -211,7 +211,7 @@ class Amenities extends Component {
           this.setState({
             isLoading: false,
             isFormModalVisible: false,
-            initialValues:EMPTY_OBJECT,
+            initialValues: EMPTY_OBJECT,
           });
         }
         showMessage({
@@ -222,7 +222,7 @@ class Amenities extends Component {
         this.fetchAmenities();
       })
       .catch(() => {
-        this.setState({ isLoading: false ,isFormModalVisible: false, });
+        this.setState({ isLoading: false, isFormModalVisible: false });
         showMessage({
           message: 'Amenity Payment Failed',
           type: 'error',
@@ -253,6 +253,7 @@ class Amenities extends Component {
           }
         >
           <Header
+            showNavbar={false}
             title="Amenities"
             back
             search
@@ -262,22 +263,22 @@ class Amenities extends Component {
             scene={scene}
           />
           {!_isEmpty(amenities) ? (
-          _map(amenities, (item, index) => (
-            <DynamicKeyCard
-              key={index}
-              isLoading={isLoading}
-              item={item}
-              values={getKeyValuePair(item)}
-              displayNameKey={displayNameKey}
-              image={_get(item, 'image', '')}
-              keyToRemove={keyToRemove}
-              footer={this.renderFooter}
-              loaderProps={{ button: true }}
-            />
-          ))
-            ) : (
-              <EmptyComponent />
-            )}
+            _map(amenities, (item, index) => (
+              <DynamicKeyCard
+                key={index}
+                isLoading={isLoading}
+                item={item}
+                values={getKeyValuePair(item)}
+                displayNameKey={displayNameKey}
+                image={_get(item, 'image', '')}
+                keyToRemove={keyToRemove}
+                footer={this.renderFooter}
+                loaderProps={{ button: true }}
+              />
+            ))
+          ) : (
+            <EmptyComponent />
+          )}
         </ScrollView>
         <FooterButton
           buttonText="Book Amenities"

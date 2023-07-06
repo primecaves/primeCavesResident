@@ -14,6 +14,7 @@ import Input from '../atoms/Input';
 import Tabs from '../atoms/Tabs';
 import argonTheme from '../../constants/Theme';
 import _noop from 'lodash/noop';
+import { EMPTY_OBJECT } from '../../constants';
 
 const { height, width } = Dimensions.get('window');
 const iPhoneX = () =>
@@ -72,7 +73,7 @@ class Header extends React.Component {
   }
 
   handleLeftPress = () => {
-    const { back, navigation } = this.props;
+    const { back, navigation, scene } = this.props;
     return back
       ? navigation.dispatch(CommonActions.goBack())
       : navigation.openDrawer();
@@ -120,7 +121,7 @@ class Header extends React.Component {
   };
 
   renderSearch = () => {
-    const { navigation, showAdd } = this.props;
+    const { navigation, showAdd, searchParams = EMPTY_OBJECT } = this.props;
     return (
       <Input
         right
@@ -129,8 +130,7 @@ class Header extends React.Component {
         placeholder="What are you looking for?"
         placeholderTextColor={'#8898AA'}
         onFocus={() => {
-          Keyboard.dismiss();
-          navigation.navigate('Search');
+          navigation.navigate('Search', searchParams);
         }}
         iconContent={
           <Icon
@@ -212,6 +212,8 @@ class Header extends React.Component {
 
   renderAddButton = () => {
     const {
+      navigation,
+      route,
       onAddButtonClick,
       rightActionIconName = 'add',
       rightActionIconFamily = 'materialicon',
@@ -264,8 +266,10 @@ class Header extends React.Component {
       iconColor,
       titleColor,
       navigation,
+      showNavbar = true,
       ...props
     } = this.props;
+    // const {routeName} = navigation.state;
     const noShadow = [
       'Search',
       'Categories',
@@ -284,38 +288,39 @@ class Header extends React.Component {
     ];
     return (
       <Block style={headerStyles}>
-        <NavBar
-          back={false}
-          title={title}
-          style={navbarStyles}
-          transparent={transparent}
-          right={this.renderRight()}
-          rightStyle={{ alignItems: 'center' }}
-          onLeftPress={this.handleLeftPress}
-          left={
-            back && (
-              <Icon
-                name={'chevron-left'}
-                family="entypo"
-                // name={back ? 'nav-left' : "menu-8"} family="ArgonExtra"
-                size={back ? 20 : 20}
-                onPress={this.handleLeftPress}
-                color={
-                  iconColor ||
-                  (white ? argonTheme.COLORS.WHITE : argonTheme.COLORS.ICON)
-                }
-                style={{ marginTop: 2 }}
-              />
-            )
-          }
-          leftStyle={{ paddingVertical: 12, flex: 0.2 }}
-          titleStyle={[
-            styles.title,
-            { color: argonTheme.COLORS[white ? 'WHITE' : 'HEADER'] },
-            titleColor && { color: titleColor },
-          ]}
-          {...props}
-        />
+        {showNavbar && (
+          <NavBar
+            back={false}
+            title={title}
+            style={navbarStyles}
+            transparent={transparent}
+            right={this.renderRight()}
+            rightStyle={{ alignItems: 'center' }}
+            onLeftPress={this.handleLeftPress}
+            left={
+              back && (
+                <Icon
+                  name={'chevron-left'}
+                  family="entypo"
+                  size={back ? 20 : 20}
+                  onPress={this.handleLeftPress}
+                  color={
+                    iconColor ||
+                    (white ? argonTheme.COLORS.WHITE : argonTheme.COLORS.ICON)
+                  }
+                  style={{ marginTop: 2 }}
+                />
+              )
+            }
+            leftStyle={{ paddingVertical: 12, flex: 0.2 }}
+            titleStyle={[
+              styles.title,
+              { color: argonTheme.COLORS[white ? 'WHITE' : 'HEADER'] },
+              titleColor && { color: titleColor },
+            ]}
+            {...props}
+          />
+        )}
         {this.renderHeader()}
       </Block>
     );

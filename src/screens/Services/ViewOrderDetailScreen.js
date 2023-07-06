@@ -13,8 +13,8 @@ import { CustomAlert, BasicProductList, CustomButton } from '../../components';
 import ProgressDialog from 'react-native-progress-dialog';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-const ViewOrderDetailScreen = ({ navigation, route }) => {
-  const { orderDetail, Token } = route.params;
+const ViewOrderDetailScreen = ({ navigation, route, serviceToken }) => {
+  const { orderDetail } = route.params;
   const [isloading, setIsloading] = useState(false);
   const [label, setLabel] = useState('Loading..');
   const [error, setError] = useState('');
@@ -64,7 +64,7 @@ const ViewOrderDetailScreen = ({ navigation, route }) => {
     setError('');
     setAlertType('error');
     var myHeaders = new Headers();
-    myHeaders.append('x-auth-token', Token);
+    myHeaders.append('x-auth-token', serviceToken);
 
     var requestOptions = {
       method: 'GET',

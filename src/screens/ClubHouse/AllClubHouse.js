@@ -100,22 +100,22 @@ class AllClubHouse extends Component {
     );
   };
   handleSubmit = (razorPayDetails, values) => {
-    const { userInfo }=this.props
+    const { userInfo } = this.props;
     this.setState({ isLoading: true });
     const request = {
       clubhouse_id: _get(values, '_id'),
       booked_price: _get(values, 'price'),
       booked_quantity: _get(values, 'no_of_quantity', 1),
       booked_days: _get(values, 'no_of_days', 1),
-      members:_get(values,'members',EMPTY_ARRAY),
-      transaction_detail:{ ...razorPayDetails },
+      members: _get(values, 'members', EMPTY_ARRAY),
+      transaction_detail: { ...razorPayDetails },
     };
     addClubHouseToResident(userInfo._id, request)
       .then(response => {
         if (response) {
           this.setState({
             isLoading: false,
-            isFormModalVisible:false,
+            isFormModalVisible: false,
           });
           showMessage({
             message: 'Clubhouse Booked Successfully',
@@ -125,7 +125,7 @@ class AllClubHouse extends Component {
         }
       })
       .catch(() => {
-        this.setState({ isLoading: false,isFormModalVisible:false });
+        this.setState({ isLoading: false, isFormModalVisible: false });
         showMessage({
           message: 'Clubhouse Booked Failed',
           type: 'error',
@@ -142,9 +142,9 @@ class AllClubHouse extends Component {
       intialClubHouse,
       isFormModalVisible,
       initialValues,
-      isPrimaryLoading
+      isPrimaryLoading,
     } = this.state;
-    const { navigation, scene,userInfo } = this.props;
+    const { navigation, scene, userInfo } = this.props;
     let prefill = {
       name: userInfo.name,
       contact: userInfo.contact_number,
@@ -158,8 +158,8 @@ class AllClubHouse extends Component {
           content={() => (
             <ClubHouseForm
               initialValues={initialValues}
-              onClose={()=>this.toggleFormModal(EMPTY_OBJECT)}
-              isPrimaryLoading = {isPrimaryLoading}
+              onClose={() => this.toggleFormModal(EMPTY_OBJECT)}
+              isPrimaryLoading={isPrimaryLoading}
               onSubmit={values =>
                 razorPay({
                   prefill,
@@ -167,7 +167,7 @@ class AllClubHouse extends Component {
                   description: _get(values, 'description', EMPTY_STRING),
                   successCallback: this.handleSubmit,
                   values,
-                  setLoading:(isPrimaryLoading)=>this.setState({ isPrimaryLoading })
+                  setLoading: (isPrimaryLoading) => this.setState({ isPrimaryLoading }),
                 })
               }
             />
@@ -182,6 +182,7 @@ class AllClubHouse extends Component {
           }
         >
           <Header
+            showNavbar={false}
             title="ClubHouse"
             back
             search
@@ -197,19 +198,19 @@ class AllClubHouse extends Component {
             navigation={navigation}
             scene={scene}
           />
-           {!_isEmpty(clubHouse) ? (
-          _map(clubHouse, (item, key) => (
-            <DynamicKeyCard
-              key={key}
-              isLoading={isLoading}
-              item={item}
-              values={getKeyValuePair(item)}
-              displayNameKey={displayNameKey}
-              image={_get(item, 'image', '')}
-              keyToRemove={keyToRemove}
-              footer={this.renderFooter}
-            />
-          ))) : (
+          {!_isEmpty(clubHouse) ? (
+            _map(clubHouse, (item, key) => (
+              <DynamicKeyCard
+                key={key}
+                isLoading={isLoading}
+                item={item}
+                values={getKeyValuePair(item)}
+                displayNameKey={displayNameKey}
+                image={_get(item, 'image', '')}
+                keyToRemove={keyToRemove}
+                footer={this.renderFooter}
+              />
+            ))) : (
             <EmptyComponent />
           )}
         </ScrollView>

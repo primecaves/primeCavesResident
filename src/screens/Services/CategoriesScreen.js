@@ -1,25 +1,23 @@
 import {
   StyleSheet,
   Image,
-  TouchableOpacity,
   View,
   StatusBar,
   Text,
   FlatList,
   RefreshControl,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
-
-import { Ionicons } from '@expo/vector-icons';
-import cartIcon from '../../assets/icons/cart_beg.png';
 import emptyBox from '../../assets/image/emptybox.png';
 import { COLORS, NETWORK, argonTheme } from '../../constants';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreaters from '../../states/actionCreaters/actionCreaters';
 import { Icon, Input, ProductCard, CustomIconButton, Button } from '../../components';
 import _map from 'lodash/map';
+import _get from 'lodash/get';
 import { Block } from 'galio-framework';
 import { theme } from 'galio-framework';
 
@@ -30,9 +28,13 @@ const DEFAULT_CATEGORY = {
   title: 'All',
   image: require('../../assets/icons/garments.png'),
 };
-const CategoriesScreen = ({ navigation, route }) => {
+const CategoriesScreen = (props) => {
+  console.log('natunatu', props);
+  const { navigation, route, serviceToken, userInfo, loginServices, registerServices } = props;
+  const isMainLoading = _get(props, 'isLoading', false);
   // const { categoryID } = route.params;
   const [isLoading, setLoading] = useState(true);
+  const [onboardingLoading, setOnboardingLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [refeshing, setRefreshing] = useState(false);
   const [label, setLabel] = useState('Loading...');
@@ -41,15 +43,12 @@ const CategoriesScreen = ({ navigation, route }) => {
   const [filterItem, setFilterItem] = useState('');
   const [isloading, setIsloading] = useState(false);
   const [category, setCategory] = useState('');
-  const [user, setUser] = useState({});
   //get the dimenssions of active window
   const [windowWidth, setWindowWidth] = useState(
     Dimensions.get('window').width
   );
-  const windowHeight = Dimensions.get('window').height;
 
   //initialize the cartproduct with redux data
-  const cartproduct = useSelector((state) => state.product);
   const dispatch = useDispatch();
 
   const { addCartItem } = bindActionCreators(actionCreaters, dispatch);
@@ -71,32 +70,7 @@ const CategoriesScreen = ({ navigation, route }) => {
     setRefreshing(false);
   };
 
-  var headerOptions = {
-    method: 'GET',
-    redirect: 'follow',
-  };
-  // const category = [
-  //   {
-  //     _id: "62fe244f58f7aa8230817f89",
-  //     title: "Garments",
-  //     image: require("../../assets/icons/garments.png"),
-  //   },
-  //   {
-  //     _id: "62fe243858f7aa8230817f86",
-  //     title: "Electornics",
-  //     image: require("../../assets/icons/electronics.png"),
-  //   },
-  //   {
-  //     _id: "62fe241958f7aa8230817f83",
-  //     title: "Cosmentics",
-  //     image: require("../../assets/icons/cosmetics.png"),
-  //   },
-  //   {
-  //     _id: "62fe246858f7aa8230817f8c",
-  //     title: "Groceries",
-  //     image: require("../../assets/icons/grocery.png"),
-  //   },
-  // ];
+
   const [selectedTab, setSelectedTab] = useState(category[0]);
 
   //method to fetch the product from server using API call
@@ -174,13 +148,25 @@ const CategoriesScreen = ({ navigation, route }) => {
 
   //render whenever the value of filterItem change
   useEffect(() => {
-    filter();
+    if (serviceToken) {
+      filter();
+    }
+
   }, [filterItem]);
 
   //fetch the product on initial render
   useEffect(() => {
-    fetchCategories();
-    fetchProduct();
+    if (serviceToken) {
+      fetchCategories();
+      fetchProduct();
+    }
+    else {
+      if (!_get(userInfo, 'service_enrolled', true)) {
+        registerServices();
+      } else {
+        loginServices();
+      }
+    }
   }, []);
 
   const renderProducts = () => {
@@ -279,7 +265,13 @@ const CategoriesScreen = ({ navigation, route }) => {
       />
     );
   };
-
+  if (isMainLoading) {
+    return (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <StatusBar />

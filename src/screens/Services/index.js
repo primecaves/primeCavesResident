@@ -5,7 +5,8 @@ import CheckoutScreen from './CheckoutScreen';
 import ProductDetailScreen from './ProductDetailScreen';
 import ViewOrderDetailScreen from './ViewOrderDetailScreen';
 import ViewOrdersScreen from './ViewOrdersScreen';
-
+import MyOrderScreen from './MyOrderScreen';
+import OrderConfirmScreen from './OrderConfirmScreen';
 export {
     CartScreen,
     CategoriesScreen,
@@ -13,4 +14,6 @@ export {
     ProductDetailScreen,
     ViewOrderDetailScreen,
     ViewOrdersScreen,
+    MyOrderScreen,
+    OrderConfirmScreen,
 };

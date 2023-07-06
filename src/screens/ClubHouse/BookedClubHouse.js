@@ -12,7 +12,7 @@ import {
   addClubHouseToResident,
 } from './clubHouse.services';
 import { Block, Text } from 'galio-framework';
-import { DynamicKeyCard, Header, Button, Modal, EmptyComponent,AlertModal,FooterButton } from '../../components';
+import { DynamicKeyCard, Header, Button, Modal, EmptyComponent, AlertModal, FooterButton } from '../../components';
 import { getKeyValuePair } from '../../utils';
 import ClubHouseForm from './Components/ClubHouseForm';
 import { EMPTY_ARRAY, EMPTY_OBJECT, EMPTY_STRING } from '../../constants';
@@ -45,7 +45,7 @@ class BookedClubHouse extends Component {
     this.fetchClubHouse();
   }
   fetchClubHouse = () => {
-    const { userInfo }=this.props
+    const { userInfo } = this.props;
     this.setState({ isLoading: true });
     getBookedClubHouse(userInfo._id)
       .then(response => {
@@ -74,10 +74,11 @@ class BookedClubHouse extends Component {
     deleteClubhouseFromResident(userInfo._id, request)
       .then(response => {
         if (response) {
-          this.setState({ isAlertModalVisible: false,
-             selectedItem: EMPTY_OBJECT,
-             formType:'',
-            });
+          this.setState({
+            isAlertModalVisible: false,
+            selectedItem: EMPTY_OBJECT,
+            formType: '',
+          });
           showMessage({
             message: 'Clubhouse Deleted Successfully',
             type: 'success',
@@ -90,7 +91,7 @@ class BookedClubHouse extends Component {
         this.setState({
           isAlertModalVisible: false,
           selectedItem: EMPTY_OBJECT,
-          formType:'',
+          formType: '',
         });
         showMessage({
           message: 'Clubhouse Deletion Failed',
@@ -105,12 +106,12 @@ class BookedClubHouse extends Component {
       isAlertModalVisible: !prevState.isAlertModalVisible,
     }));
   };
-  toggleFormModal = (item,formType) => {
-      this.setState(prevState => ({
-        isFormModalVisible: !prevState.isFormModalVisible,
-        initialValues: item,
-        formType,
-      }));
+  toggleFormModal = (item, formType) => {
+    this.setState(prevState => ({
+      isFormModalVisible: !prevState.isFormModalVisible,
+      initialValues: item,
+      formType,
+    }));
   };
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;
@@ -137,7 +138,7 @@ class BookedClubHouse extends Component {
           <Button
             shadowless
             style={styles.primaryButton}
-            onPress={() => this.toggleFormModal(item,FORM_TYPES.PAYNOW)}
+            onPress={() => this.toggleFormModal(item, FORM_TYPES.PAYNOW)}
           >
             <Block row>
               <Text
@@ -154,23 +155,23 @@ class BookedClubHouse extends Component {
     );
   };
   handleSubmit = (razorPayDetails, values) => {
-    const { userInfo }=this.props
+    const { userInfo } = this.props;
     this.setState({ isLoading: true });
     const request = {
       clubhouse_id: _get(values, '_id'),
       booked_price: _get(values, 'price'),
       booked_quantity: _get(values, 'no_of_quantity', 1),
       booked_days: _get(values, 'no_of_days', 1),
-      members:_get(values,'members',EMPTY_ARRAY),
-      transaction_detail:{ ...razorPayDetails },
+      members: _get(values, 'members', EMPTY_ARRAY),
+      transaction_detail: { ...razorPayDetails },
     };
     addClubHouseToResident(userInfo._id, request)
       .then(response => {
         if (response) {
           this.setState({
             isLoading: false,
-            isFormModalVisible:false,
-            formType:'',
+            isFormModalVisible: false,
+            formType: '',
           });
           showMessage({
             message: 'Clubhouse Booked Successfully',
@@ -181,7 +182,7 @@ class BookedClubHouse extends Component {
         this.fetchClubHouse();
       })
       .catch(() => {
-        this.setState({ isLoading: false,isFormModalVisible:false,formType:'' });
+        this.setState({ isLoading: false, isFormModalVisible: false, formType: '' });
         showMessage({
           message: 'Clubhouse Booked Failed',
           type: 'error',
@@ -189,38 +190,38 @@ class BookedClubHouse extends Component {
         });
       });
   };
-  handleUpdateClubhouse = values=>{
+  handleUpdateClubhouse = values => {
     const request = {
       clubhouse_id: _get(values, '_id'),
       booked_price: _get(values, 'price'),
       booked_quantity: _get(values, 'no_of_quantity', 1),
       booked_days: _get(values, 'no_of_days', 1),
-      members:_get(values,'members',EMPTY_ARRAY),
+      members: _get(values, 'members', EMPTY_ARRAY),
     };
-    const { userInfo }=this.props
+    const { userInfo } = this.props;
     addClubHouseToResident(userInfo._id, request)
-    .then(response => {
-      if (response) {
-        this.setState({
-          isLoading: false,
-          isFormModalVisible:false,
-        });
+      .then(response => {
+        if (response) {
+          this.setState({
+            isLoading: false,
+            isFormModalVisible: false,
+          });
+          showMessage({
+            message: 'Clubhouse Updated Successfully',
+            type: 'success',
+            backgroundColor: argonTheme.COLORS.SUCCESS,
+          });
+        }
+        this.fetchClubHouse();
+      })
+      .catch(() => {
+        this.setState({ isLoading: false, isFormModalVisible: false });
         showMessage({
-          message: 'Clubhouse Updated Successfully',
-          type: 'success',
-          backgroundColor: argonTheme.COLORS.SUCCESS,
+          message: 'Clubhouse Updated Failed',
+          type: 'error',
+          backgroundColor: argonTheme.COLORS.WARNING,
         });
-      }
-      this.fetchClubHouse();
-    })
-    .catch(() => {
-      this.setState({ isLoading: false,isFormModalVisible:false });
-      showMessage({
-        message: 'Clubhouse Updated Failed',
-        type: 'error',
-        backgroundColor: argonTheme.COLORS.WARNING,
       });
-  });
   };
   render() {
     const {
@@ -231,9 +232,9 @@ class BookedClubHouse extends Component {
       isFormModalVisible,
       initialValues,
       formType,
-      isPrimaryLoading
+      isPrimaryLoading,
     } = this.state;
-    const { navigation, scene,userInfo } = this.props;
+    const { navigation, scene, userInfo } = this.props;
     let prefill = {
       name: userInfo.name,
       contact: userInfo.contact_number,
@@ -249,16 +250,16 @@ class BookedClubHouse extends Component {
               initialValues={initialValues}
               onClose={this.toggleFormModal}
               primaryButtonText={formType}
-              isPrimaryLoading = {isPrimaryLoading}
+              isPrimaryLoading={isPrimaryLoading}
               onSubmit={(values) =>
                 formType === FORM_TYPES.PAYNOW
-                  ?   razorPay({
+                  ? razorPay({
                     prefill,
                     amount: _toFinite(_get(values, 'price', '2000')) * 100,
                     description: _get(values, 'description', EMPTY_STRING),
                     successCallback: this.handleSubmit,
                     values,
-                    setLoading:(isPrimaryLoading)=>this.setState({ isPrimaryLoading })
+                    setLoading: (isPrimaryLoading) => this.setState({ isPrimaryLoading }),
                   })
                   : this.handleUpdateClubhouse(values)
               }
@@ -274,6 +275,7 @@ class BookedClubHouse extends Component {
           }
         >
           <Header
+            showNavbar={false}
             title=" ClubHouse"
             back
             search
@@ -282,22 +284,22 @@ class BookedClubHouse extends Component {
             navigation={navigation}
             scene={scene}
           />
-           {!_isEmpty(clubHouse) ? (
-          _map(clubHouse, (item, index) => (
-            <DynamicKeyCard
-              key={index}
-              showActions
-              isLoading={isLoading}
-              item={item}
-              values={getKeyValuePair(item)}
-              displayNameKey={displayNameKey}
-              image={_get(item, 'image', '')}
-              keyToRemove={keyToRemove}
-              footer={this.renderFooter}
-              editAction={this.toggleFormModal}
-              loaderProps={{ button: true, clubhouse: true }}
-            />
-          ))) : (
+          {!_isEmpty(clubHouse) ? (
+            _map(clubHouse, (item, index) => (
+              <DynamicKeyCard
+                key={index}
+                showActions
+                isLoading={isLoading}
+                item={item}
+                values={getKeyValuePair(item)}
+                displayNameKey={displayNameKey}
+                image={_get(item, 'image', '')}
+                keyToRemove={keyToRemove}
+                footer={this.renderFooter}
+                editAction={this.toggleFormModal}
+                loaderProps={{ button: true, clubhouse: true }}
+              />
+            ))) : (
             <EmptyComponent />
           )}
         </ScrollView>

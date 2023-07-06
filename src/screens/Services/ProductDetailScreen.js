@@ -1,25 +1,20 @@
 import {
   StyleSheet,
   Image,
-  TouchableOpacity,
   View,
   StatusBar,
   Text,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import cartIcon from '../../assets/icons/cart_beg.png';
 import { COLORS, NETWORK } from '../../constants';
 import { CustomButton, CustomAlert } from '../../components/';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreaters from '../../states/actionCreaters/actionCreaters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ProductDetailScreen = ({ navigation, route }) => {
+const ProductDetailScreen = ({ navigation, route, serviceToken }) => {
   const { product } = route.params;
-  console.log('product', product);
-  const cartproduct = useSelector((state) => state.product);
   const dispatch = useDispatch();
 
   const { addCartItem } = bindActionCreators(actionCreaters, dispatch);
@@ -47,10 +42,8 @@ const ProductDetailScreen = ({ navigation, route }) => {
 
   //method to fetch wishlist from server using API call
   const fetchWishlist = async () => {
-    const value = await AsyncStorage.getItem('authUser'); // get authUser from async storage
-    let user = JSON.parse(value);
     var myHeaders = new Headers();
-    myHeaders.append('x-auth-token', user.token);
+    myHeaders.append('x-auth-token', serviceToken);
 
     var requestOptions = {
       method: 'GET',
@@ -105,7 +98,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
 
     if (onWishlist) {
       var myHeaders = new Headers();
-      myHeaders.append('x-auth-token', user.token);
+      myHeaders.append('x-auth-token', serviceToken);
 
       var requestOptions = {
         method: 'GET',
@@ -138,7 +131,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
       setIsDisbale(false);
     } else {
       var myHeaders2 = new Headers();
-      myHeaders2.append('x-auth-token', user.token);
+      myHeaders2.append('x-auth-token', serviceToken);
       myHeaders2.append('Content-Type', 'application/json');
 
       var raw2 = JSON.stringify({
