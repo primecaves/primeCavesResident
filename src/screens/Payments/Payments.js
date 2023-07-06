@@ -24,9 +24,11 @@ const Payments = props => {
   const [filterStatus, setFilterStatus] = useState({});
   const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState(props.userInfo);
+  const [useEffectCounter, setUseEffectCounter] = useState(0);
 
   useEffect(() => {
     setLoading(true);
+    console.log(userInfo);
     let status = userInfo.due_amount === 0 ? 'UPCOMING' : 'UNPAID';
     setFilterStatus({
       status: status,
@@ -46,7 +48,7 @@ const Payments = props => {
         let filterData = fetchedData.filter(item => item.status === status);
         setFilteredMainteneanceData(filterData);
       });
-  }, []);
+  }, [useEffectCounter]);
 
   const handleCardChange = updatedCard => {
     let localMaintenanceCardData = MaintenanceCardData;
@@ -57,11 +59,14 @@ const Payments = props => {
     );
     localMaintenanceCardData.push(updatedCard);
     let postData = {
-      id: userInfo.id || '64a40451a357a26a7aafc6e9',
+      id: userInfo._id || '64a40451a357a26a7aafc6e9',
       maintenanceData: localMaintenanceCardData,
     };
     updateUserMaintenanceDetails(postData)
       .then(resp => setMaintenanceCardData(resp.data.data))
+      .then(() => {
+        setUseEffectCounter(useEffectCounter + 1);
+      })
       .catch(err => {
         console.log('error', err);
       });
@@ -139,23 +144,25 @@ const Payments = props => {
         setMaintenanceCardData(localMaintenanceCardData);
       });
       let postData = {
-        id: userInfo.id || '64a40451a357a26a7aafc6e9',
+        id: userInfo._id || '64a40451a357a26a7aafc6e9',
         maintenanceData: localMaintenanceCardData,
       };
       updateUserMaintenanceDetails(postData)
         .then(resp => setMaintenanceCardData(resp.data.data))
+        .then(() => {
+          setUseEffectCounter(useEffectCounter + 1);
+        })
         .catch(err => {
           console.log('error', err);
         });
 
-      console.log(localMaintenanceCardData);
+      setSelectedCards([]);
     };
 
     //---------
     setCardSelect(selectingPayments);
     if (sendPayments) {
-      console.log('selectedCards', selectedCards);
-      if (selectedCards) {
+      if (selectedCards.length !== 0) {
         selectedCards.forEach(element => {
           let payable_amount = element.amount + element.overdue;
           total_amount += payable_amount;
