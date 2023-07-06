@@ -1,21 +1,18 @@
 import React from 'react';
-import {
-  StyleSheet,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import Theme from '../../constants/Theme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class PaymentSummaryCard extends React.Component {
   render() {
-    const { paymentStatus, paymentAmount } = this.props;
-
+    const { userInfo } = this.props;
     return (
       <Block style={styles.cardContainer}>
-        {paymentStatus ? (
+        {userInfo.due_amount > 0 ? (
           <>
             <Text style={styles.text}>Total Due Amount</Text>
-            <Text style={styles.Boldtext}>$ {paymentAmount}</Text>
+            <Text style={styles.Boldtext}>₹ {userInfo.due_amount}</Text>
           </>
         ) : (
           <>

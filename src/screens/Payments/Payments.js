@@ -15,14 +15,14 @@ import { argonTheme } from '../../constants';
 import { MONTHS_DICTIONARY } from '../../constants';
 import moment from 'moment';
 
-const Payments = (props) => {
-  const { userInfo } = props;
+const Payments = props => {
   const [MaintenanceCardData, setMaintenanceCardData] = useState([]);
   const [cardSelect, setCardSelect] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
   const [filteredMainteneanceData, setFilteredMainteneanceData] = useState([]);
   const [filterStatus, setFilterStatus] = useState({});
   const [loading, setLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState(props.userInfo);
 
   useEffect(() => {
     setLoading(true);
@@ -75,9 +75,9 @@ const Payments = (props) => {
       let monthFilteredData = localMaintenanceData.filter(
         item =>
           moment(item.period).month() >=
-          MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
+            MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
           moment(item.period).month() <=
-          MONTHS_DICTIONARY[updatedFilter.endingMonth],
+            MONTHS_DICTIONARY[updatedFilter.endingMonth],
       );
       if (updatedFilter.status !== 'RESET') {
         let filterData = monthFilteredData.filter(
@@ -169,12 +169,8 @@ const Payments = (props) => {
     </Spinner>
   ) : (
     <>
-      <PaymentSummaryCard
-        paymentStatus={userInfo.dueAmount > 0}
-        paymentAmount={userInfo.dueAmount}
-      />
+      <PaymentSummaryCard userInfo={userInfo} />
       <PaymentFilterComponent
-        userInfo={userInfo}
         filterBy={filterStatus}
         handleFilter={handleFilter}
         {...props}

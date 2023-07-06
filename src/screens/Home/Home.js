@@ -50,7 +50,9 @@ class Home extends React.Component {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.menu}
       >
-        {this.props.userInfo?.maintenamaintenance_reminder && <RemainderCard props={this.props} />}
+        {this.props.userInfo.maintenance_reminder && (
+          <RemainderCard propData={this.props} />
+        )}
         <Block flex>
           <Text size={16} bold>
             Categories

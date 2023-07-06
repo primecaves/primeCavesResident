@@ -6,7 +6,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class RemainderCard extends React.Component {
   render() {
-    const { maintenance_reminder } = this.props.userInfo;
+    const { maintenance_reminder } = this.props.propData.userInfo;
+    const { navigation } = this.props.propData;
 
     return (
       <Block style={styles.container}>
@@ -39,6 +40,7 @@ class RemainderCard extends React.Component {
                 size={'small'}
                 color={Theme.COLORS.BLACK}
                 style={styles.button}
+                onPress={() => navigation.navigate('Payments')}
               >
                 <Text size={12} color={Theme.COLORS.WHITE} bold>
                   Pay Now

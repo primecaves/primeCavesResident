@@ -7,7 +7,7 @@ import { Pressable } from 'react-native';
 import Theme from '../../constants/Theme';
 import { MONTHS } from '../../constants';
 
-const PaymentFilterComponent = ({ filterBy, handleFilter, userInfo, navigation }) => {
+const PaymentFilterComponent = ({ filterBy, handleFilter, navigation }) => {
   const [filterStatus, setFilterStatus] = useState(filterBy);
 
   const handleStartMonthChange = val => {
