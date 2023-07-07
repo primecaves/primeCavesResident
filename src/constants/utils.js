@@ -14,6 +14,8 @@ import {
     PrimeCavesLogo,
     NoData,
     AddExpectedVisitors,
+    HomeOutline,
+    ServicesOutline,
 } from '../assets';
 
 export const StatusHeight = StatusBar.currentHeight;
@@ -63,10 +65,19 @@ export const renderIcon = (requestIcon, styles = DEFAULT_ICON_STYLE) => {
                 <Services
                     {...styles}
                 />);
-
+        case MENU_SERVICES.SERVICES_OUTLINE:
+            return (
+                <ServicesOutline
+                    {...styles}
+                />);
         case MENU_SERVICES.HOME:
             return (
                 <Home
+                    {...styles}
+                />);
+        case MENU_SERVICES.HOME_OUTLINE:
+            return (
+                <HomeOutline
                     {...styles}
                 />);
         case MENU_SERVICES.ADD_EXPECTED_VISITOR:
@@ -88,5 +99,11 @@ export const renderIcon = (requestIcon, styles = DEFAULT_ICON_STYLE) => {
                 />);
     }
 };
+
+
+// Home,
+// HomeOutline,
+// Services,
+// ServicesOutline,
 
 // export const iPhoneX = () => Platform.OS === 'ios' && (height === 812 || width === 812);

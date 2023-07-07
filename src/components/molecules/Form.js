@@ -135,6 +135,16 @@ class Form extends Component {
             />
           </Block>
         );
+      case 'SELECT':
+        return (
+          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+            <Select
+              {...item}
+              onSelect={handleChange(_get(item, 'key', ''))}
+              value={values[item.key]}
+            />
+          </Block>
+        );
       case 'SELECT_ITEM':
         return (
           <Block width={width * 0.8} style={{ marginBottom: 5 }}>
@@ -150,16 +160,6 @@ class Form extends Component {
                 label: values[item.key],
                 value: values[item.key],
               }}
-            />
-          </Block>
-        );
-      case 'SELECT':
-        return (
-          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-            <Select
-              {...item}
-              onSelect={handleChange(_get(item, 'key', ''))}
-              value={values[item.key]}
             />
           </Block>
         );

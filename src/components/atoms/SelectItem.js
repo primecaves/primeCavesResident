@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { argonTheme } from '../../constants';
-import { Text, Input } from 'galio-framework';
+import { Text } from 'galio-framework';
 
 const Select = ({ options, onSelect, label, value }) => {
     const [isOpen, setIsOpen] = useState(false);

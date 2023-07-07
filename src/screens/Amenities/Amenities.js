@@ -180,7 +180,7 @@ class Amenities extends Component {
             description: _get(values, 'description', EMPTY_STRING),
             successCallback: this.handleSubmit,
             values,
-            setLoading: (isPrimaryLoading) => this.setState({ isPrimaryLoading }),
+            setLoading: (isLoading) => this.setState({ isLoading }),
           })
         }
         primaryButtonProps={{
@@ -250,11 +250,7 @@ class Amenities extends Component {
           }
         >
           <Header
-<<<<<<< HEAD
             showNavbar={true}
-=======
-            showNavbar={false}
->>>>>>> 3c0d3cb (Navigation Context error)
             title="Amenities"
             back
             search

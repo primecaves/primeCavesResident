@@ -38,7 +38,6 @@ export const AuthProvider = ({ children }) => {
                             'accessToken',
                             accessToken,
                         );
-                        console.log('mockData', mockData);
                         await AsyncStorage.setItem('userInfo', JSON.stringify(mockData));
                     }
                     else {

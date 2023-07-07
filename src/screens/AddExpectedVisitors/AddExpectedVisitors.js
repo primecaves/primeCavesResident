@@ -11,8 +11,12 @@ import argonTheme from '../../constants/Theme';
 import _map from 'lodash/map';
 import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
+import _filter from 'lodash/filter';
+import _includes from 'lodash/includes';
 import { EMPTY_OBJECT, EMPTY_STRING } from '../../constants';
 import AlertModal from '../../components/molecules/AlertModal';
+
+
 class AddExpectedVisitors extends Component {
     state = {
         isLoading: false,
@@ -20,6 +24,7 @@ class AddExpectedVisitors extends Component {
         visitors: [],
         isFormModalVisible: false,
         initialValues: EMPTY_OBJECT,
+        isEdit: false,
     };
 
     componentDidMount() {
@@ -37,10 +42,11 @@ class AddExpectedVisitors extends Component {
             .then(response => {
                 if (response) {
                     const { data, key_to_remove, display_name_key } = response.data;
+                    const keyToRemove = [..._filter(key_to_remove, item => !_includes(['block', 'flat_number', 'floor_number', 'additional_visitors', 'visitor_type'], item)), 'images', 'description'];
                     this.setState({
                         isLoading: false,
                         visitors: data,
-                        keyToRemove: key_to_remove,
+                        keyToRemove,
                         displayNameKey: display_name_key,
                     });
                 }
@@ -50,10 +56,12 @@ class AddExpectedVisitors extends Component {
             });
     };
 
-    toggleFormModal = (initialValues = EMPTY_OBJECT) => {
+    toggleFormModal = (initialValues = EMPTY_OBJECT, isEdit = false) => {
+
         this.setState(prevState => ({
             isFormModalVisible: !prevState.isFormModalVisible,
             initialValues,
+            isEdit,
         }));
     };
 
@@ -67,6 +75,7 @@ class AddExpectedVisitors extends Component {
                         isLoading: false,
                         isFormModalVisible: false,
                         initialValues: EMPTY_OBJECT,
+                        isAlertModalVisible: false,
                     });
                     showMessage({
                         message: 'Expected Visitor Deletion Successfully',
@@ -80,6 +89,7 @@ class AddExpectedVisitors extends Component {
                 this.setState({
                     isLoading: false,
                     isFormModalVisible: false,
+                    isAlertModalVisible: false,
                 });
                 showMessage({
                     message: 'Failed to Delete Expected Visitor',
@@ -94,55 +104,6 @@ class AddExpectedVisitors extends Component {
             isAlertModalVisible: !prevState.isAlertModalVisible,
             initialValues,
         }));
-    };
-
-    handleSubmit = values => {
-        const { userInfo } = this.props;
-        const { initialValues } = this.state;
-        this.setState({ isLoading: true });
-        const request = {
-            is_expected_visitor: true,
-            name: _get(values, 'name', EMPTY_STRING),
-            phone_number: _get(values, 'phone_number', EMPTY_STRING),
-            purpose_of_visit: _get(values, 'description', EMPTY_STRING),
-            visitor_type: _get(values, 'visitor_type', 'Guest'),
-            expected_date: _get(values, 'expected_date', new Date()),
-            block: _get(userInfo, 'block', EMPTY_STRING),
-            flat_number: _get(userInfo, 'flat_number', EMPTY_STRING),
-            floor_number: _get(userInfo, 'floor_number', EMPTY_STRING),
-            resident_id: _get(userInfo, '_id', EMPTY_STRING),
-            status: 'waiting',
-        };
-
-        // Perform the necessary API request to add the expected visitor
-        //const handler = _isEmpty(initialValues) ? addExpectedVisitor : updateExpectedVisitor;
-        addExpectedVisitor(request)
-            .then(response => {
-                if (response) {
-                    this.setState({
-                        isLoading: false,
-                        isFormModalVisible: false,
-                        initialValues: EMPTY_OBJECT,
-                    });
-                    showMessage({
-                        message: 'Expected Visitor Added Successfully',
-                        type: 'success',
-                        backgroundColor: argonTheme.COLORS.SUCCESS,
-                    });
-                    this.fetchVisitors();
-                }
-            })
-            .catch(() => {
-                this.setState({
-                    isLoading: false,
-                    isFormModalVisible: false,
-                });
-                showMessage({
-                    message: 'Failed to Add Expected Visitor',
-                    type: 'error',
-                    backgroundColor: argonTheme.COLORS.WARNING,
-                });
-            });
     };
 
     renderFooter = item => {
@@ -169,11 +130,11 @@ class AddExpectedVisitors extends Component {
                     <Button
                         shadowless
                         style={styles.primaryButton}
-                        onPress={() => this.toggleFormModal(item)}
+                        onPress={() => this.toggleFormModal(item, true)}
                     >
                         <Block row>
                             <Text style={styles.text} size={15}>
-                                Edit
+                                Update
                             </Text>
                         </Block>
                     </Button>
@@ -183,13 +144,13 @@ class AddExpectedVisitors extends Component {
     };
 
     renderForm = () => {
-        const { initialValues } = this.state;
+        const { initialValues, isLoading, isEdit } = this.state;
         return (
             <Form
-                isEdit
-                initialValues={initialValues}
+                isEdit={isEdit}
                 fields={FIELDS}
-                primaryButtonText={_isEmpty(initialValues) ? 'Add Visitor' : 'Update Visitor'}
+                initialValues={initialValues}
+                primaryButtonText={isEdit ? 'Update Visitor' : 'Add Visitor'}
                 secondaryButtonText="Close"
                 onClose={this.toggleFormModal}
                 onSubmit={this.handleSubmit}
@@ -199,8 +160,58 @@ class AddExpectedVisitors extends Component {
                 secondaryButtonProps={{
                     style: styles.footerSecondaryButton,
                 }}
+                isPrimaryLoading={isLoading}
             />
         );
+    };
+
+    handleSubmit = values => {
+        const { userInfo } = this.props;
+        const { isEdit } = this.state;
+        this.setState({ isLoading: true });
+        const request = {
+            is_expected_visitor: true,
+            name: _get(values, 'name', EMPTY_STRING),
+            phone_number: _get(values, 'phone_number', EMPTY_STRING),
+            purpose_of_visit: _get(values, 'description', EMPTY_STRING),
+            description: _get(values, 'description', EMPTY_STRING),
+            visitor_type: _get(values, 'visitor_type', 'Guest'),
+            expected_date: _get(values, 'expected_date', new Date()),
+            block: _get(userInfo, 'block', EMPTY_STRING),
+            flat_number: _get(userInfo, 'flat_number', EMPTY_STRING),
+            floor_number: _get(userInfo, 'floor_number', EMPTY_STRING),
+            resident_id: _get(userInfo, '_id', EMPTY_STRING),
+            status: 'waiting',
+        };
+        const handler = isEdit ? updateExpectedVisitor(_get(values, '_id'), request) : addExpectedVisitor(request);
+        handler.then(response => {
+            if (response) {
+                this.setState({
+                    isLoading: false,
+                    isFormModalVisible: false,
+                    initialValues: EMPTY_OBJECT,
+                    isEdit: false,
+                });
+                showMessage({
+                    message: 'Expected Visitor Added Successfully',
+                    type: 'success',
+                    backgroundColor: argonTheme.COLORS.SUCCESS,
+                });
+                this.fetchVisitors();
+            }
+        })
+            .catch(() => {
+                this.setState({
+                    isLoading: false,
+                    isFormModalVisible: false,
+                    isEdit: false,
+                });
+                showMessage({
+                    message: 'Failed to Add Expected Visitor',
+                    type: 'error',
+                    backgroundColor: argonTheme.COLORS.WARNING,
+                });
+            });
     };
 
     render() {
@@ -208,7 +219,9 @@ class AddExpectedVisitors extends Component {
         const { navigation, scene, userInfo } = this.props;
         return (
             <Block>
-                <Modal visible={isFormModalVisible} content={this.renderForm} />
+                <Modal
+                    visible={isFormModalVisible}
+                    content={this.renderForm} />
                 <ScrollView
                     refreshControl={
                         <RefreshControl
@@ -218,7 +231,6 @@ class AddExpectedVisitors extends Component {
                     }
                 >
                     <Header
-                        showNavbar={false}
                         title="Add Expected Visitors"
                         back
                         search
@@ -227,11 +239,10 @@ class AddExpectedVisitors extends Component {
                         showAdd
                         onAddButtonClick={this.toggleFormModal}
                         searchParams={{
-                            url: 'getExpectedVisitors',
+                            url: 'getAllVisitors',
                             request: {
-                                resident_id: _get(userInfo, 'resident_id'),
+                                resident_id: _get(userInfo, '_id'),
                                 is_expected_visitor: true,
-                                expected_date: new Date().toJSON(),
                             },
                         }}
                     />

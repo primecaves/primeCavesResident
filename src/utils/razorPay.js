@@ -59,7 +59,6 @@ export const razorPay = ({
         })
         .catch(error => {
           setLoading(false);
-          console.log('RazorPayError:', error);
           showMessage({
             message: 'Transaction Cancelled',
             type: 'error',

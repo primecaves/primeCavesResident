@@ -10,8 +10,8 @@ export const addExpectedVisitor = (req) => {
     return API.post(url, req);
 };
 
-export const updateExpectedVisitor = (req) => {
-    const url = '/updateVisitor';
+export const updateExpectedVisitor = (id, req) => {
+    const url = `/updateVisitor/?id=${id}`;
     return API.put(url, req);
 };
 

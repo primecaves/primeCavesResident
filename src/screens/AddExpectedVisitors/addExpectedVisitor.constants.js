@@ -10,6 +10,7 @@ export const FIELDS = [
         id: 'phone_number',
         key: 'phone_number',
         component: 'INPUT',
+        type: 'numeric',
         label: 'Phone Number',
         placeholder: 'Enter phone number',
     },

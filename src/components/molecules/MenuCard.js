@@ -18,10 +18,6 @@ class MenuCard extends React.Component {
             ctaColor,
             ctaRight,
         } = this.props;
-        // const imageStyles = [
-        //     full ? styles.fullImage : styles.horizontalImage,
-        //     imageStyle,
-        // ];
         const cardContainer = [styles.card, styles.shadow, style];
         const imgContainer = [
             styles.imageContainer,
@@ -44,7 +40,7 @@ class MenuCard extends React.Component {
                     <Block flex space="between" style={styles.cardDescription}>
                         <Block right={ctaRight ? true : false}>
                             <Text
-                                style={{ textAlign: 'center' }}//fontFamily: 'open-sans-regular',
+                                style={{ textAlign: 'center' }}
                                 size={12}
                                 muted={!ctaColor}
                                 color={ctaColor || argonTheme.COLORS.TEXT_GREY}

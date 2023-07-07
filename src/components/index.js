@@ -34,11 +34,8 @@ import DynamicKeyPairs from './molecules/DynamicKeyPairs';
 import FooterButton from './molecules/FooterButton';
 import AlertModal from './molecules/AlertModal';
 import EmptyComponent from './molecules/EmptyComponent';
-<<<<<<< HEAD
 import OrderList from './molecules/OrderList';
 
-=======
->>>>>>> 3c0d3cb (Navigation Context error)
 export {
   Button,
   Card,

@@ -1,6 +1,5 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Amenities, AllAmenities } from '../screens/Amenities';
 import Payments from '../screens/Payments/Payments';
@@ -11,12 +10,11 @@ import NoticeBoard from '../screens/NoticeBoard/NoticeBoard';
 import SinglePageNotice from '../screens/NoticeBoard/SinglePageNotice';
 import Complain from '../screens/Complain/Complain';
 import { ClubHouse, AllClubHouse } from '../screens/ClubHouse';
-import { argonTheme } from '../constants';
+import { EMPTY_STRING, MENU_SERVICES, argonTheme } from '../constants';
 import { Button } from 'galio-framework';
 import Profile from '../screens/Profile';
 import { componentWithProps, renderIcon } from '../constants/utils';
 import _get from 'lodash/get';
-<<<<<<< HEAD
 import {
   CartScreen,
   CategoriesScreen,
@@ -27,12 +25,8 @@ import {
   MyOrderScreen,
   OrderConfirmScreen,
 } from '../screens/Services';
-=======
 import AddExpectedVisitors from '../screens/AddExpectedVisitors/AddExpectedVisitors';
 import Search from '../screens/Search/Search';
-import { combineContextAndProps } from 'native-base';
-//import ExpectedVisitor from '../screens/ExpectedVisitors/ExpectedVisitor';
->>>>>>> 3c0d3cb (Navigation Context error)
 
 const renderHomeHeader = ({ navigation, scene, title }) => {
   return (
@@ -65,20 +59,24 @@ const renderBasicHeader = props => {
 };
 
 const RenderTabBarIcon = ({ focused, route }) => {
-  const { name } = route;
-  const styles = {
-    width: 20,
+  let iconName = EMPTY_STRING;
+  switch (route?.name) {
+    case 'Home':
+      iconName = focused ? MENU_SERVICES.HOME_OUTLINE : MENU_SERVICES.HOME;
+      break;
+    case 'Service':
+      iconName = focused ? MENU_SERVICES.SERVICES_OUTLINE : MENU_SERVICES.SERVICES;
+      break;
+    default:
+      break;
+  }
+  return renderIcon(iconName, {
     height: 20,
-    color: focused ? argonTheme.COLORS.PRIMARY : argonTheme.COLORS.BLACK,
-  };
-  return renderIcon(name, styles);
+    width: 20,
+  });
 };
 
-<<<<<<< HEAD
 const HomeStack = contextProps => {
-=======
-const HomeStack = (contextProps) => {
->>>>>>> 3c0d3cb (Navigation Context error)
   const { Navigator, Screen } = createNativeStackNavigator();
   const navProps = {
     screenOptions: {
@@ -341,19 +339,8 @@ const TabNavigator = contextProps => {
 
   return (
     <Navigator {...tabNavProps}>
-<<<<<<< HEAD
-      <Screen
-        name="Home"
-        component={() => componentWithProps(HomeStack, contextProps)}
-      />
-      <Screen
-        name="Service"
-        component={() => componentWithProps(ServiceStack, contextProps)}
-      />
-=======
       <Screen name="Home" component={(props) => componentWithProps(HomeStack, { ...contextProps, ...props })} />
       <Screen name="Service" component={(props) => componentWithProps(ServiceStack, { ...contextProps, ...props })} />
->>>>>>> 3c0d3cb (Navigation Context error)
     </Navigator >
   );
 };

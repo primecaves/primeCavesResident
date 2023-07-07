@@ -1,27 +1,35 @@
-import React, { useState } from 'react';
-import { Dimensions, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { TouchableOpacity, View, Dimensions } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Input } from '../';
-import { Block, Text } from 'galio-framework';
-import { argonTheme } from '../../constants';
-const { width } = Dimensions.get('screen');
 import _noop from 'lodash/noop';
-const DatePicker = ({ label, onValueChange, value }) => {
+import { argonTheme } from '../../constants';
+import { Block, Text } from 'galio-framework';
+const { width } = Dimensions.get('screen');
+const DatePicker = ({ value, onValueChange, label }) => {
     const [showPicker, setShowPicker] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(value || new Date());
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [inputValue, setInputValue] = useState('');
+
+    useEffect(() => {
+        if (value) {
+            setSelectedDate(value);
+            setInputValue(new Date(value).toDateString());
+        }
+    }, [value]);
 
     const onChange = (event, selected) => {
         const currentDate = selected || selectedDate;
         setShowPicker(false);
         setSelectedDate(currentDate);
-        onValueChange(currentDate);
-        setInputValue(currentDate); // Display selected date in input field
+        setInputValue(currentDate.toDateString()); // Display selected date in input field
+        onValueChange(currentDate); // Notify parent of the updated date
     };
 
     const showDatePicker = () => {
         setShowPicker(true);
     };
+
     return (
         <View>
             <Block width={width * 0.8} style={{ marginBottom: 5 }}>
@@ -34,9 +42,10 @@ const DatePicker = ({ label, onValueChange, value }) => {
 
                     {label}
                 </Text>
+
                 <TouchableOpacity onPress={showDatePicker}>
                     <Input
-                        value={selectedDate}
+                        value={inputValue}
                         placeholder="Select a date"
                         editable={false}
                         iconContent={_noop}
@@ -51,6 +60,7 @@ const DatePicker = ({ label, onValueChange, value }) => {
                     />
                 )}
             </Block>
+
         </View>
     );
 };

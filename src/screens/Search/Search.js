@@ -48,6 +48,7 @@ export default class Search extends React.Component {
     const { search } = this.state;
     const request = _get(route, 'params.request', EMPTY_OBJECT);
     const requestUrl = _get(route, 'params.url', EMPTY_STRING);
+    console.log(request, requestUrl);
     this.setState({ isLoading: true });
     getSearchDetails(requestUrl, { ...request, search })
       .then(response => {

@@ -6,7 +6,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class RemainderCard extends React.Component {
   render() {
-    const { maintenanceReminder } = this.props;
+    const { maintenance_reminder } = this.props.propData.userInfo;
+    const { navigation } = this.props.propData;
+
     return (
       <Block style={styles.container}>
         <Text bold size={16}>
@@ -15,7 +17,7 @@ class RemainderCard extends React.Component {
         <Block row>
           <Block style={styles.daysMore} flex={0.8}>
             <Text size={48} bold color={Theme.COLORS.WHITE}>
-              {maintenanceReminder.daysRemaining}
+              {maintenance_reminder.daysRemaining}
             </Text>
             <Text size={14} color={Theme.COLORS.WHITE}>
               days more
@@ -27,11 +29,11 @@ class RemainderCard extends React.Component {
             </Text>
             <Text size={12}>
               Your charges are:{' '}
-              <Text bold>₹ {maintenanceReminder.amount}.00</Text>
+              <Text bold>₹ {maintenance_reminder.amount}.00</Text>
             </Text>
             <Text size={10} muted style={styles.marginV}>
               <Icon name="calendar" />
-              <Text>Due date {maintenanceReminder.due_date}</Text>
+              <Text>Due date {maintenance_reminder.due_date}</Text>
             </Text>
             <Block row bottom>
               <Button
