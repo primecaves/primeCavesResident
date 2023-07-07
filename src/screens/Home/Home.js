@@ -76,7 +76,7 @@ class Home extends React.Component {
               item={menu[4]}
               style={{ marginRight: theme.SIZES.BASE }}
             />
-            <MenuCard item={menu[4]} />
+            <MenuCard item={menu[5]} />
           </Block>
         </Block>
       </ScrollView>

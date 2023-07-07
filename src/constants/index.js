@@ -60,8 +60,11 @@ const MENU_SERVICES = {
   PROFILE: 'Profile',
   LOGOUT: 'Logout',
   HOME: 'Home',
+  HOME_OUTLINE: 'HomeOutline',
   SERVICES: 'Services',
+  SERVICES_OUTLINE: 'ServicesOutline',
   PRIME_CAVES: 'Prime Caves',
+  ADD_EXPECTED_VISITOR: 'AddExpectedVisitors',
   NO_DATA: 'NoData',
 };
 

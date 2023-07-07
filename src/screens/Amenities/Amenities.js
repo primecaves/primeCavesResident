@@ -180,7 +180,7 @@ class Amenities extends Component {
             description: _get(values, 'description', EMPTY_STRING),
             successCallback: this.handleSubmit,
             values,
-            setLoading: isPrimaryLoading => this.setState({ isPrimaryLoading }),
+            setLoading: (isLoading) => this.setState({ isLoading }),
           })
         }
         primaryButtonProps={{

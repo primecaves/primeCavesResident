@@ -28,7 +28,6 @@ const Payments = props => {
 
   useEffect(() => {
     setLoading(true);
-    console.log(userInfo);
     let status = userInfo.due_amount === 0 ? 'UPCOMING' : 'UNPAID';
     setFilterStatus({
       status: status,
@@ -74,16 +73,15 @@ const Payments = props => {
 
   const handleFilter = updatedFilter => {
     setFilterStatus(updatedFilter);
-    console.log(updatedFilter);
     if (updatedFilter.filterByDate) {
       let localMaintenanceData = MaintenanceCardData;
 
       let monthFilteredData = localMaintenanceData.filter(
         item =>
           moment(item.period).month() >=
-            MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
+          MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
           moment(item.period).month() <=
-            MONTHS_DICTIONARY[updatedFilter.endingMonth],
+          MONTHS_DICTIONARY[updatedFilter.endingMonth],
       );
       if (updatedFilter.status !== 'RESET') {
         let filterData = monthFilteredData.filter(
@@ -107,7 +105,6 @@ const Payments = props => {
 
   let checkedCards = [];
   const handleSelectedCard = (maintenanceData, isChecked, key) => {
-    console.log(maintenanceData, isChecked, key);
     if (isChecked) {
       checkedCards.push(maintenanceData);
     } else {

@@ -38,7 +38,8 @@ const Routes = () => {
   return (
     <NavigationContainer >
       {_isEmpty(userInfo) ?
-        <AuthStack {...authProps} /> : <AppStack {...authProps} />}
+        <AuthStack {...authProps} />
+        : <AppStack {...authProps} />}
     </NavigationContainer >
   );
 };

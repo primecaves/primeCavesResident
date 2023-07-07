@@ -53,6 +53,7 @@ class DropDown extends React.Component {
             style={{ fontFamily: 'open-sans-regular', marginLeft: 14 }}
             size={14}
             color={argonTheme.COLORS.TEXT}
+            bold
           >
             {label}
           </Text>

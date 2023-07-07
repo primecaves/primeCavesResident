@@ -8,7 +8,7 @@ import _remove from 'lodash/remove';
 import _includes from 'lodash/includes';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEmpty from 'lodash/isEmpty';
-import { DynamicKeyPairs, ImageSlider, Switch } from '../';
+import { DynamicKeyPairs, ImageSlider } from '../';
 import argonTheme from '../../constants/Theme';
 import { Icon, Button, SkeletionLoader } from '../';
 import Modal from './Modal';
@@ -27,41 +27,6 @@ class DynamicKeyCard extends React.Component {
     this.state = { isModalVisible: false, width: 50 };
   }
 
-  // renderSkeletonLoader = () => {
-  //     return (
-  //         <Block
-  //             style={{
-  //                 padding: 15, paddingBottom: 1,
-  //             }}
-  //         >
-  //             <Block card style={{
-  //                 backgroundColor: argonTheme.COLORS.GREY
-  //             }} >
-  //                 <MotiView
-  //                     transition={{
-  //                         type: 'timing',
-  //                     }}
-  //                     style={[styles.container, styles.padded]}
-  //                     animate={{ backgroundColor: argonTheme.COLORS.GREY, padding: 10 }}
-  //                 >
-  //                     <Block row >
-  //                         <Skeleton colorMode='light' radius="round" height={50} width={50} />
-  //                         <Spacer />
-  //                         <Block style={{ padding: 10 }}>
-  //                             <Skeleton colorMode='light' height={30} width={width - 110} />
-  //                         </Block>
-  //                     </Block>
-  //                     <Spacer height={10} />
-  //                     <Skeleton colorMode='light' width={'100%'} />
-  //                     <Spacer height={5} />
-  //                     <Skeleton colorMode='light' width={'100%'} />
-  //                 </MotiView>
-
-  //             </Block >
-  //         </Block>
-  //     )
-  // }
-
   renderHeader = () => {
     const { editAction = _noop, item } = this.props;
     return (
@@ -73,7 +38,7 @@ class DynamicKeyCard extends React.Component {
               family="Feather"
               size={14}
               style={{ padding: 5 }}
-              onPress={() => editAction(item,'Save')}
+              onPress={() => editAction(item, 'Save')}
             />
           </TouchableOpacity>
           {/* <Icon
@@ -137,43 +102,10 @@ class DynamicKeyCard extends React.Component {
       </ScrollView>
     );
   };
+
   renderImage = () => {
     const { image } = this.props;
     return <ImageSlider image={image} isDynamicCard />;
-  };
-
-  renderBody = () => {
-    const { values, displayNameKey, image, selectedService, item } = this.props;
-    const displayName = _find(values, item => item.key === displayNameKey);
-    const members = _get(item, 'members', EMPTY_ARRAY);
-    return (
-      <Block>
-        <Block row style={{ paddingLeft: 10 }}>
-          {/* <Block card> */}
-          {!_isEmpty(image) ? (
-            this.renderImage()
-          ) : (
-            <Icon name="user" family="AntDesign" size={50} />
-          )}
-          {/* </Block> */}
-          <Block style={{ paddingLeft: 20 }}>
-            <Text style={{ fontFamily: 'open-sans-bold' }} size={12}>
-              {_get(displayName, 'title')}
-            </Text>
-            <Block>
-              <Text style={{ fontFamily: 'open-sans-regular' }} size={12}>
-                {_get(displayName, 'value')}
-              </Text>
-            </Block>
-          </Block>
-        </Block>
-        {this.renderFields()}
-        {item?.members && (
-          <DynamicKeyPairs data={members} showActions={false} />
-        )}
-        {this.renderFooter()}
-      </Block>
-    );
   };
 
   renderFooter = () => {
@@ -182,7 +114,7 @@ class DynamicKeyCard extends React.Component {
       onDeleteItem,
       onEditClick = _noop,
       item,
-      footer = _noop,
+      footer,
     } = this.props;
     if (footer) {
       return footer(item);
@@ -217,6 +149,7 @@ class DynamicKeyCard extends React.Component {
           style={{
             height: 25,
             fontColor: argonTheme.COLORS.WHITE,
+            backgroundColor: argonTheme.COLORS.PRIMARY,
           }}
           onPress={() => onEditClick(item)}
         >
@@ -225,6 +158,7 @@ class DynamicKeyCard extends React.Component {
               style={{
                 fontFamily: 'open-sans-regular',
                 color: argonTheme.COLORS.WHITE,
+
               }}
               size={16}
             >
@@ -232,6 +166,40 @@ class DynamicKeyCard extends React.Component {
             </Text>
           </Block>
         </Button>
+      </Block>
+    );
+  };
+
+  renderBody = () => {
+    const { values, displayNameKey, image, item } = this.props;
+    const displayName = _find(values, item => item.key === displayNameKey);
+    const members = _get(item, 'members', EMPTY_ARRAY);
+    return (
+      <Block>
+        <Block row style={{ paddingLeft: 10 }}>
+          {/* <Block card> */}
+          {!_isEmpty(image) ? (
+            this.renderImage()
+          ) : (
+            <Icon name="user" family="AntDesign" size={50} />
+          )}
+          {/* </Block> */}
+          <Block style={{ paddingLeft: 20 }}>
+            <Text style={{ fontFamily: 'open-sans-bold' }} size={12}>
+              {_get(displayName, 'title')}
+            </Text>
+            <Block>
+              <Text style={{ fontFamily: 'open-sans-regular' }} size={12}>
+                {_get(displayName, 'value')}
+              </Text>
+            </Block>
+          </Block>
+        </Block>
+        {this.renderFields()}
+        {item?.members && (
+          <DynamicKeyPairs data={members} showActions={false} />
+        )}
+        {this.renderFooter()}
       </Block>
     );
   };
@@ -256,7 +224,6 @@ class DynamicKeyCard extends React.Component {
             style={{ paddingTop: 8, backgroundColor: argonTheme.COLORS.GREY }}
           >
             {showActions && this.renderHeader()}
-
             {this.renderBody()}
             {/* {showActions && this.renderFooter()} */}
           </Block>

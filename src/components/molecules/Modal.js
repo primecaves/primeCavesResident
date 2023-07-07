@@ -5,11 +5,10 @@ import { argonTheme } from '../../constants';
 
 class Modal extends Component {
   render() {
-    const { content, visible = false, footer } = this.props;
+    const { content, visible, footer } = this.props;
     return (
-      <Block >
-        <MyModal
-          animationType="slide" transparent={true} visible={visible}>
+      <Block>
+        <MyModal animationType="slide" transparent={true} visible={visible}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               {content && content()}
@@ -27,23 +26,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
-    borderWidth: 1,
-    borderColor: argonTheme.COLORS.PRIMARY,
-    borderRadius: 20,
-    padding: 35,
+    marginTop: 15,
+    marginBottom: 25,
   },
   modalView: {
-    margin: 20,
-    backgroundColor: argonTheme.COLORS.GREY,
+    backgroundColor: argonTheme.COLORS.WHITE,
     borderRadius: 20,
-    padding: 35,
+    padding: 10,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
+
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,

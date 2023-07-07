@@ -12,15 +12,16 @@ import {
   Input,
   Note,
   PriceFooter,
-  Select,
   ImageSlider,
   Switch,
   DynamicKeyPairs,
+  DatePicker,
+  SelectItem,
+  Select,
 } from '../';
 import { EMPTY_ARRAY, argonTheme } from '../../constants';
 import Counter from './Counter';
 import ImagePickerPC from '../atoms/ImagePicker';
-// import InputWithTags from './inputWithTags/InputWithTags';
 const DIVIDER_COLOR = 'E5E7EB';
 const { width } = Dimensions.get('screen');
 
@@ -45,12 +46,11 @@ class Form extends Component {
       secondaryButtonText = 'Close',
       primaryButtonProps = {},
       secondaryButtonProps = {},
-      isPrimaryLoading=false
+      isPrimaryLoading = false,
     } = this.props;
     return (
       <>
         <View style={styles.horizontalLine} />
-
         <Block flex row>
           <Button
             shadowless
@@ -77,7 +77,7 @@ class Form extends Component {
           </Button>
           <View style={styles.verticleLine} />
           <Button
-          loading={isPrimaryLoading}
+            loading={isPrimaryLoading}
             shadowless
             style={{
               height: 25,
@@ -135,43 +135,34 @@ class Form extends Component {
             />
           </Block>
         );
-      // case 'INPUT_WITH_TAG':
-      //     return (
-      //         <Block
-      //             width={width * 0.8}
-      //             style={{ marginBottom: 5 }}
-      //         >
-      //             <InputWithTags
-      //                 shadowless
-      //                 placeholder={_get(item, "placeholder", "Please Enter")}
-      //                 onChangeText={handleChange(_get(item, 'key', ''))}
-      //                 value={values[item.key]}
-      //                 iconContent={
-      //                     <Icon
-      //                         size={16}
-      //                         color={_get(item, "iconColor", argonTheme.COLORS.PRIMARY)}
-      //                         name={_get(item, "iconName", "hat-3")}
-      //                         family={_get(item, "iconFamily", "ArgonExtra")}
-      //                         style={styles.inputIcons}
-      //                     />
-      //                 }
-      //                 {...item}
-
-      //             />
-      //         </Block>
-      //     )
       case 'SELECT':
         return (
           <Block width={width * 0.8} style={{ marginBottom: 5 }}>
             <Select
               {...item}
-              width={width * 0.8}
-              onValueChange={val => setFieldValue(_get(item, 'key', ''), val)}
+              onSelect={handleChange(_get(item, 'key', ''))}
               value={values[item.key]}
             />
           </Block>
         );
-
+      case 'SELECT_ITEM':
+        return (
+          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+            <SelectItem
+              {...item}
+              options={_map(_get(item, 'options', EMPTY_ARRAY), item => ({
+                label: item,
+                value: item,
+              }))}
+              width={width * 0.8}
+              onSelect={val => setFieldValue(_get(item, 'key', ''), val)}
+              value={{
+                label: values[item.key],
+                value: values[item.key],
+              }}
+            />
+          </Block>
+        );
       case 'SWITCH':
         return (
           <Block
@@ -193,6 +184,14 @@ class Form extends Component {
               value={values[item.key]}
             />
           </Block>
+        );
+      case 'DATE_PICKER':
+        return (
+          <DatePicker
+            label={_get(item, 'label', 'Default')}
+            onValueChange={val => setFieldValue(_get(item, 'key', ''), val)}
+            value={values[item.key]}
+          />
         );
       case 'COUNTER':
         return (
@@ -284,7 +283,6 @@ class Form extends Component {
       isEdit = false,
       initialValues = {},
     } = this.props;
-
     return (
       <Block
         style={{
@@ -314,7 +312,6 @@ class Form extends Component {
                   })}
                 </ScrollView>
               </Block>
-
               <Block flex={0.5}>
                 {this.renderFooter({ handleSubmit, values })}
               </Block>

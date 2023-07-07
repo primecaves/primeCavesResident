@@ -4,6 +4,8 @@ import Card from './atoms/Card';
 import DrawerItem from './atoms/DrawerItem';
 import Icon from './atoms/Icon';
 import Input from './atoms/Input';
+import DatePicker from './atoms/DatePicker';
+import SelectItem from './atoms/SelectItem';
 import SelectMenu from './atoms/SelectMenu';
 import Switch from './atoms/Switch';
 import Select from './atoms/Select';
@@ -70,4 +72,6 @@ export {
   CartProductList,
   OrderList,
   Tabs,
+  DatePicker,
+  SelectItem,
 };

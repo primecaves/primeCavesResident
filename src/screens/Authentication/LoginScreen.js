@@ -10,8 +10,9 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { Block, Text, Button as GalioButton } from 'galio-framework';
+import { Block, Text } from 'galio-framework';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import { Button as GalioButton } from 'galio-framework';
 import { Button, Input } from '../../components';
 import { EMPTY_OBJECT, EMPTY_STRING, Images, MENU_SERVICES, argonTheme } from '../../constants';
 import { Spinner } from 'native-base';

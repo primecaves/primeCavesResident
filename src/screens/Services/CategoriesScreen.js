@@ -29,7 +29,6 @@ const DEFAULT_CATEGORY = {
   image: require('../../assets/icons/garments.png'),
 };
 const CategoriesScreen = (props) => {
-  console.log('UserInfo (from service):', props);
   const { navigation, route, serviceToken, userInfo, loginServices, registerServices } = props;
   const isMainLoading = _get(props, 'isLoading', false);
   // const { categoryID } = route.params;
@@ -154,7 +153,7 @@ const CategoriesScreen = (props) => {
 
   }, [filterItem]);
 
-  
+
   // setting initial tab value as category[0]. cause : due to multiple renders value is not persisting.
   // TODO: comment this when above is fixed and try the general solution
   useEffect(() => {

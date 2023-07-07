@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Platform,
   Dimensions,
-  Keyboard,
+
 } from 'react-native';
 import { Button, Block, NavBar, Text, theme } from 'galio-framework';
 import { CommonActions } from '@react-navigation/native';
