@@ -105,7 +105,7 @@ const MaintenanceChargesCard = ({
         name: userInfo.name,
         email: userInfo.email_address,
         contact: userInfo.contact_number,
-        flat: userInfo.flat,
+        flat: userInfo.flat_number,
         block: userInfo.block,
         apartment_name: userInfo.apartment_name,
       };

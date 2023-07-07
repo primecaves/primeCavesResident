@@ -14,18 +14,21 @@ import { Spinner } from 'native-base';
 import { argonTheme } from '../../constants';
 import { MONTHS_DICTIONARY } from '../../constants';
 import moment from 'moment';
+import { showMessage } from 'react-native-flash-message';
 
-const Payments = (props) => {
-  const { userInfo } = props;
+const Payments = props => {
   const [MaintenanceCardData, setMaintenanceCardData] = useState([]);
   const [cardSelect, setCardSelect] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
   const [filteredMainteneanceData, setFilteredMainteneanceData] = useState([]);
   const [filterStatus, setFilterStatus] = useState({});
   const [loading, setLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState(props.userInfo);
+  const [useEffectCounter, setUseEffectCounter] = useState(0);
 
   useEffect(() => {
     setLoading(true);
+    console.log(userInfo);
     let status = userInfo.due_amount === 0 ? 'UPCOMING' : 'UNPAID';
     setFilterStatus({
       status: status,
@@ -45,7 +48,7 @@ const Payments = (props) => {
         let filterData = fetchedData.filter(item => item.status === status);
         setFilteredMainteneanceData(filterData);
       });
-  }, []);
+  }, [useEffectCounter]);
 
   const handleCardChange = updatedCard => {
     let localMaintenanceCardData = MaintenanceCardData;
@@ -56,11 +59,14 @@ const Payments = (props) => {
     );
     localMaintenanceCardData.push(updatedCard);
     let postData = {
-      id: userInfo.id || '64a40451a357a26a7aafc6e9',
+      id: userInfo._id || '64a40451a357a26a7aafc6e9',
       maintenanceData: localMaintenanceCardData,
     };
     updateUserMaintenanceDetails(postData)
       .then(resp => setMaintenanceCardData(resp.data.data))
+      .then(() => {
+        setUseEffectCounter(useEffectCounter + 1);
+      })
       .catch(err => {
         console.log('error', err);
       });
@@ -75,9 +81,9 @@ const Payments = (props) => {
       let monthFilteredData = localMaintenanceData.filter(
         item =>
           moment(item.period).month() >=
-          MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
+            MONTHS_DICTIONARY[updatedFilter.startingMonth] &&
           moment(item.period).month() <=
-          MONTHS_DICTIONARY[updatedFilter.endingMonth],
+            MONTHS_DICTIONARY[updatedFilter.endingMonth],
       );
       if (updatedFilter.status !== 'RESET') {
         let filterData = monthFilteredData.filter(
@@ -137,27 +143,49 @@ const Payments = (props) => {
         localMaintenanceCardData.push(updatedCard);
         setMaintenanceCardData(localMaintenanceCardData);
       });
+      let postData = {
+        id: userInfo._id || '64a40451a357a26a7aafc6e9',
+        maintenanceData: localMaintenanceCardData,
+      };
+      updateUserMaintenanceDetails(postData)
+        .then(resp => setMaintenanceCardData(resp.data.data))
+        .then(() => {
+          setUseEffectCounter(useEffectCounter + 1);
+        })
+        .catch(err => {
+          console.log('error', err);
+        });
+
+      setSelectedCards([]);
     };
 
     //---------
     setCardSelect(selectingPayments);
     if (sendPayments) {
-      selectedCards.forEach(element => {
-        let payable_amount = element.amount + element.overdue;
-        total_amount += payable_amount;
-        cardIds.push(element.id);
-      });
-      let prefill = {
-        name: userInfo.name || 'anounls',
-        email: userInfo.email_address || 'slkdfjl@gmail.com',
-        contact: userInfo.contact_number || '+919864453232',
-      };
+      if (selectedCards.length !== 0) {
+        selectedCards.forEach(element => {
+          let payable_amount = element.amount + element.overdue;
+          total_amount += payable_amount;
+          cardIds.push(element.id);
+        });
+        let prefill = {
+          name: userInfo.name || 'anounls',
+          email: userInfo.email_address || 'slkdfjl@gmail.com',
+          contact: userInfo.contact_number || '+919864453232',
+        };
 
-      razorPay({
-        prefill,
-        amount: total_amount * 100,
-        handleCallBack,
-      });
+        razorPay({
+          prefill,
+          amount: total_amount * 100,
+          handleCallBack,
+        });
+      } else {
+        showMessage({
+          message: 'Please pick a maintenance card',
+          type: 'warning',
+          backgroundColor: argonTheme.COLORS.WARNING,
+        });
+      }
     }
   };
 
@@ -169,12 +197,8 @@ const Payments = (props) => {
     </Spinner>
   ) : (
     <>
-      <PaymentSummaryCard
-        paymentStatus={userInfo.dueAmount > 0}
-        paymentAmount={userInfo.dueAmount}
-      />
+      <PaymentSummaryCard userInfo={userInfo} />
       <PaymentFilterComponent
-        userInfo={userInfo}
         filterBy={filterStatus}
         handleFilter={handleFilter}
         {...props}

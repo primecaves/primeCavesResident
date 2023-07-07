@@ -12,11 +12,10 @@ export const generateInvoiceData = async ({
   maintenanceData,
   DownloadInvoiceCallback,
 }) => {
-  let date = new Date();
   let invoiceData = {
     payment_date: maintenanceData.transaction_details.payment_date,
     name: userInfo.name,
-    email: userInfo.email_address,
+    email: userInfo.email,
     flat: userInfo.flat,
     block: userInfo.block,
     apartment_name: userInfo.apartment_name,
@@ -25,7 +24,7 @@ export const generateInvoiceData = async ({
       maintenanceData.transaction_details.razorpay_payment_id,
     period: maintenanceData.period,
 
-    invoiceNumber: maintenanceData.id + date.toISOString().split('T')[0],
+    invoiceNumber: maintenanceData.id + '-' + userInfo._id,
   };
 
   const handleCallback = () => {

@@ -138,9 +138,6 @@ export class Complain extends Component {
             />
           }
         >
-          <Header
-            showNavbar={false}
-            title="Complain" back search />
           {_map(complain, (item, index) => (
             <DynamicKeyCard
               key={index}

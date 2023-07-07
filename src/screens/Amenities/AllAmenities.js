@@ -187,7 +187,7 @@ class AllAmenities extends Component {
           }
         >
           <Header
-            showNavbar={false}
+            showNavbar={true}
             title="Amenities"
             back
             search

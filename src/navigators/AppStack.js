@@ -53,27 +53,21 @@ const renderHomeHeader = ({ navigation, scene, title }) => {
   );
 };
 
-const renderBasicHeader = ({ props }) => {
-  return (
-    <Header
-      title="Notice Board"
-      back
-      search
-      {...props}
-    />
-  );
+const renderBasicHeader = props => {
+  return <Header back search {...props} />;
 };
 
 const RenderTabBarIcon = ({ focused, route }) => {
   const { name } = route;
   const styles = {
-    width: 20, height: 20,
+    width: 20,
+    height: 20,
     color: focused ? argonTheme.COLORS.PRIMARY : argonTheme.COLORS.BLACK,
   };
   return renderIcon(name, styles);
 };
 
-const HomeStack = (contextProps) => {
+const HomeStack = contextProps => {
   const { Navigator, Screen } = createNativeStackNavigator();
   const navProps = {
     screenOptions: {
@@ -88,62 +82,105 @@ const HomeStack = (contextProps) => {
       initialRouteName="HomeMenu"
       initialParams={{ itemId: 42 }}
       screenOptions={{
-        header: ({ navigation, scene }) => renderHomeHeader({ navigation, scene, title }),
+        header: ({ navigation, scene, route }) => {
+          if (route.name == 'HomeMenu') {
+            return renderHomeHeader({ navigation, scene, title });
+          }
+        },
       }}
     >
-      <Screen name="HomeMenu" component={(props) => componentWithProps(Home, { ...props, ...contextProps })} />
+      <Screen
+        name="HomeMenu"
+        component={props =>
+          componentWithProps(Home, { ...props, ...contextProps })
+        }
+      />
       <Screen
         name="Amenities"
-        component={(props) => componentWithProps(Amenities, { ...props, ...contextProps })}
+        component={props =>
+          componentWithProps(Amenities, { ...props, ...contextProps })
+        }
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
       <Screen
         name="AllAmenities"
-        component={(props) => componentWithProps(AllAmenities, { ...props, ...contextProps })}
+        component={props =>
+          componentWithProps(AllAmenities, { ...props, ...contextProps })
+        }
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
       <Screen
         name="ClubHouse"
-        component={(props) => componentWithProps(ClubHouse, { ...props, ...contextProps })}
+        component={props =>
+          componentWithProps(ClubHouse, { ...props, ...contextProps })
+        }
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
       <Screen
         name="AllClubHouse"
-        component={(props) => componentWithProps(AllClubHouse, { ...props, ...contextProps })}
+        component={props =>
+          componentWithProps(AllClubHouse, { ...props, ...contextProps })
+        }
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
       <Screen
         name="Profile"
-        component={(props) => componentWithProps(Profile, { ...props, ...contextProps })}
+        component={props =>
+          componentWithProps(Profile, { ...props, ...contextProps })
+        }
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
 
-      <Screen name="Payments"
-        component={(props) =>
-          componentWithProps(Payments, { ...props, ...contextProps })} />
+      <Screen
+        name="Payments"
+        component={props =>
+          componentWithProps(Payments, { ...props, ...contextProps })
+        }
+        options={{
+          header: ({ navigation, scene }) =>
+            renderBasicHeader({
+              navigation,
+              scene,
+              back: true,
+              search: false,
+              title: 'Payments',
+            }),
+          cardStyle: { backgroundColor: '#F8F9FE' },
+        }}
+      />
       <Screen
         name="Complain"
         component={Complain}
         options={{
+          header: ({ navigation, scene }) =>
+            renderBasicHeader({
+              navigation,
+              scene,
+              back: true,
+              search: true,
+              title: 'Complain',
+            }),
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
       <Screen
         name="PaymentHistory"
-        component={(props) => componentWithProps(PaymentHistory, { ...props, ...contextProps })}
+        component={props =>
+          componentWithProps(PaymentHistory, { ...props, ...contextProps })
+        }
         options={{
           header: ({ navigation, scene }) =>
-            renderHomeHeader({
+            renderBasicHeader({
               navigation,
               scene,
               back: true,
@@ -157,11 +194,14 @@ const HomeStack = (contextProps) => {
         name="NoticeBoard"
         component={NoticeBoard}
         options={{
-          header: ({ navigation, scene }) => renderBasicHeader({
-            navigation,
-            scene, back: true, search: true, title: 'Notice Board',
-          })
-          ,
+          header: ({ navigation, scene }) =>
+            renderBasicHeader({
+              navigation,
+              scene,
+              back: true,
+              search: true,
+              title: 'Notice Board',
+            }),
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
@@ -172,18 +212,19 @@ const HomeStack = (contextProps) => {
           header: ({ navigation, scene }) =>
             renderBasicHeader({
               navigation,
-              scene, back: true, search: true, title: 'Notice Board',
+              scene,
+              back: true,
+              search: true,
+              title: 'Notice Board',
             }),
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
-
-
-    </Navigator >
+    </Navigator>
   );
 };
 
-const ServiceStack = (contextProps) => {
+const ServiceStack = contextProps => {
   const { Navigator, Screen } = createNativeStackNavigator();
   const navProps = {
     screenOptions: {
@@ -192,31 +233,74 @@ const ServiceStack = (contextProps) => {
     },
   };
 
+  const title = _get(contextProps, 'userInfo.name', 'Menu');
+
   return (
     <Navigator
       {...navProps}
       initialRouteName="categories"
       initialParams={{ itemId: 42 }}
       screenOptions={{
-        header: ({ navigation, scene }) => renderHomeHeader({ navigation, scene }),
+        header: ({ navigation, scene }) =>
+          renderHomeHeader({ navigation, scene, title }),
       }}
     >
-      <Screen name="cart" component={(props) => componentWithProps(CartScreen, { ...contextProps, ...props })} />
-      <Screen name="categories" component={(props) => componentWithProps(CategoriesScreen, { ...contextProps, ...props })} />
-      <Screen name="productdetail" component={(props) => componentWithProps(ProductDetailScreen, { ...contextProps, ...props })} />
-      <Screen name="checkout" component={(props) => componentWithProps(CheckoutScreen, { ...contextProps, ...props })} />
+      <Screen
+        name="cart"
+        component={props =>
+          componentWithProps(CartScreen, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="categories"
+        component={props =>
+          componentWithProps(CategoriesScreen, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="productdetail"
+        component={props =>
+          componentWithProps(ProductDetailScreen, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="checkout"
+        component={props =>
+          componentWithProps(CheckoutScreen, { ...contextProps, ...props })
+        }
+      />
       <Screen
         name="vieworderdetails"
-        component={(props) => componentWithProps(ViewOrderDetailScreen, { ...contextProps, ...props })}
+        component={props =>
+          componentWithProps(ViewOrderDetailScreen, {
+            ...contextProps,
+            ...props,
+          })
+        }
       />
-      <Screen name="myorder" component={(props) => componentWithProps(MyOrderScreen, { ...contextProps, ...props })} />
-      <Screen name="vieworder" component={(props) => componentWithProps(ViewOrdersScreen, { ...contextProps, ...props })} />
-      <Screen name="orderconfirm" component={(props) => componentWithProps(OrderConfirmScreen, { ...contextProps, ...props })} />
+      <Screen
+        name="myorder"
+        component={props =>
+          componentWithProps(MyOrderScreen, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="vieworder"
+        component={props =>
+          componentWithProps(ViewOrdersScreen, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="orderconfirm"
+        component={props =>
+          componentWithProps(OrderConfirmScreen, { ...contextProps, ...props })
+        }
+      />
     </Navigator>
   );
 };
 
-const TabNavigator = (contextProps) => {
+const TabNavigator = contextProps => {
   const { Navigator, Screen } = createBottomTabNavigator();
   const tabNavProps = {
     screenOptions: ({ route }) => ({
@@ -231,10 +315,16 @@ const TabNavigator = (contextProps) => {
 
   return (
     <Navigator {...tabNavProps}>
-      <Screen name="Home" component={() => componentWithProps(HomeStack, contextProps)} />
-      <Screen name="Service" component={() => componentWithProps(ServiceStack, contextProps)} />
+      <Screen
+        name="Home"
+        component={() => componentWithProps(HomeStack, contextProps)}
+      />
+      <Screen
+        name="Service"
+        component={() => componentWithProps(ServiceStack, contextProps)}
+      />
     </Navigator>
   );
 };
 
-export default (contextProps) => <TabNavigator {...contextProps} />;
+export default contextProps => <TabNavigator {...contextProps} />;

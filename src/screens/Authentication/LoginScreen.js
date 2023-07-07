@@ -13,7 +13,7 @@ import * as Animatable from 'react-native-animatable';
 import { Block, Text, Button as GalioButton } from 'galio-framework';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { Button, Input } from '../../components';
-import { EMPTY_OBJECT, EMPTY_STRING, Images, MENU_SCREENS, argonTheme } from '../../constants';
+import { EMPTY_OBJECT, EMPTY_STRING, Images, MENU_SERVICES, argonTheme } from '../../constants';
 import { Spinner } from 'native-base';
 import { getOTPMessage, renderIcon } from '../../constants/utils';
 import { fetchOTPCredentials, fetchWebViewUrl, validateUserCredential } from './login.services';
@@ -262,7 +262,7 @@ class LoginScreen extends React.Component {
                                                     center
                                                 >
                                                     {renderIcon(
-                                                        MENU_SCREENS.PRIME_CAVES,
+                                                        MENU_SERVICES.PRIME_CAVES,
                                                         {
                                                             height: 300,
                                                             width: 300,

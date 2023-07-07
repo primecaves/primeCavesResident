@@ -153,7 +153,6 @@ class Amenities extends Component {
             </Block>
           </Button>
         </Block>
-
       </>
     );
   };
@@ -181,7 +180,7 @@ class Amenities extends Component {
             description: _get(values, 'description', EMPTY_STRING),
             successCallback: this.handleSubmit,
             values,
-            setLoading: (isPrimaryLoading) => this.setState({ isPrimaryLoading }),
+            setLoading: isPrimaryLoading => this.setState({ isPrimaryLoading }),
           })
         }
         primaryButtonProps={{
@@ -241,9 +240,7 @@ class Amenities extends Component {
     const { navigation, scene } = this.props;
     return (
       <Block>
-        <Modal
-          visible={isFormModalVisible}
-          content={this.renderForm} />
+        <Modal visible={isFormModalVisible} content={this.renderForm} />
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -253,7 +250,7 @@ class Amenities extends Component {
           }
         >
           <Header
-            showNavbar={false}
+            showNavbar={true}
             title="Amenities"
             back
             search
