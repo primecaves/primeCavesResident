@@ -18,6 +18,7 @@ import {
 import _map from 'lodash/map';
 import _isEmpty from 'lodash/isEmpty';
 import _get from 'lodash/get';
+import _head from 'lodash/head';
 import { getKeyValuePair } from '../../utils';
 import argonTheme from '../../constants/Theme';
 import AlertModal from '../../components/molecules/AlertModal';
@@ -31,7 +32,7 @@ import {
   updateComplaint,
 } from './complain.service';
 import { showMessage } from 'react-native-flash-message';
-import { EMPTY_ARRAY, EMPTY_OBJECT } from '../../constants';
+import { EMPTY_ARRAY, EMPTY_OBJECT, EMPTY_STRING } from '../../constants';
 
 const FORM_TYPES = {
   SAVE: 'Save',
@@ -51,6 +52,7 @@ export class Complain extends Component {
     isEdit: false,
     formType: '',
   };
+
   componentDidMount() {
     this.fetchComplain();
   }
@@ -110,10 +112,10 @@ export class Complain extends Component {
       isAlertModalVisible: !prevState.isAlertModalVisible,
     }));
   };
-  toggleFormModal = (item, formType, isEdit) => {
+  toggleFormModal = (initialValues, formType, isEdit) => {
     this.setState(prevState => ({
       isFormModalVisible: !prevState.isFormModalVisible,
-      initialValues: item,
+      initialValues,
       formType,
       isEdit,
     }));
@@ -173,10 +175,12 @@ export class Complain extends Component {
         .then(response => {
           if (response) {
             this.setState({
+              isEdit: false,
               isLoading: false,
               isFormModalVisible: false,
-              formType: '',
+              formType: EMPTY_STRING,
               isPrimaryLoading: false,
+              initialValues: EMPTY_OBJECT,
             });
             showMessage({
               message: 'Complain Logged Successfully',
@@ -188,10 +192,12 @@ export class Complain extends Component {
         })
         .catch(() => {
           this.setState({
+            isEdit: false,
             isLoading: false,
             isFormModalVisible: false,
-            formType: '',
+            formType: EMPTY_STRING,
             isPrimaryLoading: false,
+            initialValues: EMPTY_OBJECT,
           });
           showMessage({
             message: 'Complain Logged Failed',
@@ -202,6 +208,7 @@ export class Complain extends Component {
     } else {
       const request = {
         ...values,
+        images,
         resident_id: userInfo._id,
       };
       this.setState({ isLoading: true });
@@ -211,8 +218,10 @@ export class Complain extends Component {
             this.setState({
               isLoading: false,
               isFormModalVisible: false,
-              formType: '',
+              formType: EMPTY_STRING,
               isPrimaryLoading: false,
+              isEdit: false,
+              initialValues: EMPTY_OBJECT,
             });
             showMessage({
               message: 'Complain Updated Successfully',
@@ -226,8 +235,10 @@ export class Complain extends Component {
           this.setState({
             isLoading: false,
             isFormModalVisible: false,
-            formType: '',
+            formType: EMPTY_STRING,
             isPrimaryLoading: false,
+            isEdit: false,
+            initialValues: EMPTY_OBJECT,
           });
           showMessage({
             message: 'Complain Update Failed',
@@ -238,9 +249,8 @@ export class Complain extends Component {
     }
   };
   handleSubmit = values => {
-    const { isEdit } = this.state;
     this.setState({ isPrimaryLoading: true });
-    if (!_isEmpty(values.images) && !isEdit) {
+    if (!_isEmpty(values.images) && _head(_get(values, 'images')).uri) {
       this.uploadImage(_get(values, 'images', EMPTY_ARRAY), values);
     } else {
       this.handleSubmitComplainNoImage(
@@ -266,7 +276,7 @@ export class Complain extends Component {
       <Form
         isEdit={isEdit}
         fields={this.getFields()}
-        onClose={() => this.toggleFormModal(EMPTY_OBJECT, '', false)}
+        onClose={() => this.toggleFormModal(EMPTY_OBJECT, EMPTY_STRING, false)}
         onSubmit={this.handleSubmit}
         initialValues={initialValues}
         isPrimaryLoading={isPrimaryLoading}
@@ -318,6 +328,7 @@ export class Complain extends Component {
       </>
     );
   };
+
   render() {
     const {
       complain,
@@ -337,7 +348,14 @@ export class Complain extends Component {
             />
           }
         >
-          <Header showNavbar={false} title="Complain" back />
+          <Header
+            showNavbar={true}
+            title="Complain"
+            back
+            search
+            showAdd
+            onAddButtonClick={() => this.toggleFormModal(EMPTY_OBJECT, FORM_TYPES.REGISTER, false)}
+          />
           {!_isEmpty(complain) ? (
             _map(complain, (item, index) => (
               <DynamicKeyCard
@@ -355,21 +373,6 @@ export class Complain extends Component {
             <EmptyComponent />
           )}
         </ScrollView>
-        <Block style={styles.buttonContainer} middle>
-          <Button
-            shadowless
-            style={styles.bookButton}
-            onPress={() =>
-              this.toggleFormModal(EMPTY_OBJECT, FORM_TYPES.REGISTER, false)
-            }
-          >
-            <Block row>
-              <Text style={styles.text} size={15}>
-                Book Complain
-              </Text>
-            </Block>
-          </Button>
-        </Block>
       </Block>
     );
   }

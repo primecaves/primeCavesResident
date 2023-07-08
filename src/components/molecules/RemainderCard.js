@@ -3,10 +3,12 @@ import { Block, Button, Text } from 'galio-framework';
 import { StyleSheet } from 'react-native';
 import Theme from '../../constants/Theme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { EMPTY_ARRAY } from '../../constants';
+import _head from 'lodash/head';
+import _get from 'lodash/get';
 class RemainderCard extends React.Component {
   render() {
-    const { maintenance_reminder } = this.props.propData.userInfo;
+    const maintenanceReminder = _head(_get(this.props, 'propData.userInfo.maintenance_reminder', EMPTY_ARRAY));
     const { navigation } = this.props.propData;
 
     return (
@@ -17,7 +19,7 @@ class RemainderCard extends React.Component {
         <Block row>
           <Block style={styles.daysMore} flex={0.8}>
             <Text size={48} bold color={Theme.COLORS.WHITE}>
-              {maintenance_reminder.daysRemaining}
+              {maintenanceReminder.daysRemaining}
             </Text>
             <Text size={14} color={Theme.COLORS.WHITE}>
               days more
@@ -29,11 +31,11 @@ class RemainderCard extends React.Component {
             </Text>
             <Text size={12}>
               Your charges are:{' '}
-              <Text bold>₹ {maintenance_reminder.amount}.00</Text>
+              <Text bold>₹ {maintenanceReminder.amount}.00</Text>
             </Text>
             <Text size={10} muted style={styles.marginV}>
               <Icon name="calendar" />
-              <Text>Due date {maintenance_reminder.due_date}</Text>
+              <Text>Due date {maintenanceReminder.due_date}</Text>
             </Text>
             <Block row bottom>
               <Button

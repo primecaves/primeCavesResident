@@ -65,7 +65,7 @@ class Profile extends React.Component {
                     </Button>
 
                   </Block>
-                  <Block row space="between">
+                  {/* <Block row space="between">
                     <Block middle>
                       <Text
                         size={18}
@@ -96,9 +96,9 @@ class Profile extends React.Component {
                       </Text>
                       <Text style={{ fontFamily: 'open-sans-regular' }} size={12} color={argonTheme.COLORS.TEXT}>Comments</Text>
                     </Block>
-                  </Block>
+                  </Block> */}
                 </Block>
-                <Block flex>
+                {/* <Block flex>
                   <Block middle style={styles.nameInfo}>
                     <Text style={{ fontFamily: 'open-sans-regular' }} size={28} color="#32325D">
                       {_get(user, 'name', '')}
@@ -131,7 +131,7 @@ class Profile extends React.Component {
                       Show more
                     </Button>
                   </Block>
-                </Block>
+                </Block> */}
               </Block>
               <Block style={{ marginBottom: 25 }} />
             </ScrollView>

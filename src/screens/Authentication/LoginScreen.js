@@ -40,6 +40,7 @@ import {
   removeListener,
 } from 'react-native-otp-verify';
 import { showMessage } from 'react-native-flash-message';
+
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     {children}
@@ -391,7 +392,7 @@ class LoginScreen extends React.Component {
                         size={18}
                         color={argonTheme.COLORS.WHITE}
                       >
-                        New to guardian, Need a demo ?
+                        New to Primecaves, Need a demo ?
                       </Text>
                     </Block>
                   </TouchableOpacity>

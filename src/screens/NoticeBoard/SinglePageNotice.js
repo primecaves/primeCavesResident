@@ -234,9 +234,7 @@ export default class SinglePageNotice extends React.Component {
                   size={10}
                   color={argonTheme.COLORS.TEXT}
                 >
-                  {moment
-                    .unix(_get(notice, 'last_updated_date', new Date() / 1000))
-                    .format('MMM DD, YYYY')}
+                  {moment.unix(new Date(_get(notice, 'updatedAt')) / 1000).format('MMM DD, YYYY')}
                 </Text>
               </Block>
               {isModalVisible && this.renderModal()}
@@ -259,7 +257,7 @@ export default class SinglePageNotice extends React.Component {
             >
               {_upperCase(notice.title)}
             </Text>
-            <Button
+            {_get(notice, 'has_poll', false) && (<Button
               shadowless
               style={styles.addToArticle}
               color={argonTheme.COLORS.PRIMARY}
@@ -272,7 +270,7 @@ export default class SinglePageNotice extends React.Component {
               >
                 SHOW POLL
               </Text>
-            </Button>
+            </Button>)}
             <ScrollView vertical={true}>
               <Text
                 muted

@@ -121,13 +121,17 @@ class Header extends React.Component {
   };
 
   renderSearch = () => {
-    const { navigation, showAdd, searchParams = EMPTY_OBJECT } = this.props;
+    const {
+      navigation,
+      showAdd,
+      searchParams = EMPTY_OBJECT,
+      searchPlaceholder = 'What are you looking for?' } = this.props;
     return (
       <Input
         right
         color="black"
         style={[styles.search, { width: showAdd ? width - 95 : width - 32 }]}
-        placeholder="What are you looking for?"
+        placeholder={searchPlaceholder}
         placeholderTextColor={'#8898AA'}
         onFocus={() => {
           navigation.navigate('Search', searchParams);
@@ -212,8 +216,6 @@ class Header extends React.Component {
 
   renderAddButton = () => {
     const {
-      navigation,
-      route,
       onAddButtonClick,
       rightActionIconName = 'add',
       rightActionIconFamily = 'materialicon',
