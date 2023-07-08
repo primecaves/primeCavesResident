@@ -16,7 +16,7 @@ export const updateResident = request => {
 };
 
 export const fetchWebViewUrl = () => {
-  const url = '/getWebViewUrl';
+  const url = '/getResidentWebViewUrl';
   return API.get(url);
 };
 

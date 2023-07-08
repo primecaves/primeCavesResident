@@ -23,11 +23,11 @@ export const AuthProvider = ({ children }) => {
                         const { accessToken, data } = response.data;
                         const mockData = {
                             ...data,
-                            due_amount: 1200,
+                            due_amount: 1500,
                             maintenance_reminder: [
                                 {
                                     daysRemaining: 5,
-                                    due_date: '23 Mar,2023',
+                                    due_date: '23 Mar, 2023',
                                     amount: 1500,
                                 },
                             ],

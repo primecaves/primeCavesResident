@@ -12,7 +12,6 @@ import FlashMessage from 'react-native-flash-message';
 import { NativeBaseProvider } from 'native-base';
 
 const App = () => {
-
   return (
     <NativeBaseProvider>
       <Provider store={store}>

@@ -2,9 +2,6 @@ import { Block, Button } from 'galio-framework';
 import React from 'react';
 import {
   StyleSheet,
-
-  View,
-  TouchableOpacity,
   Image,
   PermissionsAndroid,
   ScrollView,
@@ -17,12 +14,6 @@ import Modal from '../molecules/Modal';
 import { EMPTY_ARRAY, argonTheme } from '../../constants';
 import _get from 'lodash/get';
 import _map from 'lodash/map';
-import ActionSheet from '../molecules/ActionSheet';
-
-
-import { Text } from 'galio-framework';
-import { Center } from 'native-base';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default class ImagePickerPC extends React.Component {
   constructor(props) {
@@ -127,7 +118,6 @@ export default class ImagePickerPC extends React.Component {
         this.setState({
           selectedFiles: _get(res, 'assets', EMPTY_ARRAY),
           showModal: false,
-
         });
         onValueChange(_map(_get(res, 'assets', EMPTY_ARRAY), item => { return { uri: item.uri }; }));
 
@@ -155,6 +145,12 @@ export default class ImagePickerPC extends React.Component {
         icon="photo"
         iconSize={50}
       />
+      <Button
+        style={styles.button}
+        onPress={this.toggleModal}
+      >
+        Close
+      </Button>
     </ScrollView>
   );
   toggleModal = () => {
@@ -175,10 +171,11 @@ export default class ImagePickerPC extends React.Component {
           content={this.renderContent}
           onClose={this.toggleModal}
         /> */}
-        {showModal && (<Modal
-          visible={showModal}
-          content={this.renderContent}
-        />)}
+        {showModal && (
+          <Modal
+            visible={showModal}
+            content={this.renderContent}
+          />)}
         <ScrollView horizontal={true}>
           {_map(selectedFiles, (item, index) => (
             item.uri ? (<Image

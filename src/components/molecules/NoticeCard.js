@@ -24,7 +24,6 @@ class NoticeCard extends React.Component {
       style,
       imageStyle,
     } = this.props;
-
     const imageStyles = [
       full ? styles.fullImage : styles.horizontalImage,
       imageStyle,
@@ -66,7 +65,7 @@ class NoticeCard extends React.Component {
                     size={8}
                     color={argonTheme.COLORS.TEXT}
                   >
-                    {moment.unix(_get(item, 'last_updated_date', new Date()) / 1000).format('MMM DD, YYYY')}
+                    {moment.unix(new Date(_get(item, 'updatedAt')) / 1000).format('MMM DD, YYYY')}
                   </Text>
                 </Block>
                 <Block style={styles.pro} center >

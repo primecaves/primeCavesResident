@@ -1,9 +1,8 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, RefreshControl } from 'react-native';
 import { Block, theme } from 'galio-framework';
 import { NoticeCard, Filter, SkeletionLoader } from '../../components';
 import _map from 'lodash/map';
-import _get from 'lodash/get';
 import _uniq from 'lodash/uniq';
 import _cloneDeep from 'lodash/cloneDeep';
 
@@ -54,7 +53,7 @@ class NoticeBoard extends React.Component {
     const { notices, initialCards, isLoading } = this.state;
     return (
       <Block flex style={styles.group}>
-        <Block style={styles.filterContainer}>
+        {/* <Block style={styles.filterContainer}>
           <Filter
             title="Notice Board"
             filterParams={_uniq(_map(notices, item => item.tag))}
@@ -62,7 +61,7 @@ class NoticeBoard extends React.Component {
             filterKey="tag"
             initialCards={initialCards}
           />
-        </Block>
+        </Block> */}
         <Block flex>
           <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
             {_map(notices, item => (
@@ -81,7 +80,15 @@ class NoticeBoard extends React.Component {
     }
     return (
       <Block flex>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={this.fetchNotice}
+            />
+          }
+        >
           {this.renderCards()}
         </ScrollView>
       </Block>

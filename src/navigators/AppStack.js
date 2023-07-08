@@ -102,70 +102,74 @@ const HomeStack = contextProps => {
     >
       <Screen
         name="HomeMenu"
-        component={props =>
-          componentWithProps(Home, { ...props, ...contextProps })
-        }
-      />
+      >
+        {props => componentWithProps(Home, { ...props, ...contextProps })}
+      </Screen>
       <Screen
         name="Amenities"
-        component={props =>
-          componentWithProps(Amenities, { ...props, ...contextProps })
-        }
+
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
-      />
+      >
+        {props => componentWithProps(Amenities, { ...props, ...contextProps })
+        }
+      </Screen>
       <Screen
         name="AllAmenities"
-        component={props =>
+        options={{
+          cardStyle: { backgroundColor: '#F8F9FE' },
+        }}
+      >
+        {props =>
           componentWithProps(AllAmenities, { ...props, ...contextProps })
         }
-        options={{
-          cardStyle: { backgroundColor: '#F8F9FE' },
-        }}
-      />
+      </Screen>
       <Screen
         name="ClubHouse"
-        component={props =>
-          componentWithProps(ClubHouse, { ...props, ...contextProps })
-        }
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
-      />
+      >
+        {props => componentWithProps(ClubHouse, { ...props, ...contextProps })
+        }
+      </Screen>
       <Screen
         name="AddExpectedVisitors"
-        component={props =>
+
+        options={{
+          cardStyle: { backgroundColor: '#F8F9FE' },
+        }}
+      >
+        {props =>
           componentWithProps(AddExpectedVisitors, { ...props, ...contextProps })
         }
-        options={{
-          cardStyle: { backgroundColor: '#F8F9FE' },
-        }}
-      />
+      </Screen>
       <Screen
         name="AllClubHouse"
-        component={props =>
-          componentWithProps(AllClubHouse, { ...props, ...contextProps })
-        }
+
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
-      />
+      >
+        {props => componentWithProps(AllClubHouse, { ...props, ...contextProps })
+        }
+      </Screen>
       <Screen
         name="Profile"
-        component={props =>
-          componentWithProps(Profile, { ...props, ...contextProps })
-        }
+
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
-      />
+      >
+        {props =>
+          componentWithProps(Profile, { ...props, ...contextProps })
+        }
+      </Screen>
 
       <Screen
         name="Payments"
-        component={props =>
-          componentWithProps(Payments, { ...props, ...contextProps })
-        }
+
         options={{
           header: ({ navigation, scene }) =>
             renderBasicHeader({
@@ -177,29 +181,33 @@ const HomeStack = contextProps => {
             }),
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
-      />
+      >
+        {props =>
+          componentWithProps(Payments, { ...props, ...contextProps })
+        }
+      </Screen>
       <Screen
         name="Complain"
-        component={props =>
-          componentWithProps(Complain, { ...props, ...contextProps })
-        }
+
         options={{
-          header: ({ navigation, scene }) =>
-            renderBasicHeader({
-              navigation,
-              scene,
-              back: true,
-              search: true,
-              title: 'Complain',
-            }),
+          // header: ({ navigation, scene }) =>
+          //   renderBasicHeader({
+          //     navigation,
+          //     scene,
+          //     back: true,
+          //     search: true,
+          //     title: 'Complain',
+          //   }),
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
-      />
+      >
+        {props =>
+          componentWithProps(Complain, { ...props, ...contextProps })
+        }
+      </Screen>
       <Screen
         name="PaymentHistory"
-        component={props =>
-          componentWithProps(PaymentHistory, { ...props, ...contextProps })
-        }
+
         options={{
           header: ({ navigation, scene }) =>
             renderBasicHeader({
@@ -211,7 +219,11 @@ const HomeStack = contextProps => {
             }),
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
-      />
+      >
+        {props =>
+          componentWithProps(PaymentHistory, { ...props, ...contextProps })
+        }
+      </Screen>
 
       <Screen
         name="NoticeBoard"
@@ -224,6 +236,7 @@ const HomeStack = contextProps => {
               back: true,
               search: true,
               title: 'Notice Board',
+              searchPlaceholder: 'Seach Notice ...',
             }),
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
@@ -237,7 +250,7 @@ const HomeStack = contextProps => {
               navigation,
               scene,
               back: true,
-              search: true,
+              search: false,
               title: 'Notice Board',
             }),
           cardStyle: { backgroundColor: '#F8F9FE' },
@@ -250,7 +263,7 @@ const HomeStack = contextProps => {
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
-    </Navigator>
+    </Navigator >
   );
 };
 
@@ -347,16 +360,18 @@ const TabNavigator = contextProps => {
     <Navigator {...tabNavProps}>
       <Screen
         name="Home"
-        component={props =>
+      >
+        {props =>
           componentWithProps(HomeStack, { ...contextProps, ...props })
         }
-      />
+      </Screen>
       <Screen
         name="Service"
-        component={props =>
+      >
+        {props =>
           componentWithProps(ServiceStack, { ...contextProps, ...props })
         }
-      />
+      </Screen>
     </Navigator>
   );
 };
