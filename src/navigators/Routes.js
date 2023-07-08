@@ -36,11 +36,13 @@ const Routes = () => {
     registerServices,
   };
   return (
-    <NavigationContainer >
-      {_isEmpty(userInfo) ?
+    <NavigationContainer>
+      {_isEmpty(userInfo) ? (
         <AuthStack {...authProps} />
-        : <AppStack {...authProps} />}
-    </NavigationContainer >
+      ) : (
+        <AppStack {...authProps} />
+      )}
+    </NavigationContainer>
   );
 };
 

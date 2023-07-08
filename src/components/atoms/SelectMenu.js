@@ -43,7 +43,8 @@ class SelectMenu extends React.Component {
       <Menu
         backgroundColor={argonTheme.COLORS.WHITE}
         placement="bottom"
-        w={width ? width : 130}
+        width={width ? width : 130}
+        height={height ? height : 130}
         trigger={triggerProps =>
           renderMenu({ triggerProps, width, height, menuText })
         }
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     padding: 5,
     marginHorizontal: 10,
     height: 50,
-    margin:0
+    margin: 0,
   },
   selectContainer: {
     borderRadius: 4,

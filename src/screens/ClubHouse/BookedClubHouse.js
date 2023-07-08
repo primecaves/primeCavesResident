@@ -12,7 +12,15 @@ import {
   addClubHouseToResident,
 } from './clubHouse.services';
 import { Block, Text } from 'galio-framework';
-import { DynamicKeyCard, Header, Button, Modal, EmptyComponent, AlertModal, FooterButton } from '../../components';
+import {
+  DynamicKeyCard,
+  Header,
+  Button,
+  Modal,
+  EmptyComponent,
+  AlertModal,
+  FooterButton,
+} from '../../components';
 import { getKeyValuePair } from '../../utils';
 import ClubHouseForm from './Components/ClubHouseForm';
 import { EMPTY_ARRAY, EMPTY_OBJECT, EMPTY_STRING } from '../../constants';
@@ -182,7 +190,11 @@ class BookedClubHouse extends Component {
         this.fetchClubHouse();
       })
       .catch(() => {
-        this.setState({ isLoading: false, isFormModalVisible: false, formType: '' });
+        this.setState({
+          isLoading: false,
+          isFormModalVisible: false,
+          formType: '',
+        });
         showMessage({
           message: 'Clubhouse Booked Failed',
           type: 'error',
@@ -223,6 +235,13 @@ class BookedClubHouse extends Component {
         });
       });
   };
+  handlePaymentHistory = () => {
+    const { navigation } = this.props;
+    let request = {
+      service: 'clubhouse',
+    };
+    navigation.navigate('PaymentHistory', request);
+  };
   render() {
     const {
       clubHouse,
@@ -251,16 +270,17 @@ class BookedClubHouse extends Component {
               onClose={this.toggleFormModal}
               primaryButtonText={formType}
               isPrimaryLoading={isPrimaryLoading}
-              onSubmit={(values) =>
+              onSubmit={values =>
                 formType === FORM_TYPES.PAYNOW
                   ? razorPay({
-                    prefill,
-                    amount: _toFinite(_get(values, 'price', '2000')) * 100,
-                    description: _get(values, 'description', EMPTY_STRING),
-                    successCallback: this.handleSubmit,
-                    values,
-                    setLoading: (isPrimaryLoading) => this.setState({ isPrimaryLoading }),
-                  })
+                      prefill,
+                      amount: _toFinite(_get(values, 'price', '2000')) * 100,
+                      description: _get(values, 'description', EMPTY_STRING),
+                      successCallback: this.handleSubmit,
+                      values,
+                      setLoading: isPrimaryLoading =>
+                        this.setState({ isPrimaryLoading }),
+                    })
                   : this.handleUpdateClubhouse(values)
               }
             />
@@ -276,11 +296,12 @@ class BookedClubHouse extends Component {
         >
           <Header
             showNavbar={true}
-            title=" ClubHouse"
+            title="ClubHouse"
             back
             search
             showAdd
-            rightActionIconName="payments"
+            onAddButtonClick={this.handlePaymentHistory}
+            rightActionIconName="history"
             navigation={navigation}
             scene={scene}
           />
@@ -299,7 +320,8 @@ class BookedClubHouse extends Component {
                 editAction={this.toggleFormModal}
                 loaderProps={{ button: true, clubhouse: true }}
               />
-            ))) : (
+            ))
+          ) : (
             <EmptyComponent />
           )}
         </ScrollView>

@@ -10,22 +10,33 @@ import {
 import {
   Button,
   DynamicKeyCard,
-  FooterButton,
+  EmptyComponent,
   Form,
   Header,
-  Icon,
   Modal,
 } from '../../components';
 import _map from 'lodash/map';
+import _isEmpty from 'lodash/isEmpty';
 import _get from 'lodash/get';
 import { getKeyValuePair } from '../../utils';
-import API_1 from '../../constants/complainResponse';
 import argonTheme from '../../constants/Theme';
 import AlertModal from '../../components/molecules/AlertModal';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { FIELDS } from './complain.constant';
 import { Dimensions } from 'react-native';
-import ImagePickerPC from '../../components/atoms/ImagePicker';
+import axios from 'axios';
+import {
+  addComplaint,
+  deleteComplaint,
+  getBookedComplaints,
+  updateComplaint,
+} from './complain.service';
+import { showMessage } from 'react-native-flash-message';
+import { EMPTY_ARRAY, EMPTY_OBJECT } from '../../constants';
+
+const FORM_TYPES = {
+  SAVE: 'Save',
+  REGISTER: 'Register',
+};
 export class Complain extends Component {
   state = {
     isLoading: false,
@@ -35,30 +46,240 @@ export class Complain extends Component {
     displayNameKey: '',
     isAlertModalVisible: false,
     isFormModalVisible: false,
+    imageArray: [],
+    s3Images: [],
+    isEdit: false,
+    formType: '',
   };
-
   componentDidMount() {
     this.fetchComplain();
   }
-
   fetchComplain = () => {
-    const { data, key_to_remove, display_name_key } = API_1;
-    this.setState({
-      complain: data,
-      keyToRemove: key_to_remove,
-      displayNameKey: display_name_key,
-    });
+    const { userInfo } = this.props;
+    this.setState({ isLoading: true });
+    getBookedComplaints(userInfo._id)
+      .then(response => {
+        if (response) {
+          const {
+            data: { data, key_to_remove, display_name_key },
+          } = response;
+          this.setState({
+            isLoading: false,
+            complain: data,
+            keyToRemove: key_to_remove,
+            displayNameKey: display_name_key,
+          });
+        }
+      })
+      .catch(() => {
+        this.setState({ isLoading: false });
+      });
   };
-  toggleAlertModal = () => {
+  handleDeleteComplain = () => {
+    const { selectedItem } = this.state;
+    deleteComplaint(selectedItem._id)
+      .then(response => {
+        if (response) {
+          this.setState({
+            isAlertModalVisible: false,
+            selectedItem: EMPTY_OBJECT,
+          });
+          showMessage({
+            message: 'Complain Deleted Successfully',
+            type: 'success',
+            backgroundColor: argonTheme.COLORS.SUCCESS,
+          });
+          this.fetchComplain();
+        }
+      })
+      .catch(() => {
+        this.setState({
+          isAlertModalVisible: false,
+          selectedItem: EMPTY_OBJECT,
+        });
+        showMessage({
+          message: 'Complain Deletion Failed',
+          type: 'error',
+          backgroundColor: argonTheme.COLORS.WARNING,
+        });
+      });
+  };
+  toggleAlertModal = selectedItem => {
     this.setState(prevState => ({
+      selectedItem,
       isAlertModalVisible: !prevState.isAlertModalVisible,
     }));
   };
-  toggleFormModal = item => {
+  toggleFormModal = (item, formType, isEdit) => {
     this.setState(prevState => ({
       isFormModalVisible: !prevState.isFormModalVisible,
       initialValues: item,
+      formType,
+      isEdit,
     }));
+  };
+  uploadImage = (imageArray, values) => {
+    const data = new FormData();
+    for (let i = 0; i < imageArray.length; i++) {
+      data.append('files', {
+        uri: imageArray[i].uri,
+        name: `complain${i}.jpeg`,
+        type: 'image/jpeg',
+      });
+    }
+    axios({
+      method: 'POST',
+      url: 'http://31.220.21.195:3000/api/v1/upload-multiple-complaint',
+      data: data,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then(resp => {
+        const { data } = resp;
+        var s3Images = EMPTY_ARRAY;
+        data.map(item => {
+          s3Images = [...s3Images, item.location];
+        });
+        // showMessage({
+        //   message: 'Image Uploaded',
+        //   type: 'success',
+        //   backgroundColor: argonTheme.COLORS.SUCCESS,
+        // });
+        this.handleSubmitComplainNoImage(values, s3Images);
+      })
+      .catch(() => {
+        this.setState({ isPrimaryLoading: false });
+        showMessage({
+          message: 'Error in image uploading',
+          type: 'error',
+          backgroundColor: argonTheme.COLORS.WARNING,
+        });
+      });
+  };
+  handleSubmitComplainNoImage = (values, images = EMPTY_ARRAY) => {
+    const { userInfo } = this.props;
+    const { formType, initialValues } = this.state;
+    if (formType === FORM_TYPES.REGISTER) {
+      const request = {
+        ...values,
+        resident_id: userInfo._id,
+        status: 'open',
+        images,
+      };
+      this.setState({ isLoading: true });
+      addComplaint(request)
+        .then(response => {
+          if (response) {
+            this.setState({
+              isLoading: false,
+              isFormModalVisible: false,
+              formType: '',
+              isPrimaryLoading: false,
+            });
+            showMessage({
+              message: 'Complain Logged Successfully',
+              type: 'success',
+              backgroundColor: argonTheme.COLORS.SUCCESS,
+            });
+          }
+          this.fetchComplain();
+        })
+        .catch(() => {
+          this.setState({
+            isLoading: false,
+            isFormModalVisible: false,
+            formType: '',
+            isPrimaryLoading: false,
+          });
+          showMessage({
+            message: 'Complain Logged Failed',
+            type: 'error',
+            backgroundColor: argonTheme.COLORS.WARNING,
+          });
+        });
+    } else {
+      const request = {
+        ...values,
+        resident_id: userInfo._id,
+      };
+      this.setState({ isLoading: true });
+      updateComplaint(initialValues._id, request)
+        .then(response => {
+          if (response) {
+            this.setState({
+              isLoading: false,
+              isFormModalVisible: false,
+              formType: '',
+              isPrimaryLoading: false,
+            });
+            showMessage({
+              message: 'Complain Updated Successfully',
+              type: 'success',
+              backgroundColor: argonTheme.COLORS.SUCCESS,
+            });
+          }
+          this.fetchComplain();
+        })
+        .catch(() => {
+          this.setState({
+            isLoading: false,
+            isFormModalVisible: false,
+            formType: '',
+            isPrimaryLoading: false,
+          });
+          showMessage({
+            message: 'Complain Update Failed',
+            type: 'error',
+            backgroundColor: argonTheme.COLORS.WARNING,
+          });
+        });
+    }
+  };
+  handleSubmit = values => {
+    const { isEdit } = this.state;
+    this.setState({ isPrimaryLoading: true });
+    if (!_isEmpty(values.images) && !isEdit) {
+      this.uploadImage(_get(values, 'images', EMPTY_ARRAY), values);
+    } else {
+      this.handleSubmitComplainNoImage(
+        values,
+        _get(values, 'images', EMPTY_ARRAY),
+      );
+    }
+  };
+  getFields = () => {
+    const { formType } = this.state;
+    if (formType === FORM_TYPES.REGISTER) {
+      return _map(FIELDS, (item, index) => ({
+        ...item,
+        editable: true,
+      }));
+    } else {
+      return FIELDS;
+    }
+  };
+  renderForm = () => {
+    const { initialValues, isEdit, formType, isPrimaryLoading } = this.state;
+    return (
+      <Form
+        isEdit={isEdit}
+        fields={this.getFields()}
+        onClose={() => this.toggleFormModal(EMPTY_OBJECT, '', false)}
+        onSubmit={this.handleSubmit}
+        initialValues={initialValues}
+        isPrimaryLoading={isPrimaryLoading}
+        primaryButtonText={formType}
+        secondaryButtonText="Close"
+        primaryButtonProps={{
+          style: styles.footerPrimaryButton,
+        }}
+        secondaryButtonProps={{
+          style: styles.footerSecondaryButton,
+        }}
+      />
+    );
   };
   renderFooter = item => {
     const { isAlertModalVisible } = this.state;
@@ -68,14 +289,14 @@ export class Complain extends Component {
         <Block flex row>
           <AlertModal
             visible={isAlertModalVisible}
-            onClose={this.toggleAlertModal}
-          // onSubmit={() => this.handleDeleteClubhouse(item)}
+            onClose={() => this.toggleAlertModal(EMPTY_OBJECT)}
+            onSubmit={() => this.handleDeleteComplain(item)}
           />
 
           <Button
             shadowless
             style={styles.secondaryButton}
-            onPress={this.toggleAlertModal}
+            onPress={() => this.toggleAlertModal(item)}
           >
             <Block row>
               <Text size={14}>Cancel</Text>
@@ -85,7 +306,7 @@ export class Complain extends Component {
           <Button
             shadowless
             style={styles.primaryButton}
-            onPress={() => this.toggleFormModal(item)}
+            onPress={() => this.toggleFormModal(item, FORM_TYPES.SAVE, true)}
           >
             <Block row>
               <Text style={styles.text} size={15}>
@@ -95,25 +316,6 @@ export class Complain extends Component {
           </Button>
         </Block>
       </>
-    );
-  };
-  renderForm = () => {
-    const { initialValues } = this.state;
-    return (
-      <Form
-        isEdit
-        fields={FIELDS}
-        onClose={this.toggleFormModal}
-        initialValues={initialValues}
-        primaryButtonText="Register"
-        secondaryButtonText="Close"
-        primaryButtonProps={{
-          style: styles.footerPrimaryButton,
-        }}
-        secondaryButtonProps={{
-          style: styles.footerSecondaryButton,
-        }}
-      />
     );
   };
   render() {
@@ -126,9 +328,7 @@ export class Complain extends Component {
     } = this.state;
     return (
       <Block>
-        <Modal
-          visible={isFormModalVisible}
-          content={this.renderForm} />
+        <Modal visible={isFormModalVisible} content={this.renderForm} />
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -137,21 +337,40 @@ export class Complain extends Component {
             />
           }
         >
-          {_map(complain, (item, index) => (
-            <DynamicKeyCard
-              key={index}
-              isLoading={isLoading}
-              item={item}
-              values={getKeyValuePair(item)}
-              displayNameKey={displayNameKey}
-              // image={_get(item, 'image', '')}
-              keyToRemove={keyToRemove}
-              footer={this.renderFooter}
-            />
-          ))}
+          <Header showNavbar={false} title="Complain" back />
+          {!_isEmpty(complain) ? (
+            _map(complain, (item, index) => (
+              <DynamicKeyCard
+                key={index}
+                isLoading={isLoading}
+                item={item}
+                values={getKeyValuePair(item)}
+                image={_get(item, 'images', EMPTY_ARRAY)}
+                displayNameKey={displayNameKey}
+                keyToRemove={keyToRemove}
+                footer={this.renderFooter}
+              />
+            ))
+          ) : (
+            <EmptyComponent />
+          )}
         </ScrollView>
+        <Block style={styles.buttonContainer} middle>
+          <Button
+            shadowless
+            style={styles.bookButton}
+            onPress={() =>
+              this.toggleFormModal(EMPTY_OBJECT, FORM_TYPES.REGISTER, false)
+            }
+          >
+            <Block row>
+              <Text style={styles.text} size={15}>
+                Book Complain
+              </Text>
+            </Block>
+          </Button>
+        </Block>
       </Block>
-
     );
   }
 }
@@ -221,7 +440,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     backgroundColor: 'transparent',
     position: 'absolute',
-    top: Dimensions.get('screen').height * 0.6,
+    top: Dimensions.get('screen').height * 0.5,
     height: 150,
     width: Dimensions.get('screen').width,
   },

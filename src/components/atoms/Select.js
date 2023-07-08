@@ -16,8 +16,8 @@ class DropDown extends React.Component {
   }
 
   handleOnSelect = (index, value) => {
+    console.log(value);
     const { onSelect } = this.props;
-
     this.setState({ value: value });
     onSelect && onSelect(value);
   };
@@ -36,7 +36,6 @@ class DropDown extends React.Component {
       width = 100,
       ...props
     } = this.props;
-
     const modalStyles = [
       styles.qty,
       color && { backgroundColor: color },
@@ -77,6 +76,7 @@ class DropDown extends React.Component {
               color={argonTheme.COLORS.ICON}
               name="time-slot"
               family="Entypo"
+              marginLeft={10}
             />
             <Text size={12} style={textStyles}>
               {this.state.value}
@@ -95,18 +95,18 @@ class DropDown extends React.Component {
   }
 }
 
-DropDown.propTypes = {
-  color: PropTypes.string,
-  iconFamily: PropTypes.string,
-  iconName: PropTypes.string,
-  iconSize: PropTypes.number,
-  onSelect: PropTypes.func,
-  textStyle: PropTypes.any,
-};
+// DropDown.propTypes = {
+//   color: PropTypes.string,
+//   iconFamily: PropTypes.string,
+//   iconName: PropTypes.string,
+//   iconSize: PropTypes.number,
+//   onSelect: PropTypes.func,
+//   textStyle: PropTypes.any,
+// };
 
 const styles = StyleSheet.create({
   qty: {
-    width: 100,
+    width: 314,
     // backgroundColor: argonTheme.COLORS.DEFAULT,
     paddingHorizontal: 16,
     paddingTop: 10,
@@ -125,12 +125,13 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginLeft: -16,
     width: 100,
+    height: 100,
   },
   selectContainer: {
     borderRadius: 4,
     borderWidth: 1,
     borderColor: argonTheme.COLORS.BORDER,
-    height: 44,
+    height: 40,
     backgroundColor: argonTheme.COLORS.WHITE,
   },
 });

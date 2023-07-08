@@ -65,23 +65,26 @@ export class DynamicKeyPairs extends Component {
         </Block>
         {_map(field, (item, index) => (
           <Block flex row>
-            <Block>
+            <Block marginLeft={10}>
               <Input
                 style={styles.input}
                 editable={showActions}
                 value={_get(item, 'member', EMPTY_STRING)}
-                onChangeText ={(val) =>this.handleChange(val, index, COMPONENT.INPUT)}
+                onChangeText={val =>
+                  this.handleChange(val, index, COMPONENT.INPUT)
+                }
               />
             </Block>
-            <Block paddingLeft={10}>
+            <Block paddingLeft={10} marginTop={7}>
               <SelectMenu
                 disabled={!showActions}
                 optionValues={['1am-2am', '10am-11pm']}
-                onSelect={val => this.handleChange(val, index, COMPONENT.SELECT)
+                onSelect={val =>
+                  this.handleChange(val, index, COMPONENT.SELECT)
                 }
                 value={_get(item, 'time_slot', EMPTY_STRING)}
                 text={_get(item, 'time_slot', EMPTY_STRING)}
-                height={45}
+                width={100}
               />
             </Block>
             {showActions && field.length - 1 === index && field.length < 4 && (
