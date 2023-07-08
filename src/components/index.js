@@ -35,7 +35,7 @@ import FooterButton from './molecules/FooterButton';
 import AlertModal from './molecules/AlertModal';
 import EmptyComponent from './molecules/EmptyComponent';
 import OrderList from './molecules/OrderList';
-
+import SelectItem from './atoms/SelectItem';
 export {
   Button,
   Card,

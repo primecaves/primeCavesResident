@@ -57,7 +57,7 @@ export const razorPay = ({
             backgroundColor: argonTheme.COLORS.SUCCESS,
           });
         })
-        .catch(error => {
+        .catch(() => {
           setLoading(false);
           showMessage({
             message: 'Transaction Cancelled',

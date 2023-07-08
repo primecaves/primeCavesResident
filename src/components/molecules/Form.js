@@ -147,7 +147,10 @@ class Form extends Component {
         );
       case 'SELECT_ITEM':
         return (
-          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+          <Block
+            width={width * 0.8}
+            style={{ marginTop: 20, marginBottom: 20 }}
+          >
             <SelectItem
               {...item}
               options={_map(_get(item, 'options', EMPTY_ARRAY), item => ({
@@ -223,7 +226,8 @@ class Form extends Component {
               {...item}
               onValueChange={val => setFieldValue(_get(item, 'key', ''), val)}
               values={values}
-              service={service} />
+              service={service}
+            />
           </Block>
         );
       case 'SLIDER':

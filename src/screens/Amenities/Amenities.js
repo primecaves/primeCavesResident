@@ -5,7 +5,6 @@ import {
   Dimensions,
   ScrollView,
   RefreshControl,
-  TouchableOpacity,
 } from 'react-native';
 import {
   DynamicKeyCard,
@@ -33,6 +32,7 @@ import _map from 'lodash/map';
 import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
 import _toFinite from 'lodash/toFinite';
+import moment from 'moment';
 const { width } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
@@ -229,6 +229,13 @@ class Amenities extends Component {
         });
       });
   };
+  handlePaymentHistory = () => {
+    const { navigation } = this.props;
+    let request = {
+      service: 'amenities',
+    };
+    navigation.navigate('PaymentHistory', request);
+  };
   render() {
     const {
       amenities,
@@ -255,8 +262,9 @@ class Amenities extends Component {
             back
             search
             showAdd
-            rightActionIconName="payments"
+            rightActionIconName="history"
             navigation={navigation}
+            onAddButtonClick={this.handlePaymentHistory}
             scene={scene}
           />
           {!_isEmpty(amenities) ? (

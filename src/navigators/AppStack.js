@@ -65,7 +65,9 @@ const RenderTabBarIcon = ({ focused, route }) => {
       iconName = focused ? MENU_SERVICES.HOME_OUTLINE : MENU_SERVICES.HOME;
       break;
     case 'Service':
-      iconName = focused ? MENU_SERVICES.SERVICES_OUTLINE : MENU_SERVICES.SERVICES;
+      iconName = focused
+        ? MENU_SERVICES.SERVICES_OUTLINE
+        : MENU_SERVICES.SERVICES;
       break;
     default:
       break;
@@ -133,7 +135,9 @@ const HomeStack = contextProps => {
       />
       <Screen
         name="AddExpectedVisitors"
-        component={(props) => componentWithProps(AddExpectedVisitors, { ...props, ...contextProps })}
+        component={props =>
+          componentWithProps(AddExpectedVisitors, { ...props, ...contextProps })
+        }
         options={{
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
@@ -176,7 +180,9 @@ const HomeStack = contextProps => {
       />
       <Screen
         name="Complain"
-        component={(props) => componentWithProps(Complain, { ...props, ...contextProps })}
+        component={props =>
+          componentWithProps(Complain, { ...props, ...contextProps })
+        }
         options={{
           header: ({ navigation, scene }) =>
             renderBasicHeader({
@@ -244,7 +250,7 @@ const HomeStack = contextProps => {
           cardStyle: { backgroundColor: '#F8F9FE' },
         }}
       />
-    </Navigator >
+    </Navigator>
   );
 };
 
@@ -339,9 +345,19 @@ const TabNavigator = contextProps => {
 
   return (
     <Navigator {...tabNavProps}>
-      <Screen name="Home" component={(props) => componentWithProps(HomeStack, { ...contextProps, ...props })} />
-      <Screen name="Service" component={(props) => componentWithProps(ServiceStack, { ...contextProps, ...props })} />
-    </Navigator >
+      <Screen
+        name="Home"
+        component={props =>
+          componentWithProps(HomeStack, { ...contextProps, ...props })
+        }
+      />
+      <Screen
+        name="Service"
+        component={props =>
+          componentWithProps(ServiceStack, { ...contextProps, ...props })
+        }
+      />
+    </Navigator>
   );
 };
 

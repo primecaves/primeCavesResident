@@ -10,7 +10,7 @@ export const getUserMaintenanceDetails = userID => {
   return API.get(url);
 };
 
-export const updateUserMaintenanceDetails = (data) => {
-  const url = `/updateUserMaintenanceDetails`;
-  return API.post(url,data);
+export const updateUserMaintenanceDetails = data => {
+  const url = '/updateUserMaintenanceDetails';
+  return API.post(url, data);
 };

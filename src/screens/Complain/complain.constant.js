@@ -1,8 +1,9 @@
 export const FIELDS = [
   {
-    id: 'image',
-    key: 'image',
+    id: 'images',
+    key: 'images',
     component: 'IMAGE',
+    editable: false,
   },
   {
     id: 'name',
@@ -19,14 +20,14 @@ export const FIELDS = [
   {
     id: 'type',
     key: 'type',
-    component: 'SELECT',
+    component: 'SELECT_ITEM',
     label: 'Type',
     options: ['personal', 'community'],
   },
   {
     id: 'tag',
     key: 'tag',
-    component: 'SELECT',
+    component: 'SELECT_ITEM',
     label: 'Tag',
     options: [
       'common Areas',
@@ -39,5 +40,4 @@ export const FIELDS = [
     ],
   },
   { id: 'urgent', key: 'urgent', component: 'SWITCH', label: 'Urgent' },
-
 ];
